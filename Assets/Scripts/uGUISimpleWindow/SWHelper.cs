@@ -193,7 +193,8 @@ namespace uGUISimpleWindow
                     return glg;
                 case LayoutType.Horizontal:
                     HorizontalLayoutGroup hlg = go.AddComponent<HorizontalLayoutGroup>();
-                    hlg.childControlWidth = true;   // false;
+                    bool isControlChild = ! new List<UIInfo.Fit>() { UIInfo.Fit.Fixed, UIInfo.Fit.Self }.Contains(uiInfo.m_fit);
+                    hlg.childControlWidth = isControlChild;
                     hlg.childControlHeight = true;
                     hlg.childForceExpandWidth = false;
                     hlg.childForceExpandHeight = false;
