@@ -97,9 +97,9 @@ namespace uGUISimpleWindow
                         le_wshp.flexibleHeight = 1;
                         break;
                     case UIInfo.Fit.Self:
-                        ContentSizeFitter csf = ret.AddComponent<ContentSizeFitter>();
-                        csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;    //width/heightを中身（文字など）サイズに合わせる
-                        csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                        //ContentSizeFitter csf = ret.AddComponent<ContentSizeFitter>();
+                        //csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;    //width/heightを中身（文字など）サイズに合わせる
+                        //csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
                         break;
                     case UIInfo.Fit.Fixed:
                     case UIInfo.Fit.Flexible:
@@ -193,8 +193,7 @@ namespace uGUISimpleWindow
                     return glg;
                 case LayoutType.Horizontal:
                     HorizontalLayoutGroup hlg = go.AddComponent<HorizontalLayoutGroup>();
-                    bool isControlChild = ! new List<UIInfo.Fit>() { UIInfo.Fit.Fixed, UIInfo.Fit.Self }.Contains(uiInfo.m_fit);
-                    hlg.childControlWidth = isControlChild;
+                    hlg.childControlWidth = true;
                     hlg.childControlHeight = true;
                     hlg.childForceExpandWidth = false;
                     hlg.childForceExpandHeight = false;

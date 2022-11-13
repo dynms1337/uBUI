@@ -288,7 +288,7 @@ namespace uGUISimpleWindow
         /// </summary>
         /// <param name="onValueChanged">Sliderを動かしたときに実行する処理</param>
         /// <returns></returns>
-        public Slider addSlider(UnityAction<float> onValueChanged, float initialValue, float max = 1f, float min = 0f, bool wholeNumbers = false)
+        public Slider addSlider(UnityAction<float> onValueChanged, float initialValue = 0.5f, float max = 1f, float min = 0f, bool wholeNumbers = false)
         { return SWHelper.CreateSlider(goPanel, onValueChanged, initialValue, max, min, wholeNumbers); }
         /// <summary>
         /// Toggleコンポーネントを持ったGameObjectを子要素に追加して、Toggleコンポーネントを返す

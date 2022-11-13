@@ -33,15 +33,18 @@ public class Example01 : MonoBehaviour
         SPanel hooter = window.hooter;
 
         // captionにボタンを追加
-        caption.addButton(() => { window.locate_byPosition(left: 20, bottom: 20, width: window_width, height: window_height); }, labelStr: "△");  //基本位置
-        caption.addButton(() => { window.locate_byMarginPx(left: 10, right: 10, top: 10, bottom: 10); }, labelStr: "□");  // 最大化
-        caption.addButton(() => { window.SetActive(false); }, labelStr: "×");  // 非表示
+        caption.addButton(() => { window.locate_byPosition(left: 20, bottom: 20, width: window_width, height: window_height); }, labelStr: "△"
+            , uiInfo:UIInfo.BUTTON_DEFAULT.fit_Self());  //基本位置
+        caption.addButton(() => { window.locate_byMarginPx(left: 10, right: 10, top: 10, bottom: 10); }, labelStr: "□"
+            , uiInfo: UIInfo.BUTTON_DEFAULT.fit_Fixed().uiSize(new Vector2(20, 20)));  // 最大化
+        caption.addButton(() => { window.SetActive(false); }, labelStr: "×"
+            , uiInfo: UIInfo.BUTTON_DEFAULT.fit_Fixed().uiSize(new Vector2(20, 20)));  // 非表示
 
         // contentにUI要素を追加
         Text logger = content.addText("input text in text field...");
 
         // hooterにUI要素を追加
-        hooter.addButton(() => { logger.text += "added from button.\r\n text1 text1 text1 \r\n"; }, labelStr: "+ text1");
+        hooter.addButton(() => { content.addText("added from button.\r\n text1 text1 text1 \r\n"); }, labelStr: "+ text1");
         hooter.addButton(() => { logger.text += "added from button.\r\n text2 text2 text2 \r\n"; }, labelStr: "+ text2");
         hooter.addTextField(onEndEdit: s => logger.text += "added from textfield.\r\n " + s);
     }

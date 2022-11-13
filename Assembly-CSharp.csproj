@@ -62,6 +62,7 @@
     <Compile Include="Assets\Scripts\uGUISimpleWindow\SWHelper.cs" />
     <Compile Include="Assets\Scripts\Example01.cs" />
     <Compile Include="Assets\Scripts\Example02.cs" />
+    <Compile Include="Assets\Scripts\Example03.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
