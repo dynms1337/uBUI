@@ -473,6 +473,7 @@ namespace uGUISimpleWindow
             (go.transform as RectTransform).pivot = new Vector2(0f, 0.5f);  //拡縮・回転の基点、文字数が増えたときに右へサイズが膨らんでいくようにする。
 
             Text ret = addTextComponent(go, label, uiInfo);
+            ret.verticalOverflow = VerticalWrapMode.Overflow;
             return ret;
         }
 

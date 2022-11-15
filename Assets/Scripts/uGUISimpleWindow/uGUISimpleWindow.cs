@@ -242,7 +242,7 @@ namespace uGUISimpleWindow
         /// </summary>
         /// <param name="height">空白の高さのピクセル数</param>
         /// <returns></returns>
-        public Image addSpacer(int height = 0) { return SWHelper.CreateSpacer(goPanel, height); }
+        public Image addSpacer(int height = 15) { return SWHelper.CreateSpacer(goPanel, height); }
         /// <summary>
         /// 水平方向の罫線を表現するためにImageコンポーネントを持ったGameObjectを子要素に追加して、Imageコンポーネントを返す
         /// </summary>
