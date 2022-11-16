@@ -473,7 +473,7 @@ namespace uGUISimpleWindow
             (go.transform as RectTransform).pivot = new Vector2(0f, 0.5f);  //拡縮・回転の基点、文字数が増えたときに右へサイズが膨らんでいくようにする。
 
             Text ret = addTextComponent(go, label, uiInfo);
-            ret.verticalOverflow = VerticalWrapMode.Overflow;
+
             return ret;
         }
 
@@ -854,6 +854,8 @@ namespace uGUISimpleWindow
 
             return inputField;
         }
+
+
         public static void setUIInfo(this InputField inputfield, UIInfo uiInfo)
         {
             Foreach(inputfield.gameObject, g =>
@@ -933,6 +935,8 @@ namespace uGUISimpleWindow
             LayoutGroup lgContent = addLyaoutGroup(goContent, contentPanelLayoutGroupType);
             LayoutElement le_Content = goContent.GetOrAddComponent<LayoutElement>();
             le_Content.preferredWidth = calcScrollViewWidth(parent);
+            var csf = goContent.GetOrAddComponent<ContentSizeFitter>();
+            csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             return lgContent;
         }

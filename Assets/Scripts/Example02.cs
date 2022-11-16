@@ -42,18 +42,20 @@ public class Example02 : MonoBehaviour
 
         UIInfo uiTitle = UIInfo.TEXT_DEFAULT.textSize(15);
         {
-            //content.addText("TextBox", uiTitle);
-            content.addText("TextBox");
-            Text text1 = content.addText("Input text here...");
-            content.addTextField(onEndEdit: s => text1.text += "\r\n---\r\n\r\n", onValueChanged: s => text1.text = "text field :" + s);
+            content.addText("TextBox", uiTitle);
+            //content.addText("TextBox");
+            string initialText = "entered string: ";
+            Text text1 = content.addText(initialText);
+            content.addTextField(onEndEdit: s => text1.text += "\r\n---\r\n\r\n", onValueChanged: s => text1.text = $"{initialText}{s}");
             content.addSpacer();
         }
 
-        content.addText("N行のテキストボックスの変更・確定検知の例");
-        SPanel content_textarea = content.addPanel_Horizontal();
-        Text text2 = content_textarea.addText("input text...");
-        content_textarea.addTextField(onEndEdit: s => text2.text += "entered", onValueChanged: s => text2.text = "text area :" + s);
-
+        {
+            content.addText("N行のテキストボックスの変更・確定検知の例");
+            SPanel content_textarea = content.addPanel_Horizontal();
+            Text text2 = content_textarea.addText("input text...");
+            content_textarea.addTextField(onEndEdit: s => text2.text += "entered", onValueChanged: s => text2.text = "text area :" + s);
+        }
         content.addText("トグルボタンのbool取得の例");
         SPanel content_toggle = content.addPanel_Horizontal();
         Text text3 = content_toggle.addText("click toggle...");
