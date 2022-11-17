@@ -755,6 +755,7 @@ namespace uGUISimpleWindow
             checkmarkRect.sizeDelta = new Vector2(TOGGLE_BACKGROUND_SIZE / 2, TOGGLE_BACKGROUND_SIZE / 2);
 
             Text label = CreateText(parent: goToggleRoot, uiInfo: new UIInfo().fit_Parent(), label: labelStr);
+            label.gameObject.getParent().GetOrAddComponent<LayoutElement>().flexibleWidth = 1;
 
             Toggle toggle = goToggleRoot.AddComponent<Toggle>();
             toggle.isOn = isOn;
