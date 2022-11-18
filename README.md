@@ -18,7 +18,7 @@ Copy `Assets/Scripts/uGUISimpleWindow` folder to your project code.
 
 # Usage Example
 
-![image-20221118211134668](README.assets\image-20221118211134668.png)
+![image-20221118211134668](README.assets/image-20221118211134668.png)
 
 
 
