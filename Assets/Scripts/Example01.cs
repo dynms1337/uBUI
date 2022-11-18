@@ -1,33 +1,16 @@
 ﻿using uGUISimpleWindow;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
 public class Example01 : MonoBehaviour
 {
-    void Start()
-    {
-        example01();
-    }
+    void Start() { example01(); }
 
     private void example01()
     {
-        List<Dictionary<string, string>> itemList = new List<Dictionary<string, string>>();
-        for (int i = 0; i < 10; i++)
-        {
-            var d = new Dictionary<string, string>();
-            for (int j = 0; j < 3; j++) { d[$"name{i}-{j}"] = $"value{i}-{j}"; }
-            itemList.Add(d);
-        }
-
-        int window_width = 300;
-        int window_height = 800;
-        const int window_left = 420;
-        const int window_bottom = 20;
+        var (window_width, window_height, window_left, window_bottom) = (300, 800, 420, 20);
 
         SWindow window = new SWindow();
         window.init_onScreen("Example01 - Components", leftbottom: new Vector2(window_left, window_bottom), windowSize: new Vector2(window_width, window_height), hooterLayout: LayoutType.Vertical);
@@ -91,7 +74,15 @@ public class Example01 : MonoBehaviour
             content.addText("Radio Buttons (by ToggleGroup)", uiTitle);
             SPanel hp = content.addPanel_Horizontal();
             Text text_radio = hp.addText("click radio button...");
-            hp.addRadioButton(s => text_radio.text = "selected :" + s, itemList[0], layoutGroup: LayoutType.Horizontal);
+
+            hp.addRadioButton(s => text_radio.text = "selected :" + s,
+                showValueDict: new Dictionary<string, string>()
+                    {
+                        {"name0","value0" },
+                        {"name1","value1" },
+                        {"name2","value2" },
+                    },
+                layoutGroup: LayoutType.Horizontal);
             content.addSpacer();
         }
         {
@@ -104,8 +95,8 @@ public class Example01 : MonoBehaviour
 
         {
             content.addText("Image, Spacer", uiTitle);
-            content.addText("By placing a Spacer in the middle of the HorizontalPanel, objects can be placed on both sides.", uiDesc);
-            SPanel hp = content.addPanel_Horizontal(UIInfo.PANEL_DEFAULT/*.layoutAlignment(*/);
+            content.addText("By placing a Spacer in the middle of the HorizontalPanel, objects can be placed on both sides.", uiDesc.uiSize(new Vector2(window_width, 0)));
+            SPanel hp = content.addPanel_Horizontal(UIInfo.PANEL_DEFAULT.layoutAlignment(TextAnchor.LowerRight));
             hp.addImage(size: new Vector2(100, 100), color: Color.red);
             hp.addSpacer();
             hp.addImage(size: new Vector2(150, 150), color: Color.green);
@@ -113,8 +104,8 @@ public class Example01 : MonoBehaviour
         }
 
         // ************************ Hooter ************************
+        window.hooter.addText("------ Hooter ------", uiTitle.layoutAlignment(TextAnchor.MiddleCenter));
         {
-            window.hooter.addText("------ Hooter ------", uiTitle.layoutAlignment(TextAnchor.MiddleCenter));
             Text log = window.hooter.addText("click count : 0");
             int clickCount = 0;
             window.hooter.addButton(() =>
