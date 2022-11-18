@@ -65,7 +65,6 @@
     <Compile Include="Assets\Scripts\uGUISimpleWindow\core\InfiniteScroll.cs" />
     <Compile Include="Assets\Scripts\uGUISimpleWindow\core\SWHelper.cs" />
     <Compile Include="Assets\Scripts\Example01.cs" />
-    <Compile Include="Assets\Scripts\Example02.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

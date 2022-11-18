@@ -16,39 +16,115 @@ public class Example01 : MonoBehaviour
 
     private void example01()
     {
-        Debug.Log("start 01");
+        List<Dictionary<string, string>> itemList = new List<Dictionary<string, string>>();
+        for (int i = 0; i < 10; i++)
+        {
+            var d = new Dictionary<string, string>();
+            for (int j = 0; j < 3; j++) { d[$"name{i}-{j}"] = $"value{i}-{j}"; }
+            itemList.Add(d);
+        }
 
         int window_width = 300;
         int window_height = 800;
+        const int window_left = 420;
+        const int window_bottom = 20;
 
-        // windowを作成、各部のパネルを変数に格納
-        //SWindow window = SWindow.Create(title: "Example01", position: new Vector2(20, 20), size: new Vector2(window_width, window_height));
         SWindow window = new SWindow();
-        window.init_onScreen(title:"Example01");
-        window.locate_byPosition(left: 20, bottom: 20, width: window_width, height: window_height);
+        window.init_onScreen("Example01 - Components", leftbottom: new Vector2(window_left, window_bottom), windowSize: new Vector2(window_width, window_height), hooterLayout: LayoutType.Vertical);
 
-        //SPanel header = window.header;	//title引数を指定すると、headerには自動的にウィンドウのタイトルが記入されるので操作の必要なし
-        SPanel caption = window.caption;
+        // ************************ Caption buttons ************************
+        // △ Basic Position
+        var uiCaption = UIInfo.BUTTON_DEFAULT.fit_Fixed().uiSize(new Vector2(20, 20));
+        window.caption.addButton(() => { window.locate_byPosition(left: window_left, bottom: window_bottom, width: window_width, height: window_height); },
+            labelStr: "△", uiInfo: uiCaption);
+        // □ Maximize
+        window.caption.addButton(() => { window.locate_byMarginPx(left: 10, right: 10, top: 10, bottom: 10); }, labelStr: "□"
+            , uiInfo: uiCaption);
+        // × Hide
+        window.caption.addButton(() => { window.SetActive(false); }, labelStr: "×"
+            , uiInfo: uiCaption);
+
+
+        // ************************ Content ************************
         SPanel content = window.content;
-        SPanel hooter = window.hooter;
 
-        // captionにボタンを追加
-        caption.addButton(() => { window.locate_byPosition(left: 20, bottom: 20, width: window_width, height: window_height); }, labelStr: "△"
-            , uiInfo:UIInfo.BUTTON_DEFAULT.fit_Self());  //基本位置
-        caption.addButton(() => { window.locate_byMarginPx(left: 10, right: 10, top: 10, bottom: 10); }, labelStr: "□"
-            , uiInfo: UIInfo.BUTTON_DEFAULT.fit_Fixed().uiSize(new Vector2(20, 20)));  // 最大化
-        caption.addButton(() => { window.SetActive(false); }, labelStr: "×"
-            , uiInfo: UIInfo.BUTTON_DEFAULT.fit_Fixed().uiSize(new Vector2(20, 20)));  // 非表示
+        UIInfo uiTitle = UIInfo.TEXT_DEFAULT.textSize(18);
+        UIInfo uiDesc = UIInfo.TEXT_DEFAULT.textSize(14);
 
-        // contentにUI要素を追加
-        Text logger = content.addText("input text in text field...");
+        content.addText("------ Content ------", uiTitle.layoutAlignment(TextAnchor.MiddleCenter));
+        {
+            content.addText("InputField (Single line)", uiTitle);
+            string initialText = "entered string: \r\n";
+            Text log = content.addText(initialText);
+            content.addTextField(onEndEdit: s => log.text += "\r\n---\r\n\r\n", onValueChanged: s => log.text = $"{initialText}{s}\r\n");
+            content.addSpacer();
+        }
 
-        // hooterにUI要素を追加
-        hooter.addButton(() => { content.addText("added from button.\r\n text1 text1 text1 \r\n"); }, labelStr: "+ text1");
-        hooter.addButton(() => { logger.text += "added from button.\r\n text2 text2 text2 \r\n"; }, labelStr: "+ text2");
-        hooter.addTextField(onEndEdit: s => logger.text += "added from textfield.\r\n " + s);
+        {
+            content.addText("InputField (Multi lines)", uiTitle);
+            string initialText = "entered string: \r\n";
+            Text log = content.addText(initialText);
+            content.addTextField(onEndEdit: s => log.text += "\r\n---\r\n\r\n", onValueChanged: s => log.text = $"{initialText}{s}\r\n", lineCount: 2);
+            content.addSpacer();
+        }
+        {
+            content.addText("Button", uiTitle);
+            Text log = content.addText("click count : 0");
+            int clickCount = 0;
+            content.addButton(() =>
+            {
+                clickCount++;
+                log.text = $"click count : {clickCount}";
+            }
+            , "click here");
+            content.addSpacer();
+        }
+        {
+            content.addText("Toggle", uiTitle);
+            SPanel hp = content.addPanel_Horizontal();
+            Text textToggleStatus = hp.addText("Toggle Status...");
+            hp.addToggle(b => textToggleStatus.text = "Toggle Status :" + (b ? "ON" : "OFF"), "switch here!", isOn: false);
+            content.addSpacer();
+        }
+
+        {
+            content.addText("Radio Buttons (by ToggleGroup)", uiTitle);
+            SPanel hp = content.addPanel_Horizontal();
+            Text text_radio = hp.addText("click radio button...");
+            hp.addRadioButton(s => text_radio.text = "selected :" + s, itemList[0], layoutGroup: LayoutType.Horizontal);
+            content.addSpacer();
+        }
+        {
+            content.addText("Slider", uiTitle);
+            SPanel hp = content.addPanel_Horizontal();
+            Text text_slider = hp.addText("drag slider...");
+            hp.addSlider(f => text_slider.text = "value :" + f.ToString());
+            content.addSpacer();
+        }
+
+        {
+            content.addText("Image, Spacer", uiTitle);
+            content.addText("By placing a Spacer in the middle of the HorizontalPanel, objects can be placed on both sides.", uiDesc);
+            SPanel hp = content.addPanel_Horizontal(UIInfo.PANEL_DEFAULT/*.layoutAlignment(*/);
+            hp.addImage(size: new Vector2(100, 100), color: Color.red);
+            hp.addSpacer();
+            hp.addImage(size: new Vector2(150, 150), color: Color.green);
+            content.addSpacer();
+        }
+
+        // ************************ Hooter ************************
+        {
+            window.hooter.addText("------ Hooter ------", uiTitle.layoutAlignment(TextAnchor.MiddleCenter));
+            Text log = window.hooter.addText("click count : 0");
+            int clickCount = 0;
+            window.hooter.addButton(() =>
+            {
+                clickCount++;
+                log.text = $"click count : {clickCount}";
+            }
+            , "click here");
+        }
     }
-
 
 
 }
