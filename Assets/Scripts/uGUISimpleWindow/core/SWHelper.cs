@@ -934,10 +934,9 @@ namespace uGUISimpleWindow
             Image viewportImage = addImageComponent(goViewport, uiInfo: new UIInfo().bgColor(COLOR_SCROLLVIEW_MASK));
 
             LayoutGroup lgContent = addLyaoutGroup(goContent, contentPanelLayoutGroupType);
-            LayoutElement le_Content = goContent.GetOrAddComponent<LayoutElement>();
-            le_Content.preferredWidth = calcScrollViewWidth(parent);
             var csf = goContent.GetOrAddComponent<ContentSizeFitter>();
             csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             return lgContent;
         }
