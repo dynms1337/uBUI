@@ -8,13 +8,6 @@ using System.Reflection;
 
 namespace uGUISimpleWindow
 {
-    public enum LayoutType
-    {
-        Grid,
-        Horizontal,
-        Vertical,
-        None,
-    }
 
     public class SPanel
     {

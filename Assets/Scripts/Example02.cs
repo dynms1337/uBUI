@@ -41,6 +41,8 @@ public class Example02 : MonoBehaviour
         SPanel content = window.content;
 
         UIInfo uiTitle = UIInfo.TEXT_DEFAULT.textSize(18);
+        UIInfo uiDesc = UIInfo.TEXT_DEFAULT.textSize(14);
+
         {
             content.addText("InputField (Single line)", uiTitle);
             string initialText = "entered string: \r\n";
@@ -70,26 +72,38 @@ public class Example02 : MonoBehaviour
         }
         {
             content.addText("Toggle", uiTitle);
-            SPanel content_toggle = content.addPanel_Horizontal();
-            Text textToggleStatus = content_toggle.addText("Toggle Status...");
-            content_toggle.addToggle(b => textToggleStatus.text = "Toggle Status :" + (b ? "ON" : "OFF"), "switch here!", isOn: false);
+            SPanel hp = content.addPanel_Horizontal();
+            Text textToggleStatus = hp.addText("Toggle Status...");
+            hp.addToggle(b => textToggleStatus.text = "Toggle Status :" + (b ? "ON" : "OFF"), "switch here!", isOn: false);
             content.addSpacer();
         }
 
         {
             content.addText("Radio Buttons (by ToggleGroup)", uiTitle);
-            SPanel content_radio = content.addPanel_Horizontal();
-            Text text_radio = content_radio.addText("click radio button...");
-            content_radio.addRadioButton(s => text_radio.text = "selected :" + s, itemList[0], layoutGroup: LayoutType.Horizontal);
+            SPanel hp = content.addPanel_Horizontal();
+            Text text_radio = hp.addText("click radio button...");
+            hp.addRadioButton(s => text_radio.text = "selected :" + s, itemList[0], layoutGroup: LayoutType.Horizontal);
             content.addSpacer();
         }
         {
             content.addText("Slider", uiTitle);
-            SPanel content_slider = content.addPanel_Horizontal();
-            Text text_slider = content_slider.addText("drag slider...");
-            content_slider.addSlider(f => text_slider.text = "value :" + f.ToString());
+            SPanel hp = content.addPanel_Horizontal();
+            Text text_slider = hp.addText("drag slider...");
+            hp.addSlider(f => text_slider.text = "value :" + f.ToString());
             content.addSpacer();
         }
+
+        {
+            content.addText("Image, Spacer", uiTitle);
+            content.addText("By placing a Spacer in the middle of the HorizontalPanel, objects can be placed on both sides.", uiDesc);
+            SPanel hp = content.addPanel_Horizontal(UIInfo.PANEL_DEFAULT/*.layoutAlignment(*/);            
+            hp.addImage(size: new Vector2(100, 100), color: Color.red);
+            hp.addSpacer();
+            hp.addImage(size: new Vector2(150, 150), color: Color.green);
+            content.addSpacer();
+        }
+
+
     }
 
 

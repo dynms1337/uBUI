@@ -23,7 +23,7 @@ namespace uGUISimpleWindow
         public static readonly UIInfo SCROLLBAR_DEFAULT = new UIInfo().fit_Fixed().position(Vector2.zero).uiSize(SWHelper.UIELEMENT_SIZE);
         public static readonly UIInfo SCROLLVIEW_DEFAULT = new UIInfo().fit_Parent().bgColor(SWHelper.COLOR_AREA_BG);
         public static readonly UIInfo CANVAS_DEFAULT = new UIInfo().fit_Fixed().fit_Fixed();
-        public static readonly UIInfo PANEL_DEFAULT = new UIInfo().fit_Parent().fit_Parent().bgColor(SWHelper.COLOR_AREA_BG);
+        public static readonly UIInfo PANEL_DEFAULT = new UIInfo().fit_Parent().fit_Parent().bgColor(SWHelper.COLOR_AREA_BG).layoutAlignment(TextAnchor.MiddleLeft);
 
         public enum Fit { Parent, WParentHSelf, WSelfHParent, Self, Fixed, Flexible, WParentHFrexible, UnSpecified }
         public Fit m_fit = Fit.UnSpecified;
@@ -41,6 +41,7 @@ namespace uGUISimpleWindow
         public int m_padding_right = -1;
         public int m_padding_top = -1;
         public int m_padding_bottom = -1;
+        public TextAnchor m_layoutAlignment = TextAnchor.MiddleLeft;
 
         public UIInfo() { }
 
@@ -67,6 +68,7 @@ namespace uGUISimpleWindow
         public UIInfo bgColor(Color bgColor) { UIInfo ret = this.Clone(); ret.m_bgColor = bgColor; return ret; }
         public UIInfo bgColor(string colorCode) { UIInfo ret = this.Clone(); ret.m_bgColor = SWHelper.parseColor(colorCode); return ret; }
         public UIInfo textAlignment(TextAnchor textAlignment) { UIInfo ret = this.Clone(); ret.m_textAlignment = textAlignment; return ret; }
+        public UIInfo layoutAlignment(TextAnchor layoutAlignment) { UIInfo ret = this.Clone(); ret.m_layoutAlignment = layoutAlignment; return ret; }
         public UIInfo spacing(int space) { UIInfo ret = this.Clone(); ret.m_spacing = space; return ret; }
         public UIInfo padding(int pad) { return this.padding(pad, pad, pad, pad); }
         public UIInfo padding(int left, int right, int top, int bottom)

@@ -414,10 +414,11 @@ namespace uGUISimpleWindow
             {
                 case LayoutType.Horizontal:
                     lg = addLyaoutGroup(panelGO, layoutGroup, uiInfo);
-                    lg.childAlignment = TextAnchor.MiddleCenter;
+                    lg.childAlignment = uiInfo.m_layoutAlignment;
                     break;
                 case LayoutType.Vertical:
                     lg = addLyaoutGroup(panelGO, layoutGroup, uiInfo);
+                    lg.childAlignment = uiInfo.m_layoutAlignment;
                     break;
                 default: lg = addLyaoutGroup(panelGO, layoutGroup); break;
             }
