@@ -1,4 +1,4 @@
-﻿using uGUISimpleWindow;
+﻿using uBUI;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;

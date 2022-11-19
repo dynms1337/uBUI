@@ -57,13 +57,13 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\uGUISimpleWindow\core\LayoutType.cs" />
-    <Compile Include="Assets\Scripts\uGUISimpleWindow\SWindow.cs" />
-    <Compile Include="Assets\Scripts\uGUISimpleWindow\core\UIInfo.cs" />
-    <Compile Include="Assets\Scripts\uGUISimpleWindow\SPanel.cs" />
-    <Compile Include="Assets\Scripts\uGUISimpleWindow\core\DragBehaviour.cs" />
-    <Compile Include="Assets\Scripts\uGUISimpleWindow\core\InfiniteScroll.cs" />
-    <Compile Include="Assets\Scripts\uGUISimpleWindow\core\SWHelper.cs" />
+    <Compile Include="Assets\Scripts\uBUI\core\LayoutType.cs" />
+    <Compile Include="Assets\Scripts\uBUI\SWindow.cs" />
+    <Compile Include="Assets\Scripts\uBUI\core\UIInfo.cs" />
+    <Compile Include="Assets\Scripts\uBUI\SPanel.cs" />
+    <Compile Include="Assets\Scripts\uBUI\core\DragBehaviour.cs" />
+    <Compile Include="Assets\Scripts\uBUI\core\InfiniteScroll.cs" />
+    <Compile Include="Assets\Scripts\uBUI\core\SWHelper.cs" />
     <Compile Include="Assets\Scripts\Example01.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,13 +4,13 @@ using UnityEngine.UI;
 using System;
 using UnityEngine.Events;
 using System.Collections.Generic;
-using uGUISimpleWindow;
+using uBUI;
 using System.Reflection;
 using System.IO;
 using Assets.core;
 
 
-namespace uGUISimpleWindow
+namespace uBUI
 {
     public static class SWHelper
     {

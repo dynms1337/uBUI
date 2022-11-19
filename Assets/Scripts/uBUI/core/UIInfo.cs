@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace uGUISimpleWindow
+namespace uBUI
 {
 
     [Serializable]

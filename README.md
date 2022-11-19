@@ -1,4 +1,4 @@
-# UGUISimpleWindow
+# uBUI
 
 Library that can assemble Window-based uGUI
 
