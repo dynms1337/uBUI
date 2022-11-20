@@ -80,7 +80,7 @@ namespace uBUI
 
             internal Item(GameObject parent, int itemWidth)
             {
-                this.lg = SWHelper.CreatePanel(uiInfo: UIInfo.PANEL_DEFAULT.fit_Fixed(uiSize: new Vector2(itemWidth, 30))
+                this.lg = SWHelper.CreatePanel(uiInfo: UIInfo.PANEL_DEFAULT.fitW(  //.fit_Fixed(uiSize: new Vector2(itemWidth, 30))
                     , layoutGroup: LayoutType.Horizontal, parent: parent);
                 this.spanel = SPanel.CreateFromPanel(lg);
                 this.rt = spanel.goPanel.GetComponent<RectTransform>();  //GetComponentは遅いのであらかじめインスタンス取得しておく

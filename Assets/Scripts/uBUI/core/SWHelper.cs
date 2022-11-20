@@ -70,71 +70,97 @@ namespace uBUI
             RectTransform rectTransform = ret.AddComponent<RectTransform>();
             rectTransform.sizeDelta = sizeDelta;
             {
-                switch (uiInfo.m_fit)
+                switch (uiInfo.m_fitWidth)
                 {
-                    case UIInfo.Fit.Parent:
-                        rectTransform.anchorMin = Vector2.zero;
-                        rectTransform.anchorMax = Vector2.one;
-                        rectTransform.anchoredPosition = Vector2.zero;
-                        rectTransform.sizeDelta = uiInfo.m_margin;
-                        break;
-                    case UIInfo.Fit.WParentHSelf:
-                        //width:Parentへアンカーする。 height:子要素のサイズに合わせる
-                        rectTransform.anchorMin = Vector2.zero;
-                        rectTransform.anchorMax = Vector2.one;
-                        rectTransform.anchoredPosition = Vector2.zero;
-                        rectTransform.sizeDelta = uiInfo.m_margin;
-                        LayoutElement le_pow = ret.AddComponent<LayoutElement>();
-                        le_pow.flexibleWidth = 1;
-                        le_pow.flexibleHeight = 0;
-                        break;
-                    case UIInfo.Fit.WSelfHParent:
-                        rectTransform.anchorMin = Vector2.zero;
-                        rectTransform.anchorMax = Vector2.one;
-                        rectTransform.anchoredPosition = Vector2.zero;
-                        rectTransform.sizeDelta = uiInfo.m_margin;
-                        LayoutElement le_wshp = ret.AddComponent<LayoutElement>();
-                        le_wshp.flexibleHeight = 1;
-                        break;
-                    case UIInfo.Fit.Self:
-                        //ContentSizeFitter csf = ret.AddComponent<ContentSizeFitter>();
-                        //csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;    //width/heightを中身（文字など）サイズに合わせる
-                        //csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-                        break;
                     case UIInfo.Fit.Fixed:
                     case UIInfo.Fit.Flexible:
-                        RectTransform rt = ret.transform as RectTransform;
-                        rt.localPosition = uiInfo.m_position;
-                        rt.sizeDelta = new Vector2(
-                            uiInfo.m_uiSize.x != 0 ? uiInfo.m_uiSize.x : rt.sizeDelta.x,
-                            uiInfo.m_uiSize.y != 0 ? uiInfo.m_uiSize.y : rt.sizeDelta.y);
-                        LayoutElement le_fixed = ret.AddComponent<LayoutElement>();
-                        if (uiInfo.m_uiSize.x != 0) le_fixed.minWidth = uiInfo.m_uiSize.x;
-                        if (uiInfo.m_uiSize.y != 0) le_fixed.minHeight = uiInfo.m_uiSize.y;
-                        if (uiInfo.m_fit == UIInfo.Fit.Fixed)
                         {
-                            if (uiInfo.m_uiSize.x != 0) le_fixed.preferredWidth = uiInfo.m_uiSize.x;
-                            if (uiInfo.m_uiSize.y != 0) le_fixed.preferredHeight = uiInfo.m_uiSize.y;
-                            le_fixed.flexibleWidth = 0;
-                            le_fixed.flexibleHeight = 0;
+                            LayoutElement le = ret.AddComponent<LayoutElement>();
+                            if (uiInfo.m_uiSize.x != 0) le.minWidth = uiInfo.m_uiSize.x;
+                            if (uiInfo.m_uiSize.y != 0) le.minHeight = uiInfo.m_uiSize.y;
+                            if (uiInfo.m_fit == UIInfo.Fit.Fixed)
+                            {
+                                if (uiInfo.m_uiSize.x != 0) le.preferredWidth = uiInfo.m_uiSize.x;
+                                if (uiInfo.m_uiSize.y != 0) le.preferredHeight = uiInfo.m_uiSize.y;
+                                le.flexibleWidth = 0;
+                                le.flexibleHeight = 0;
+                            }
+                            else
+                            {
+                                if (uiInfo.m_flexWidth != 0) le.flexibleWidth = uiInfo.m_flexWidth;
+                                if (uiInfo.m_flexHeight != 0) le.flexibleHeight = uiInfo.m_flexHeight;
+                            }
                         }
-                        else
-                        {
-                            if (uiInfo.m_flexWidth != 0) le_fixed.flexibleWidth = uiInfo.m_flexWidth;
-                            if (uiInfo.m_flexHeight != 0) le_fixed.flexibleHeight = uiInfo.m_flexHeight;
-                        }
-                        break;
-                    case UIInfo.Fit.WParentHFrexible:
-                        rectTransform.anchorMin = Vector2.zero;
-                        rectTransform.anchorMax = Vector2.one;
-                        rectTransform.anchoredPosition = Vector2.zero;
-                        rectTransform.sizeDelta = uiInfo.m_margin;
-                        LayoutElement le_h = ret.AddComponent<LayoutElement>();
-                        le_h.flexibleHeight = 1;
                         break;
                     case UIInfo.Fit.UnSpecified:
                     default: break; //pass
                 }
+
+                //switch (uiInfo.m_fit)
+                //{
+                //    case UIInfo.Fit.Parent:
+                //        rectTransform.anchorMin = Vector2.zero;
+                //        rectTransform.anchorMax = Vector2.one;
+                //        rectTransform.anchoredPosition = Vector2.zero;
+                //        rectTransform.sizeDelta = uiInfo.m_margin;
+                //        break;
+                //    case UIInfo.Fit.WParentHSelf:
+                //        //width:Parentへアンカーする。 height:子要素のサイズに合わせる
+                //        rectTransform.anchorMin = Vector2.zero;
+                //        rectTransform.anchorMax = Vector2.one;
+                //        rectTransform.anchoredPosition = Vector2.zero;
+                //        rectTransform.sizeDelta = uiInfo.m_margin;
+                //        LayoutElement le_pow = ret.AddComponent<LayoutElement>();
+                //        le_pow.flexibleWidth = 1;
+                //        le_pow.flexibleHeight = 0;
+                //        break;
+                //    case UIInfo.Fit.WSelfHParent:
+                //        rectTransform.anchorMin = Vector2.zero;
+                //        rectTransform.anchorMax = Vector2.one;
+                //        rectTransform.anchoredPosition = Vector2.zero;
+                //        rectTransform.sizeDelta = uiInfo.m_margin;
+                //        LayoutElement le_wshp = ret.AddComponent<LayoutElement>();
+                //        le_wshp.flexibleHeight = 1;
+                //        break;
+                //    case UIInfo.Fit.Self:
+                //        //ContentSizeFitter csf = ret.AddComponent<ContentSizeFitter>();
+                //        //csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;    //width/heightを中身（文字など）サイズに合わせる
+                //        //csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                //        break;
+                //    case UIInfo.Fit.Fixed:
+                //    case UIInfo.Fit.Flexible:
+                //        RectTransform rt = ret.transform as RectTransform;
+                //        rt.localPosition = uiInfo.m_position;
+                //        rt.sizeDelta = new Vector2(
+                //            uiInfo.m_uiSize.x != 0 ? uiInfo.m_uiSize.x : rt.sizeDelta.x,
+                //            uiInfo.m_uiSize.y != 0 ? uiInfo.m_uiSize.y : rt.sizeDelta.y);
+                //        LayoutElement le_fixed = ret.AddComponent<LayoutElement>();
+                //        if (uiInfo.m_uiSize.x != 0) le_fixed.minWidth = uiInfo.m_uiSize.x;
+                //        if (uiInfo.m_uiSize.y != 0) le_fixed.minHeight = uiInfo.m_uiSize.y;
+                //        if (uiInfo.m_fit == UIInfo.Fit.Fixed)
+                //        {
+                //            if (uiInfo.m_uiSize.x != 0) le_fixed.preferredWidth = uiInfo.m_uiSize.x;
+                //            if (uiInfo.m_uiSize.y != 0) le_fixed.preferredHeight = uiInfo.m_uiSize.y;
+                //            le_fixed.flexibleWidth = 0;
+                //            le_fixed.flexibleHeight = 0;
+                //        }
+                //        else
+                //        {
+                //            if (uiInfo.m_flexWidth != 0) le_fixed.flexibleWidth = uiInfo.m_flexWidth;
+                //            if (uiInfo.m_flexHeight != 0) le_fixed.flexibleHeight = uiInfo.m_flexHeight;
+                //        }
+                //        break;
+                //    case UIInfo.Fit.WParentHFrexible:
+                //        rectTransform.anchorMin = Vector2.zero;
+                //        rectTransform.anchorMax = Vector2.one;
+                //        rectTransform.anchoredPosition = Vector2.zero;
+                //        rectTransform.sizeDelta = uiInfo.m_margin;
+                //        LayoutElement le_h = ret.AddComponent<LayoutElement>();
+                //        le_h.flexibleHeight = 1;
+                //        break;
+                //    case UIInfo.Fit.UnSpecified:
+                //    default: break; //pass
+                //}
             }
             if (default_layer != -1)
                 ret.layer = default_layer;

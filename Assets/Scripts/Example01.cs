@@ -17,7 +17,7 @@ public class Example01 : MonoBehaviour
 
         // ************************ Caption buttons ************************
         // △ Basic Position
-        var uiCaption = UIInfo.BUTTON_DEFAULT.fit_Fixed().uiSize(new Vector2(20, 20));
+        var uiCaption = UIInfo.BUTTON_DEFAULT.fitWH(UIInfo.Fit.Fixed, 20);
         window.caption.addButton(() => { window.locate_byPosition(left: window_left, bottom: window_bottom, width: window_width, height: window_height); },
             labelStr: "△", uiInfo: uiCaption);
         // □ Maximize
@@ -95,7 +95,7 @@ public class Example01 : MonoBehaviour
 
         {
             content.addText("Image, Spacer", uiTitle);
-            content.addText("By placing a Spacer in the middle of the HorizontalPanel, objects can be placed on both sides.", uiDesc.uiSize(new Vector2(window_width, 0)));
+            content.addText("By placing a Spacer in the middle of the HorizontalPanel, objects can be placed on both sides.", uiDesc/*.uiSize(new Vector2(window_width, 0))*/);
             SPanel hp = content.addPanel_Horizontal(UIInfo.PANEL_DEFAULT.layoutAlignment(TextAnchor.LowerRight));
             hp.addImage(size: new Vector2(100, 100), color: Color.red);
             hp.addSpacer();
