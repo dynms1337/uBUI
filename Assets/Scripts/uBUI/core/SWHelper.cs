@@ -70,31 +70,40 @@ namespace uBUI
             RectTransform rectTransform = ret.AddComponent<RectTransform>();
             rectTransform.sizeDelta = sizeDelta;
             {
-                switch (uiInfo.m_fitWidth)
-                {
-                    case UIInfo.Fit.Fixed:
-                    case UIInfo.Fit.Flexible:
-                        {
-                            LayoutElement le = ret.AddComponent<LayoutElement>();
-                            if (uiInfo.m_uiSize.x != 0) le.minWidth = uiInfo.m_uiSize.x;
-                            if (uiInfo.m_uiSize.y != 0) le.minHeight = uiInfo.m_uiSize.y;
-                            if (uiInfo.m_fit == UIInfo.Fit.Fixed)
-                            {
-                                if (uiInfo.m_uiSize.x != 0) le.preferredWidth = uiInfo.m_uiSize.x;
-                                if (uiInfo.m_uiSize.y != 0) le.preferredHeight = uiInfo.m_uiSize.y;
-                                le.flexibleWidth = 0;
-                                le.flexibleHeight = 0;
-                            }
-                            else
-                            {
-                                if (uiInfo.m_flexWidth != 0) le.flexibleWidth = uiInfo.m_flexWidth;
-                                if (uiInfo.m_flexHeight != 0) le.flexibleHeight = uiInfo.m_flexHeight;
-                            }
-                        }
-                        break;
-                    case UIInfo.Fit.UnSpecified:
-                    default: break; //pass
-                }
+
+                LayoutElement le = ret.AddComponent<LayoutElement>();
+                if (uiInfo.m_leMinSize.x != 0) le.minWidth = uiInfo.m_leMinSize.x;
+                if (uiInfo.m_leMinSize.y != 0) le.minHeight = uiInfo.m_leMinSize.y;
+                if (uiInfo.m_lePreferredSize.x != 0) le.preferredWidth = uiInfo.m_lePreferredSize.x;
+                if (uiInfo.m_lePreferredSize.y != 0) le.preferredHeight = uiInfo.m_lePreferredSize.y;
+                if (uiInfo.m_leFlexWeight.x != 0) le.flexibleWidth = uiInfo.m_leFlexWeight.x;
+                if (uiInfo.m_leFlexWeight.y != 0) le.flexibleHeight = uiInfo.m_leFlexWeight.y;
+
+                //switch (uiInfo.m_fitWidth)
+                //{
+                //    case UIInfo.Fit.Fixed:
+                //    case UIInfo.Fit.Flexible:
+                //        {
+                //            LayoutElement le = ret.AddComponent<LayoutElement>();
+                //            if (uiInfo.m_lePreferredSize.x != 0) le.minWidth = uiInfo.m_lePreferredSize.x;
+                //            if (uiInfo.m_lePreferredSize.y != 0) le.minHeight = uiInfo.m_lePreferredSize.y;
+                //            if (uiInfo.m_fit == UIInfo.Fit.Fixed)
+                //            {
+                //                if (uiInfo.m_lePreferredSize.x != 0) le.preferredWidth = uiInfo.m_lePreferredSize.x;
+                //                if (uiInfo.m_lePreferredSize.y != 0) le.preferredHeight = uiInfo.m_lePreferredSize.y;
+                //                le.flexibleWidth = 0;
+                //                le.flexibleHeight = 0;
+                //            }
+                //            else
+                //            {
+                //                if (uiInfo.m_flexWidth != 0) le.flexibleWidth = uiInfo.m_flexWidth;
+                //                if (uiInfo.m_flexHeight != 0) le.flexibleHeight = uiInfo.m_flexHeight;
+                //            }
+                //        }
+                //        break;
+                //    case UIInfo.Fit.UnSpecified:
+                //    default: break; //pass
+                //}
 
                 //switch (uiInfo.m_fit)
                 //{
@@ -604,10 +613,10 @@ namespace uBUI
             if (tex == null) return CreateButton(parent, TaskOnClick: TaskOnClick, labelStr: labelStr, sprite: null, imgSize: imgSize, uiInfo: uiInfo, goName: goName);
             int width = tex.width;
             int height = tex.height;
-            if (uiInfo != null && uiInfo.m_uiSize.x != 0f & uiInfo.m_uiSize.y != 0f)
+            if (uiInfo != null && uiInfo.m_lePreferredSize.x != 0f & uiInfo.m_lePreferredSize.y != 0f)
             {
-                width = (int)uiInfo.m_uiSize.x;
-                height = (int)uiInfo.m_uiSize.y;
+                width = (int)uiInfo.m_lePreferredSize.x;
+                height = (int)uiInfo.m_lePreferredSize.y;
                 tex = ResizeTexture(tex, width, height);
             }
             return CreateButton(parent, TaskOnClick, labelStr, Sprite.Create(tex, new Rect(0, 0, width, height), Vector2.zero), imgSize: imgSize, imgColor: imgColor, uiInfo, goName);

@@ -75,7 +75,7 @@ namespace uBUI
         public SPanel addPanel_Vertical(UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = new UIInfo();
-            if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fitW(UIInfo.Fit.Flexible);
+            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fitW(UIInfo.Fit.Flexible);
             return CreateVertical(goPanel, uiInfo, goName: goName);
         }
         /// <summary>

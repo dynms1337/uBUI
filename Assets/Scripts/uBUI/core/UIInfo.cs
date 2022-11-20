@@ -14,15 +14,16 @@ namespace uBUI
     {
 
 
+        // LayoutElement
         public enum Fit { Fixed, Flexible, UnSpecified }
-        public Fit m_fitWidth = Fit.UnSpecified;
-        public Fit m_fitHeight = Fit.UnSpecified;
+        //public Fit m_fitWidth = Fit.UnSpecified;
+        //public Fit m_fitHeight = Fit.UnSpecified;
+        public Vector2 m_lePreferredSize = Vector2.zero;
+        public Vector2 m_leMinSize = Vector2.zero;
+        public Vector2 m_leFlexWeight = Vector2.zero;
+
+
         public Vector2 m_margin = Vector2.zero;   //Parentで使用
-        //public Vector2 m_position = Vector2.zero;
-        public Vector2 m_uiSize = Vector2.zero;
-        public Vector2 m_uiFlexWeight = Vector2.zero;
-        //public float m_flexWidth = 0f;        //SpecifiedSizeで使用、０なら設定しない
-        //public float m_flexHeight = 0f;       //SpecifiedSizeで使用、０なら設定しない
 
         public int m_textSize = SWHelper.FONT_SIZE;
         public Color m_textColor = SWHelper.COLOR_TEXT;
@@ -62,15 +63,6 @@ namespace uBUI
          *  ※　呼び出し元のUIInfoの変更を避けるため、クローンを編集して返却している。
         */
         public UIInfo margin(Vector2 margin) { UIInfo ret = this.Clone(); ret.m_margin = margin; return ret; }
-        //public UIInfo position(Vector2 position) { UIInfo ret = this.Clone(); ret.m_position = position; return ret; }
-        //public UIInfo uiSize(Vector2 uiSize)
-        //{
-        //    UIInfo ret = this.Clone();
-        //    if (ret.is_fit_UnSpecified()) ret = ret.fit_Fixed();
-        //    ret.m_uiSize = uiSize; return ret;
-        //}
-        //public UIInfo flexWidth(float flexWidth) { UIInfo ret = this.Clone(); ret.m_flexWidth = flexWidth; return ret; }
-        //public UIInfo flexHeight(float flexHeight) { UIInfo ret = this.Clone(); ret.m_flexHeight = flexHeight; return ret; }
         public UIInfo textSize(int sizePx) { UIInfo ret = this.Clone(); ret.m_textSize = sizePx; return ret; }
         public UIInfo textColor(Color textColor) { UIInfo ret = this.Clone(); ret.m_textColor = textColor; return ret; }
         public UIInfo bgColor(Color bgColor) { UIInfo ret = this.Clone(); ret.m_bgColor = bgColor; return ret; }
@@ -89,14 +81,42 @@ namespace uBUI
             return ret;
         }
 
+        public UIInfo lePreferredSize(float width, float height)
+        {
+            UIInfo ret = this.Clone();
+            if (width != 0) ret.m_lePreferredSize.x = width;
+            if (height != 0) ret.m_lePreferredSize.y = height;
+            return ret;
+        }
+
+        public UIInfo leMinSize(float width, float height)
+        {
+            UIInfo ret = this.Clone();
+            if (width != 0) ret.m_leMinSize.x = width;
+            if (height != 0) ret.m_leMinSize.y = height;
+            return ret;
+        }
+        public UIInfo leFlexWeight(float wWeight, float hWeight)
+        {
+            UIInfo ret = this.Clone();
+            if (wWeight != 0) ret.m_leFlexWeight.x = wWeight;
+            if (hWeight != 0) ret.m_leFlexWeight.y = hWeight;
+            return ret;
+        }
+
+        // ************************ Syntax sugar for LayoutElement settings ************************
         public UIInfo fitW(Fit fit, float? sizeOrWeight = 1f)
         {
             UIInfo ret = this.Clone();
-            ret.m_fitWidth = fit;
+            //ret.m_fitWidth = fit;
             if (sizeOrWeight != null) switch (fit)
                 {
-                    case Fit.Fixed: ret.m_uiSize.x = sizeOrWeight.Value; break;
-                    case Fit.Flexible: ret.m_uiFlexWeight.x = sizeOrWeight.Value; break;
+                    case Fit.Fixed:
+                        ret.lePreferredSize(sizeOrWeight.Value, 0); 
+                        break;
+                    case Fit.Flexible:
+                        ret.leFlexWeight(sizeOrWeight.Value, 0); 
+                        break;
                     case Fit.UnSpecified: break;
                     default: break;
                 }
@@ -108,8 +128,8 @@ namespace uBUI
             ret.m_fitHeight = fit;
             if (sizeOrWeight != null) switch (fit)
                 {
-                    case Fit.Fixed: ret.m_uiSize.y = sizeOrWeight.Value; break;
-                    case Fit.Flexible: ret.m_uiFlexWeight.y = sizeOrWeight.Value; break;
+                    case Fit.Fixed: ret.lePreferredSize(0, sizeOrWeight.Value); break;
+                    case Fit.Flexible: ret.leFlexWeight(0, sizeOrWeight.Value); break;
                     case Fit.UnSpecified: break;
                     default: break;
 
@@ -117,51 +137,9 @@ namespace uBUI
             return ret;
         }
 
+        public UIInfo fitWH(Fit fit) { return fitW(fit).fitH(fit); }
         public UIInfo fitWH(Fit fit, float? sizeOrWeight = null) { return fitW(fit, sizeOrWeight).fitH(fit, sizeOrWeight); }
-        public UIInfo fitWH(Fit fit, Vector2? sizeOrWeight  = null) { return fitW(fit, sizeOrWeight.Value.x ).fitH(fit, sizeOrWeight.Value.y ); }
-
-
-        ///// <summary>縦横固定サイズ[px]</summary>
-        //public UIInfo fit_Fixed(Vector2 position = default(Vector2), Vector2 uiSize = default(Vector2))
-        //{
-        //    UIInfo ret = this.Clone(); ret.m_fit = Fit.Fixed;
-        //    if (position != default(Vector2)) ret.m_position = position;
-        //    if (uiSize != default(Vector2)) ret.m_uiSize = uiSize;
-        //    return ret;
-        //}
-        ///// <summary>親GameObjectのサイズに合わせる。</summary>
-        //public UIInfo fit_Parent(Vector2 margin = default(Vector2))
-        //{
-        //    UIInfo ret = this.Clone(); ret.m_fit = Fit.Parent;
-        //    if (margin != default(Vector2)) ret.m_margin = margin;
-        //    return ret;
-        //}
-        ///// <summary>自身のコンポーネントのサイズに合わせる</summary>
-        //public UIInfo fit_Self()
-        //{
-        //    UIInfo ret = this.Clone(); ret.m_fit = Fit.Self;
-        //    return ret;
-        //}
-        ///// <summary>親GameObjectに隙間ができないように合わせる</summary>
-        //public UIInfo fit_Flexible(float flexWidth = 1f, float flexHeight = 1f, Vector2 minSize = default(Vector2))
-        //{
-        //    if (minSize == default(Vector2)) minSize = Vector2.zero;
-        //    UIInfo ret = this.Clone(); ret.m_fit = Fit.Flexible;
-        //    ret.m_flexWidth = flexWidth; ret.m_flexHeight = flexHeight; ret.m_uiSize = minSize;
-        //    return ret;
-        //}
-        ///// <summary>横幅は親、縦幅は自身のサイズに合わせる</summary>
-        //public UIInfo fit_WParentHSelf(Vector2 margin = default(Vector2))
-        //{
-        //    UIInfo ret = this.Clone(); ret.m_fit = Fit.WParentHSelf;
-        //    if (margin != default(Vector2)) ret.m_margin = margin;
-        //    return ret;
-        //}
-        //public UIInfo fit_WSelfHParent()
-        //{
-        //    UIInfo ret = this.Clone(); ret.m_fit = Fit.WSelfHParent;
-        //    return ret;
-        //}
+        public UIInfo fitWH(Fit fit, Vector2? sizeOrWeight = null) { return fitW(fit, sizeOrWeight.Value.x).fitH(fit, sizeOrWeight.Value.y); }
 
 
         // ********************** Other Methods **********************************
@@ -172,6 +150,6 @@ namespace uBUI
             return JsonUtility.FromJson<UIInfo>(jsonStr);
         }
 
-        public bool is_fit_UnSpecified() { return this.m_fit == Fit.UnSpecified; }
+        //public bool is_fit_UnSpecified() { return this.m_fit == Fit.UnSpecified; }
     }
 }
