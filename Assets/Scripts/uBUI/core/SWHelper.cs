@@ -69,8 +69,11 @@ namespace uBUI
             GameObject ret = new GameObject(goName);
             RectTransform rectTransform = ret.AddComponent<RectTransform>();
             rectTransform.sizeDelta = sizeDelta;
-            {
 
+            if (!(uiInfo.m_leMinSize == Vector2.zero &
+                uiInfo.m_lePreferredSize == Vector2.zero &
+                uiInfo.m_leFlexWeight == Vector2.zero))
+            {
                 LayoutElement le = ret.AddComponent<LayoutElement>();
                 if (uiInfo.m_leMinSize.x != 0) le.minWidth = uiInfo.m_leMinSize.x;
                 if (uiInfo.m_leMinSize.y != 0) le.minHeight = uiInfo.m_leMinSize.y;
@@ -78,98 +81,6 @@ namespace uBUI
                 if (uiInfo.m_lePreferredSize.y != 0) le.preferredHeight = uiInfo.m_lePreferredSize.y;
                 if (uiInfo.m_leFlexWeight.x != 0) le.flexibleWidth = uiInfo.m_leFlexWeight.x;
                 if (uiInfo.m_leFlexWeight.y != 0) le.flexibleHeight = uiInfo.m_leFlexWeight.y;
-
-                //switch (uiInfo.m_fitWidth)
-                //{
-                //    case UIInfo.Fit.Fixed:
-                //    case UIInfo.Fit.Flexible:
-                //        {
-                //            LayoutElement le = ret.AddComponent<LayoutElement>();
-                //            if (uiInfo.m_lePreferredSize.x != 0) le.minWidth = uiInfo.m_lePreferredSize.x;
-                //            if (uiInfo.m_lePreferredSize.y != 0) le.minHeight = uiInfo.m_lePreferredSize.y;
-                //            if (uiInfo.m_fit == UIInfo.Fit.Fixed)
-                //            {
-                //                if (uiInfo.m_lePreferredSize.x != 0) le.preferredWidth = uiInfo.m_lePreferredSize.x;
-                //                if (uiInfo.m_lePreferredSize.y != 0) le.preferredHeight = uiInfo.m_lePreferredSize.y;
-                //                le.flexibleWidth = 0;
-                //                le.flexibleHeight = 0;
-                //            }
-                //            else
-                //            {
-                //                if (uiInfo.m_flexWidth != 0) le.flexibleWidth = uiInfo.m_flexWidth;
-                //                if (uiInfo.m_flexHeight != 0) le.flexibleHeight = uiInfo.m_flexHeight;
-                //            }
-                //        }
-                //        break;
-                //    case UIInfo.Fit.UnSpecified:
-                //    default: break; //pass
-                //}
-
-                //switch (uiInfo.m_fit)
-                //{
-                //    case UIInfo.Fit.Parent:
-                //        rectTransform.anchorMin = Vector2.zero;
-                //        rectTransform.anchorMax = Vector2.one;
-                //        rectTransform.anchoredPosition = Vector2.zero;
-                //        rectTransform.sizeDelta = uiInfo.m_margin;
-                //        break;
-                //    case UIInfo.Fit.WParentHSelf:
-                //        //width:Parentへアンカーする。 height:子要素のサイズに合わせる
-                //        rectTransform.anchorMin = Vector2.zero;
-                //        rectTransform.anchorMax = Vector2.one;
-                //        rectTransform.anchoredPosition = Vector2.zero;
-                //        rectTransform.sizeDelta = uiInfo.m_margin;
-                //        LayoutElement le_pow = ret.AddComponent<LayoutElement>();
-                //        le_pow.flexibleWidth = 1;
-                //        le_pow.flexibleHeight = 0;
-                //        break;
-                //    case UIInfo.Fit.WSelfHParent:
-                //        rectTransform.anchorMin = Vector2.zero;
-                //        rectTransform.anchorMax = Vector2.one;
-                //        rectTransform.anchoredPosition = Vector2.zero;
-                //        rectTransform.sizeDelta = uiInfo.m_margin;
-                //        LayoutElement le_wshp = ret.AddComponent<LayoutElement>();
-                //        le_wshp.flexibleHeight = 1;
-                //        break;
-                //    case UIInfo.Fit.Self:
-                //        //ContentSizeFitter csf = ret.AddComponent<ContentSizeFitter>();
-                //        //csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;    //width/heightを中身（文字など）サイズに合わせる
-                //        //csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-                //        break;
-                //    case UIInfo.Fit.Fixed:
-                //    case UIInfo.Fit.Flexible:
-                //        RectTransform rt = ret.transform as RectTransform;
-                //        rt.localPosition = uiInfo.m_position;
-                //        rt.sizeDelta = new Vector2(
-                //            uiInfo.m_uiSize.x != 0 ? uiInfo.m_uiSize.x : rt.sizeDelta.x,
-                //            uiInfo.m_uiSize.y != 0 ? uiInfo.m_uiSize.y : rt.sizeDelta.y);
-                //        LayoutElement le_fixed = ret.AddComponent<LayoutElement>();
-                //        if (uiInfo.m_uiSize.x != 0) le_fixed.minWidth = uiInfo.m_uiSize.x;
-                //        if (uiInfo.m_uiSize.y != 0) le_fixed.minHeight = uiInfo.m_uiSize.y;
-                //        if (uiInfo.m_fit == UIInfo.Fit.Fixed)
-                //        {
-                //            if (uiInfo.m_uiSize.x != 0) le_fixed.preferredWidth = uiInfo.m_uiSize.x;
-                //            if (uiInfo.m_uiSize.y != 0) le_fixed.preferredHeight = uiInfo.m_uiSize.y;
-                //            le_fixed.flexibleWidth = 0;
-                //            le_fixed.flexibleHeight = 0;
-                //        }
-                //        else
-                //        {
-                //            if (uiInfo.m_flexWidth != 0) le_fixed.flexibleWidth = uiInfo.m_flexWidth;
-                //            if (uiInfo.m_flexHeight != 0) le_fixed.flexibleHeight = uiInfo.m_flexHeight;
-                //        }
-                //        break;
-                //    case UIInfo.Fit.WParentHFrexible:
-                //        rectTransform.anchorMin = Vector2.zero;
-                //        rectTransform.anchorMax = Vector2.one;
-                //        rectTransform.anchoredPosition = Vector2.zero;
-                //        rectTransform.sizeDelta = uiInfo.m_margin;
-                //        LayoutElement le_h = ret.AddComponent<LayoutElement>();
-                //        le_h.flexibleHeight = 1;
-                //        break;
-                //    case UIInfo.Fit.UnSpecified:
-                //    default: break; //pass
-                //}
             }
             if (default_layer != -1)
                 ret.layer = default_layer;
@@ -305,7 +216,7 @@ namespace uBUI
 
         public static Image addImageComponent(GameObject go, Sprite sprite = null, UIInfo uiInfo = null)
         {
-            if (uiInfo == null) uiInfo = new UIInfo().fit_Fixed();
+            if (uiInfo == null) uiInfo = UIInfo.IMAGE_DEFAULT;
             if (uiInfo.m_bgColor == default(Color)) { uiInfo.m_bgColor = COLOR_IMAGE_DEFAULT; }
             Image image = go.AddComponent<Image>();
             if (sprite != null)
@@ -363,7 +274,7 @@ namespace uBUI
             Vector2 position = default(Vector2), Vector2 size = default(Vector2), string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.CANVAS_DEFAULT;
-            if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Fixed();
+            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Fixed();
             if (position == default(Vector2)) position = WINDOW_POSITION;
             if (size == default(Vector2)) size = WINDOW_SIZE;
             var goCanvas = CreateUIElement(goName == "" ? goname_Canvas.get() : goName, uiInfo, size, parent: parent); // new GameObject(goName == "" ? goname_Canvas.get() : goName);
@@ -394,13 +305,13 @@ namespace uBUI
             if (uiInfo == null) uiInfo = new UIInfo();
             if (leftbottom == default(Vector2)) leftbottom = WINDOW_POSITION;
             if (size == default(Vector2)) size = WINDOW_SIZE;
-            Canvas canvas = CreateCanvas(parent, RenderMode.ScreenSpaceOverlay, new UIInfo().fit_Fixed(), leftbottom, size, goName);
+            Canvas canvas = CreateCanvas(parent, RenderMode.ScreenSpaceOverlay, UIInfo.CANVAS_DEFAULT, leftbottom, size, goName);
 
             CanvasScaler canvasScaler = canvas.gameObject.GetOrAddComponent<CanvasScaler>();
             canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
             canvasScaler.scaleFactor = canvasScale;
 
-            LayoutGroup container = CreatePanel(uiInfo.fit_Fixed(leftbottom, size), layoutGroup, canvas.gameObject, "container");
+            LayoutGroup container = CreatePanel(UIInfo.PANEL_DEFAULT.lePreferredSize(size.x, size.y), layoutGroup, canvas.gameObject, "container");
 
             RectTransform rt = container.gameObject.GetOrAddComponent<RectTransform>();
             rt.anchorMin = Vector2.zero;            //anchorMin/Max 画面左下が原点。
@@ -420,7 +331,7 @@ namespace uBUI
             if (uiInfo == null) uiInfo = new UIInfo();
             if (positionFromLeftBottom == default(Vector2)) positionFromLeftBottom = WINDOW_POSITION;
             if (size == default(Vector2)) size = WINDOW_SIZE;
-            Canvas canvas = CreateCanvas(parent, RenderMode.WorldSpace, new UIInfo().fit_Fixed(), positionFromLeftBottom, size, goName);
+            Canvas canvas = CreateCanvas(parent, RenderMode.WorldSpace, UIInfo.CANVAS_DEFAULT, positionFromLeftBottom, size, goName);
 
 
             CanvasScaler canvasScaler = canvas.gameObject.GetOrAddComponent<CanvasScaler>();
@@ -433,14 +344,14 @@ namespace uBUI
                                                                                       //スケールが0.001なら、0.001m/pxとなり、Windowの幅が800pxならゲーム空間での幅が80cmになる。
             canvas.gameObject.GetComponent<RectTransform>().localScale = new Vector3(meterPerPx, meterPerPx, meterPerPx);
 
-            LayoutGroup container = CreatePanel(uiInfo.fit_Fixed(positionFromLeftBottom, size), layoutGroup, canvas.gameObject, "container");
+            LayoutGroup container = CreatePanel(UIInfo.PANEL_DEFAULT.lePreferredSize(size.x, size.y), layoutGroup, canvas.gameObject, "container");
             return container;
         }
 
         public static LayoutGroup CreatePanel(UIInfo uiInfo = null, LayoutType layoutGroup = LayoutType.Vertical, GameObject parent = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.PANEL_DEFAULT;
-            if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Parent();
+            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Parent();
             GameObject panelGO = CreateUIElement(goName == "" ? goname_Panel.get() + "-" + layoutGroup.ToString() : goName, uiInfo, parent: parent);
             if (uiInfo.m_bgColor == default(Color)) uiInfo.m_bgColor = SWHelper.COLOR_AREA_BG;
             Image image = addImageComponent(panelGO, uiInfo: uiInfo);
@@ -471,7 +382,7 @@ namespace uBUI
         {
 
             Image ret = CreateImage(parent, uiInfo:
-                new UIInfo().fit_Flexible(flexWidth: 1f, flexHeight: 0f).uiSize(new Vector2(0, height))
+                UIInfo.IMAGE_DEFAULT.leFlexWeight(1, 0).lePreferredSize(0, height)
                 , goName: goName);
             ret.color = Color.clear;
             return ret;
@@ -482,7 +393,7 @@ namespace uBUI
         {
             if (color == default(Color)) color = Color.black;
             Image ret = CreateImage(parent, uiInfo:
-                new UIInfo().fit_Flexible(flexWidth: 1f, flexHeight: 0f).uiSize(new Vector2(0, height))
+                UIInfo.IMAGE_DEFAULT.leFlexWeight(1, 0).lePreferredSize(0, height)
                 , goName: goName);
             ret.color = color;
             return ret;
@@ -500,7 +411,7 @@ namespace uBUI
         public static Text CreateText(GameObject parent, string label, UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.TEXT_DEFAULT;
-            if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_WParentHSelf();
+            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_WParentHSelf();
             if (uiInfo.m_bgColor == default(Color)) uiInfo.m_bgColor = COLOR_AREA_BG;
             Image image = CreateImage(parent, uiInfo: uiInfo, goName: goName == "" ? "TextContainer" : goName);
             GameObject container = image.gameObject;
@@ -524,7 +435,7 @@ namespace uBUI
             Sprite sprite = null, int imgSize = -1, Color? imgColor = null, UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.BUTTON_DEFAULT;
-            if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_WParentHSelf();
+            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_WParentHSelf();
             Text text = CreateText(parent, labelStr, uiInfo, goName == "" ? goname_Button.get() : goName);
             text.alignment = TextAnchor.MiddleCenter;
 
@@ -537,9 +448,9 @@ namespace uBUI
 
             if (sprite != null)  //ボタン画像がないときはGameObjectを追加しない。レイアウトが崩れないようにするため。
             {
-                UIInfo uiImage = uiInfo.fit_Self();
+                UIInfo uiImage = uiInfo;   //.fit_Self();
                 if (imgSize > 0)
-                    uiImage = uiImage.uiSize(new Vector2(imgSize, imgSize)).fit_Fixed();
+                    uiImage = uiImage.lePreferredSize(imgSize, imgSize); //.fit_Fixed();
                 Image buttonImage = CreateImage(goButton, uiInfo: uiImage, goName: "buttonImage");
                 buttonImage.sprite = sprite;
                 buttonImage.preserveAspect = true;  //引き伸ばしたときに画像のアスペクト比を保つ
@@ -628,7 +539,7 @@ namespace uBUI
         public static Image CreateImage(GameObject parent, Sprite sprite = null, UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.IMAGE_DEFAULT;
-            if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Self();
+            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Self();
             GameObject go = CreateUIElement(goName == "" ? goname_Image.get() : goName, uiInfo, parent: parent);
             return addImageComponent(go, sprite, uiInfo);
         }
@@ -675,7 +586,7 @@ namespace uBUI
             GameObject handle = CreateUIElement("Handle", new UIInfo(), parent: handleArea);
 
             // Background
-            Image backgroundImage = addImageComponent(background, uiInfo: new UIInfo().fit_Parent().bgColor(COLOR_SLIDER_BACKGROUND));
+            Image backgroundImage = addImageComponent(background, uiInfo: new UIInfo().leFlexWeight(1, 0).bgColor(COLOR_SLIDER_BACKGROUND));
             RectTransform backgroundRect = background.GetComponent<RectTransform>();
             backgroundRect.anchorMin = new Vector2(0, 0.25f);
             backgroundRect.anchorMax = new Vector2(1, 0.75f);
@@ -689,7 +600,7 @@ namespace uBUI
             fillAreaRect.sizeDelta = new Vector2(-20, 0);
 
             // Fill
-            addImageComponent(fill, uiInfo: new UIInfo().fit_Parent().bgColor(COLOR_AREA_BG));
+            addImageComponent(fill, uiInfo: new UIInfo().leFlexWeight(1, 0).bgColor(COLOR_AREA_BG));
 
             RectTransform fillRect = fill.GetComponent<RectTransform>();
             fillRect.sizeDelta = new Vector2(10, 0);
@@ -701,7 +612,7 @@ namespace uBUI
             handleAreaRect.anchorMax = new Vector2(1, 1);
 
             // Handle
-            Image handleImage = addImageComponent(handle, uiInfo: new UIInfo().fit_Parent().bgColor(COLOR_SLIDER_HANDLE));
+            Image handleImage = addImageComponent(handle, uiInfo: new UIInfo().leFlexWeight(1, 0).bgColor(COLOR_SLIDER_HANDLE));
 
             RectTransform handleRect = handle.GetComponent<RectTransform>();
             handleRect.sizeDelta = new Vector2(20, 0);
@@ -730,14 +641,14 @@ namespace uBUI
         public static Scrollbar CreateScrollbar(GameObject parent, UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.SCROLLBAR_DEFAULT;
-            if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Fixed().position(Vector2.zero).uiSize(UIELEMENT_SIZE);
+            //if (uiInfo.is_fit_UnSpecified()) uiInfo = UIInfo.SCROLLBAR_DEFAULT.rtSizeDelta(UIELEMENT_SIZE);
             // Create GOs Hierarchy
             GameObject scrollbarRoot = CreateUIElement(goName == "" ? goname_ScrollBar.get() : goName, uiInfo, parent: parent);
             GameObject sliderArea = CreateUIElement("Sliding Area", new UIInfo(), parent: scrollbarRoot);
             GameObject handle = CreateUIElement("Handle", new UIInfo(), parent: sliderArea);
 
 
-            Image bgImage = addImageComponent(scrollbarRoot, uiInfo: new UIInfo().fit_Parent().bgColor(COLOR_SLIDER_BACKGROUND));
+            Image bgImage = addImageComponent(scrollbarRoot, uiInfo: new UIInfo().leFlexWeight(1, 0).bgColor(COLOR_SLIDER_BACKGROUND));
 
             Image handleImage = addImageComponent(handle);
 
@@ -771,18 +682,18 @@ namespace uBUI
         public static Toggle CreateToggle(GameObject parent, UnityAction<bool> onValueChanged, string labelStr = "Toggle", bool isOn = true,
             UIInfo uiInfo = null, string goName = "")
         {
-            if (uiInfo == null) uiInfo = new UIInfo().fit_Parent();
-            if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Parent();
+            if (uiInfo == null) uiInfo = UIInfo.TOGGLE_DEFAULT;
+            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Parent();
             // Set up hierarchy
             GameObject goToggleRoot = CreateUIElement(goName == "" ? goname_Toggle.get() : goName, uiInfo, parent: parent);
             LayoutGroup lg = addLyaoutGroup(goToggleRoot, LayoutType.Horizontal, uiInfo.padding(0));
             lg.childAlignment = TextAnchor.MiddleLeft;
             Image bgImage = CreateImage(parent: goToggleRoot,
-                uiInfo: new UIInfo().fit_Flexible(0f, 0f, new Vector2(TOGGLE_BACKGROUND_SIZE, TOGGLE_BACKGROUND_SIZE)).bgColor(COLOR_SELECTABLE_ON), goName: "Background");
+                uiInfo: new UIInfo().rtSizeDelta(new Vector2(TOGGLE_BACKGROUND_SIZE, TOGGLE_BACKGROUND_SIZE)).bgColor(COLOR_SELECTABLE_ON), goName: "Background");
             GameObject goBackground = bgImage.gameObject;
 
             Image checkmarkImage = CreateImage(parent: goBackground,
-              uiInfo: new UIInfo().fit_Fixed().bgColor(Color.white), goName: "Checkmark");
+              uiInfo: new UIInfo().bgColor(Color.white), goName: "Checkmark");
             GameObject goCheckmark = checkmarkImage.gameObject;
             RectTransform checkmarkRect = goCheckmark.GetComponent<RectTransform>();
             checkmarkRect.anchorMin = new Vector2(0.5f, 0.5f);
@@ -790,7 +701,7 @@ namespace uBUI
             checkmarkRect.anchoredPosition = Vector2.zero;
             checkmarkRect.sizeDelta = new Vector2(TOGGLE_BACKGROUND_SIZE / 2, TOGGLE_BACKGROUND_SIZE / 2);
 
-            Text label = CreateText(parent: goToggleRoot, uiInfo: new UIInfo().fit_Parent(), label: labelStr);
+            Text label = CreateText(parent: goToggleRoot, uiInfo: new UIInfo()/*.fit_Parent()*/, label: labelStr);
             label.gameObject.getParent().GetOrAddComponent<LayoutElement>().flexibleWidth = 1;
 
             Toggle toggle = goToggleRoot.AddComponent<Toggle>();
@@ -807,7 +718,7 @@ namespace uBUI
             LayoutType layoutGroup = LayoutType.Horizontal, UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.RADIO_BUTTON_DEFAULT;
-            if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_WParentHSelf();
+            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_WParentHSelf();
             GameObject goRadioPanel = CreatePanel(parent: parent, layoutGroup: layoutGroup, uiInfo: uiInfo, goName: goname_RadioButton.get()).gameObject;
             ToggleGroup toggleGroup = goRadioPanel.AddComponent<ToggleGroup>();
             int i = 0;
@@ -839,12 +750,12 @@ namespace uBUI
            string initialText = "", int lineCount = 1, UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.INPUTFIELD_DEFAULT;
-            if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_WParentHSelf();
+            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_WParentHSelf();
             GameObject goInputField = CreateUIElement(goName == "" ? goname_InputField.get() : goName, uiInfo, parent: parent);
             GameObject goPlaceholder = CreateUIElement("Placeholder", new UIInfo(), parent: goInputField);
             GameObject goText = CreateUIElement("Text", new UIInfo(), parent: goInputField);
 
-            Image image = addImageComponent(goInputField, uiInfo: new UIInfo().fit_Parent().bgColor(COLOR_SELECTABLE));
+            Image image = addImageComponent(goInputField, uiInfo: new UIInfo()/*.fit_Parent()*/.bgColor(COLOR_SELECTABLE));
 
             InputField inputField = goInputField.AddComponent<InputField>();
             LayoutElement leInputField = goInputField.GetOrAddComponent<LayoutElement>();
@@ -920,11 +831,11 @@ namespace uBUI
             float scrollSensitivity = 20, UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.SCROLLVIEW_DEFAULT;
-            if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Parent();
+            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Parent();
             if (uiInfo.m_bgColor == default(Color)) uiInfo = uiInfo.bgColor(COLOR_AREA_BG);
             GameObject goScrollView = CreateUIElement(goName == "" ? goname_ScrollView.get() : goName, uiInfo, parent: parent);
-            GameObject goViewport = CreateUIElement("Viewport", new UIInfo().fit_Parent(), parent: goScrollView);
-            GameObject goContent = CreateUIElement("Content", new UIInfo().fit_Self(), parent: goViewport);
+            GameObject goViewport = CreateUIElement("Viewport", new UIInfo()/*.fit_Parent()*/, parent: goScrollView);
+            GameObject goContent = CreateUIElement("Content", new UIInfo()/*.fit_Self()*/, parent: goViewport);
 
             GameObject hScrollbar = CreateScrollbar(parent: goScrollView).gameObject;
             hScrollbar.name = "ScrollbarHorizontal";

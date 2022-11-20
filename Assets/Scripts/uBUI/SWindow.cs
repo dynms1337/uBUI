@@ -30,18 +30,18 @@ namespace uBUI
             if (uiInfo == null) uiInfo = uiContentPanel.Clone();
             this.container = SPanel.CreateFromPanel(lgContainer);
 
-            this.header = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().fit_WParentHSelf().bgColor(uiInfo.m_bgColor),
+            this.header = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().leFlexWeight(1,0).bgColor(uiInfo.m_bgColor),
                 layoutGroup: LayoutType.Vertical, parent: container.goPanel, goName: title + "-header"));
-            SPanel _title_caption_container = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().fit_WParentHSelf().bgColor(uiInfo.m_bgColor),
+            SPanel _title_caption_container = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().leFlexWeight(1,0).bgColor(uiInfo.m_bgColor),
                 layoutGroup: LayoutType.Horizontal, parent: header.goPanel, goName: title + "-title-caption-container"));
-            this.title = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().fit_WParentHSelf().bgColor(uiInfo.m_bgColor),
+            this.title = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().leFlexWeight(1,0).bgColor(uiInfo.m_bgColor),
                 layoutGroup: LayoutType.Horizontal, parent: _title_caption_container.goPanel, "left"));  //子要素のサイズに合わせる
-            this.caption = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().fit_Self().bgColor(uiInfo.m_bgColor),
+            this.caption = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().bgColor(uiInfo.m_bgColor),
                 layoutGroup: LayoutType.Horizontal, parent: _title_caption_container.goPanel, "right")); //子要素のサイズに合わせる
             uiTitle = this.title.addText(title);
 
             this.content = SPanel.CreateFromPanel(
-                SWHelper.CreateScrollView(container.goPanel, uiInfo: uiInfo.fit_Flexible(), goName: title + "-content"));
+                SWHelper.CreateScrollView(container.goPanel, uiInfo: uiInfo.leFlexWeight(1,1), goName: title + "-content"));
             this.hooter = SPanel.CreateFromPanel(
                 SWHelper.CreatePanel(uiInfo: uiInfo, layoutGroup: hooterLayout, parent: container.goPanel, goName: title + "-hooter"));
 

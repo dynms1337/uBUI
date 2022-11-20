@@ -17,7 +17,7 @@ public class Example01 : MonoBehaviour
 
         // ************************ Caption buttons ************************
         // △ Basic Position
-        var uiCaption = UIInfo.BUTTON_DEFAULT.fitWH(UIInfo.Fit.Fixed, 20);
+        var uiCaption = UIInfo.BUTTON_DEFAULT.lePreferredSize(20,20);
         window.caption.addButton(() => { window.locate_byPosition(left: window_left, bottom: window_bottom, width: window_width, height: window_height); },
             labelStr: "△", uiInfo: uiCaption);
         // □ Maximize

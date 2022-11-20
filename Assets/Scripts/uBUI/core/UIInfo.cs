@@ -21,6 +21,9 @@ namespace uBUI
         public Vector2 m_lePreferredSize = Vector2.zero;
         public Vector2 m_leMinSize = Vector2.zero;
         public Vector2 m_leFlexWeight = Vector2.zero;
+        // RectTransform
+        public Vector2 m_rtPosition = Vector2.zero;
+        public Vector2 m_rtSizeDelta = Vector2.zero;
 
 
         public Vector2 m_margin = Vector2.zero;   //Parentで使用
@@ -37,18 +40,18 @@ namespace uBUI
         public TextAnchor m_layoutAlignment = TextAnchor.MiddleLeft;
 
 
-        public static readonly UIInfo TEXT_DEFAULT = new UIInfo().fitW(Fit.Flexible).bgColor(Color.clear/*SWHelper.COLOR_AREA_BG*/)
+        public static readonly UIInfo TEXT_DEFAULT = new UIInfo().leFlexWeight(1, 0).bgColor(Color.clear/*SWHelper.COLOR_AREA_BG*/)
             .textSize(SWHelper.FONT_SIZE).textAlignment(TextAnchor.MiddleLeft);
-        public static readonly UIInfo BUTTON_DEFAULT = TEXT_DEFAULT.fitW(Fit.Flexible).bgColor(Color.white)  //ボタンのデフォルト背景色は白。ホバーしたときの色変化を見やすくするため。)
+        public static readonly UIInfo BUTTON_DEFAULT = TEXT_DEFAULT.leFlexWeight(1, 0).bgColor(Color.white)  //ボタンのデフォルト背景色は白。ホバーしたときの色変化を見やすくするため。)
             .textAlignment(TextAnchor.MiddleCenter);
-        public static readonly UIInfo INPUTFIELD_DEFAULT = TEXT_DEFAULT.fitW(Fit.Flexible).bgColor(Color.gray);
+        public static readonly UIInfo INPUTFIELD_DEFAULT = TEXT_DEFAULT.leFlexWeight(1, 0).bgColor(Color.gray);
         public static readonly UIInfo IMAGE_DEFAULT = new UIInfo();
-        public static readonly UIInfo TOGGLE_DEFAULT = new UIInfo().fitW(Fit.Flexible);
-        public static readonly UIInfo RADIO_BUTTON_DEFAULT = new UIInfo().fitW(Fit.Flexible);
-        public static readonly UIInfo SCROLLBAR_DEFAULT = new UIInfo().fitWH(Fit.Fixed, 20); //  .fit_Fixed().position(Vector2.zero).uiSize(SWHelper.UIELEMENT_SIZE);
-        public static readonly UIInfo SCROLLVIEW_DEFAULT = new UIInfo().fitWH(Fit.UnSpecified).bgColor(SWHelper.COLOR_AREA_BG);
-        public static readonly UIInfo CANVAS_DEFAULT = new UIInfo().fitWH(Fit.UnSpecified); //.fit_Fixed();
-        public static readonly UIInfo PANEL_DEFAULT = new UIInfo().fitWH(Fit.Flexible).bgColor(SWHelper.COLOR_AREA_BG).layoutAlignment(TextAnchor.MiddleLeft);
+        public static readonly UIInfo TOGGLE_DEFAULT = new UIInfo().leFlexWeight(1, 0);
+        public static readonly UIInfo RADIO_BUTTON_DEFAULT = new UIInfo().leFlexWeight(1, 0);
+        public static readonly UIInfo SCROLLBAR_DEFAULT = new UIInfo().rtSizeDelta(new Vector2(20, 20)); // .lePreferredSize(20, 20); //  .fit_Fixed().position(Vector2.zero).uiSize(SWHelper.UIELEMENT_SIZE);
+        public static readonly UIInfo SCROLLVIEW_DEFAULT = new UIInfo().bgColor(SWHelper.COLOR_AREA_BG);
+        public static readonly UIInfo CANVAS_DEFAULT = new UIInfo();
+        public static readonly UIInfo PANEL_DEFAULT = new UIInfo().leFlexWeight(1, 1).bgColor(SWHelper.COLOR_AREA_BG).layoutAlignment(TextAnchor.MiddleLeft);
 
         //public static readonly UIInfo DEFAULT = new UIInfo().fit_Parent().fit_Parent().bgColor(SWHelper.COLOR_AREA_BG).layoutAlignment(TextAnchor.MiddleLeft);
 
@@ -81,6 +84,19 @@ namespace uBUI
             return ret;
         }
 
+        public UIInfo rtSizeDelta(Vector2 sizeDelta)
+        {
+            UIInfo ret = this.Clone();
+            ret.m_rtSizeDelta = sizeDelta;
+            return ret;
+        }
+        public UIInfo rtPosition(Vector2 position)
+        {
+            UIInfo ret = this.Clone();
+            ret.m_rtPosition = position;
+            return ret;
+        }
+
         public UIInfo lePreferredSize(float width, float height)
         {
             UIInfo ret = this.Clone();
@@ -105,41 +121,41 @@ namespace uBUI
         }
 
         // ************************ Syntax sugar for LayoutElement settings ************************
-        public UIInfo fitW(Fit fit, float? sizeOrWeight = 1f)
-        {
-            UIInfo ret = this.Clone();
-            //ret.m_fitWidth = fit;
-            if (sizeOrWeight != null) switch (fit)
-                {
-                    case Fit.Fixed:
-                        ret.lePreferredSize(sizeOrWeight.Value, 0); 
-                        break;
-                    case Fit.Flexible:
-                        ret.leFlexWeight(sizeOrWeight.Value, 0); 
-                        break;
-                    case Fit.UnSpecified: break;
-                    default: break;
-                }
-            return ret;
-        }
-        public UIInfo fitH(Fit fit, float? sizeOrWeight = 1f)   // 1f : default for Flexible
-        {
-            UIInfo ret = this.Clone();
-            ret.m_fitHeight = fit;
-            if (sizeOrWeight != null) switch (fit)
-                {
-                    case Fit.Fixed: ret.lePreferredSize(0, sizeOrWeight.Value); break;
-                    case Fit.Flexible: ret.leFlexWeight(0, sizeOrWeight.Value); break;
-                    case Fit.UnSpecified: break;
-                    default: break;
+        //public UIInfo fitW(Fit fit, float? sizeOrWeight = 1f)
+        //{
+        //    UIInfo ret = this.Clone();
+        //    //ret.m_fitWidth = fit;
+        //    if (sizeOrWeight != null) switch (fit)
+        //        {
+        //            case Fit.Fixed:
+        //                ret.lePreferredSize(sizeOrWeight.Value, 0); 
+        //                break;
+        //            case Fit.Flexible:
+        //                ret.leFlexWeight(sizeOrWeight.Value, 0); 
+        //                break;
+        //            case Fit.UnSpecified: break;
+        //            default: break;
+        //        }
+        //    return ret;
+        //}
+        //public UIInfo fitH(Fit fit, float? sizeOrWeight = 1f)   // 1f : default for Flexible
+        //{
+        //    UIInfo ret = this.Clone();
+        //    ret.m_fitHeight = fit;
+        //    if (sizeOrWeight != null) switch (fit)
+        //        {
+        //            case Fit.Fixed: ret.lePreferredSize(0, sizeOrWeight.Value); break;
+        //            case Fit.Flexible: ret.leFlexWeight(0, sizeOrWeight.Value); break;
+        //            case Fit.UnSpecified: break;
+        //            default: break;
 
-                }
-            return ret;
-        }
+        //        }
+        //    return ret;
+        //}
 
-        public UIInfo fitWH(Fit fit) { return fitW(fit).fitH(fit); }
-        public UIInfo fitWH(Fit fit, float? sizeOrWeight = null) { return fitW(fit, sizeOrWeight).fitH(fit, sizeOrWeight); }
-        public UIInfo fitWH(Fit fit, Vector2? sizeOrWeight = null) { return fitW(fit, sizeOrWeight.Value.x).fitH(fit, sizeOrWeight.Value.y); }
+        //public UIInfo fitWH(Fit fit) { return fitW(fit).fitH(fit); }
+        //public UIInfo fitWH(Fit fit, float? sizeOrWeight = null) { return fitW(fit, sizeOrWeight).fitH(fit, sizeOrWeight); }
+        //public UIInfo fitWH(Fit fit, Vector2? sizeOrWeight = null) { return fitW(fit, sizeOrWeight.Value.x).fitH(fit, sizeOrWeight.Value.y); }
 
 
         // ********************** Other Methods **********************************
