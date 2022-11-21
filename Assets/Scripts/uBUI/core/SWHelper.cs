@@ -744,7 +744,6 @@ namespace uBUI
             inputField.textComponent = text;
             inputField.placeholder = placeholder;
             inputField.text = initialText;
-            inputField.onValueChanged.AddListener(s => { leInputField.preferredHeight = text.preferredHeight; });
             if (onValueChanged != null) inputField.onValueChanged.AddListener(onValueChanged);
             if (onEndEdit != null) inputField.onEndEdit.AddListener(onEndEdit);
             inputField.setUIInfo(uiInfo);
