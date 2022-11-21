@@ -12,19 +12,36 @@ namespace uBUI
     [Serializable]
     public class UIInfo
     {
+        /// <summary>    /// Reference version of Vector2. b/c Vector2? (that is, nullable structure) cannot serialize by JsonUtility.    /// </summary>
+        [Serializable]
+        public class Vector2R
+        {
+            public bool notNull = false;
+            public Vector2 Value;
+            public Vector2R() { }  // default constructor for JSON serialize/deserialize
+            public static Vector2R make(Vector2 vec)
+            {
+                var ret = new Vector2R();
+                ret.Value = vec;
+                ret.notNull = true;  // instantiate without constructor to avoid set notNull true when deserialize.
+                return ret;
+            }
+        }
 
 
         // LayoutElement
-        public enum Fit { Fixed, Flexible, UnSpecified }
-        //public Fit m_fitWidth = Fit.UnSpecified;
-        //public Fit m_fitHeight = Fit.UnSpecified;
-        public Vector2 m_lePreferredSize = Vector2.zero;
-        public Vector2 m_leMinSize = Vector2.zero;
-        public Vector2 m_leFlexWeight = Vector2.zero;
+        public Vector2R m_lePreferredSize = new Vector2R();
+        public Vector2R m_leMinSize = new Vector2R();
+        public Vector2R m_leFlexWeight = new Vector2R();
         // RectTransform
-        public Vector2 m_rtPosition = Vector2.zero;
-        public Vector2 m_rtSizeDelta = Vector2.zero;
-
+        public Vector2R m_rtPosition = new Vector2R();
+        public Vector2R m_rtSizeDelta = new Vector2R();
+        public Vector2R m_rtAnchoredPosition = new Vector2R();
+        public Vector2R m_rtAnchorMin = new Vector2R();
+        public Vector2R m_rtAnchorMax = new Vector2R();
+        public Vector2R m_rtPivot = new Vector2R();
+        public Vector2R m_rtOffsetMin = new Vector2R();
+        public Vector2R m_rtOffsetMax = new Vector2R();
 
         public Vector2 m_margin = Vector2.zero;   //Parentで使用
 
@@ -57,13 +74,10 @@ namespace uBUI
 
         public UIInfo() { }
 
-        /* フィールド編集用メソッド
-         * メソッドチェインでの利用を想定
+        /* Field editing method (Immutable like)
          * Usage:
          *  UIInfo uiInfo1 = new UIInfo().fit_Parent().bgColor(Color.red);
          *  UIInfo uiInfo2 = uiInfo1.textSize(14);
-         *  
-         *  ※　呼び出し元のUIInfoの変更を避けるため、クローンを編集して返却している。
         */
         public UIInfo margin(Vector2 margin) { UIInfo ret = this.Clone(); ret.m_margin = margin; return ret; }
         public UIInfo textSize(int sizePx) { UIInfo ret = this.Clone(); ret.m_textSize = sizePx; return ret; }
@@ -84,79 +98,109 @@ namespace uBUI
             return ret;
         }
 
+        // ----- RectTransform -----
+        public UIInfo rtSizeDelta(float size) { return rtSizeDelta(new Vector2(size, size)); }
+        public UIInfo rtSizeDelta(float width, float height) { return rtSizeDelta(new Vector2(width, height)); }
         public UIInfo rtSizeDelta(Vector2 sizeDelta)
         {
             UIInfo ret = this.Clone();
-            ret.m_rtSizeDelta = sizeDelta;
+            ret.m_rtSizeDelta = Vector2R.make(sizeDelta);
             return ret;
         }
+
+        public UIInfo rtPosition(float x, float y) { return rtPosition(new Vector2(x, y)); }
         public UIInfo rtPosition(Vector2 position)
         {
             UIInfo ret = this.Clone();
-            ret.m_rtPosition = position;
+            ret.m_rtPosition = Vector2R.make(position);
             return ret;
         }
 
-        public UIInfo lePreferredSize(float width, float height)
+        public UIInfo rtAnchoredPosition(float x, float y) { return rtAnchoredPosition(new Vector2(x, y)); }
+        public UIInfo rtAnchoredPosition(Vector2 position)
         {
             UIInfo ret = this.Clone();
-            if (width != 0) ret.m_lePreferredSize.x = width;
-            if (height != 0) ret.m_lePreferredSize.y = height;
+            ret.m_rtAnchoredPosition = Vector2R.make(position);
             return ret;
         }
 
-        public UIInfo leMinSize(float width, float height)
+        public UIInfo rtAnchorMin(float value) { return rtAnchorMin(new Vector2(value, value)); }
+        public UIInfo rtAnchorMin(float x, float y) { return rtAnchorMin(new Vector2(x, y)); }
+        public UIInfo rtAnchorMin(Vector2 anchor)
         {
             UIInfo ret = this.Clone();
-            if (width != 0) ret.m_leMinSize.x = width;
-            if (height != 0) ret.m_leMinSize.y = height;
+            ret.m_rtAnchorMin = Vector2R.make(anchor);
             return ret;
         }
-        public UIInfo leFlexWeight(float wWeight, float hWeight)
+
+        public UIInfo rtAnchorMax(float value) { return rtAnchorMax(new Vector2(value, value)); }
+        public UIInfo rtAnchorMax(float x, float y) { return rtAnchorMax(new Vector2(x, y)); }
+        public UIInfo rtAnchorMax(Vector2 anchor)
         {
             UIInfo ret = this.Clone();
-            if (wWeight != 0) ret.m_leFlexWeight.x = wWeight;
-            if (hWeight != 0) ret.m_leFlexWeight.y = hWeight;
+            ret.m_rtAnchorMax = Vector2R.make(anchor);
             return ret;
         }
 
-        // ************************ Syntax sugar for LayoutElement settings ************************
-        //public UIInfo fitW(Fit fit, float? sizeOrWeight = 1f)
-        //{
-        //    UIInfo ret = this.Clone();
-        //    //ret.m_fitWidth = fit;
-        //    if (sizeOrWeight != null) switch (fit)
-        //        {
-        //            case Fit.Fixed:
-        //                ret.lePreferredSize(sizeOrWeight.Value, 0); 
-        //                break;
-        //            case Fit.Flexible:
-        //                ret.leFlexWeight(sizeOrWeight.Value, 0); 
-        //                break;
-        //            case Fit.UnSpecified: break;
-        //            default: break;
-        //        }
-        //    return ret;
-        //}
-        //public UIInfo fitH(Fit fit, float? sizeOrWeight = 1f)   // 1f : default for Flexible
-        //{
-        //    UIInfo ret = this.Clone();
-        //    ret.m_fitHeight = fit;
-        //    if (sizeOrWeight != null) switch (fit)
-        //        {
-        //            case Fit.Fixed: ret.lePreferredSize(0, sizeOrWeight.Value); break;
-        //            case Fit.Flexible: ret.leFlexWeight(0, sizeOrWeight.Value); break;
-        //            case Fit.UnSpecified: break;
-        //            default: break;
+        public UIInfo rtOffsetMin(float value) { return rtOffsetMin(new Vector2(value, value)); }
+        public UIInfo rtOffsetMin(float x, float y) { return rtOffsetMin(new Vector2(x, y)); }
+        public UIInfo rtOffsetMin(Vector2 offset)
+        {
+            UIInfo ret = this.Clone();
+            ret.m_rtOffsetMin= Vector2R.make(offset);
+            return ret;
+        }
 
-        //        }
-        //    return ret;
-        //}
+        public UIInfo rtOffsetMax(float value) { return rtOffsetMax(new Vector2(value, value)); }
+        public UIInfo rtOffsetMax(float x, float y) { return rtOffsetMax(new Vector2(x, y)); }
+        public UIInfo rtOffsetMax(Vector2 offset)
+        {
+            UIInfo ret = this.Clone();
+            ret.m_rtOffsetMax = Vector2R.make(offset);
+            return ret;
+        }
 
-        //public UIInfo fitWH(Fit fit) { return fitW(fit).fitH(fit); }
-        //public UIInfo fitWH(Fit fit, float? sizeOrWeight = null) { return fitW(fit, sizeOrWeight).fitH(fit, sizeOrWeight); }
-        //public UIInfo fitWH(Fit fit, Vector2? sizeOrWeight = null) { return fitW(fit, sizeOrWeight.Value.x).fitH(fit, sizeOrWeight.Value.y); }
 
+        public UIInfo rtPivot(float x, float y) { return rtPivot(new Vector2(x, y)); }
+        public UIInfo rtPivot(Vector2 pivot)
+        {
+            UIInfo ret = this.Clone();
+            ret.m_rtPivot = Vector2R.make(pivot);
+            return ret;
+        }
+
+
+        // ----- LayoutElement -----
+        public UIInfo lePreferredSize(float size) { return lePreferredSize(new Vector2(size, size)); }
+        public UIInfo lePreferredSize(float width, float height) { return lePreferredSize(new Vector2(width, height)); }
+        public UIInfo lePreferredSize(Vector2 size)
+        {
+            UIInfo ret = this.Clone();
+            //ret.m_lePreferredSize = size;
+            ret.m_lePreferredSize = Vector2R.make(size);
+            return ret;
+        }
+
+        public UIInfo leMinSize(float size) { return leMinSize(new Vector2(size, size)); }
+        public UIInfo leMinSize(float width, float height) { return leMinSize(new Vector2(width, height)); }
+        public UIInfo leMinSize(Vector2 size)
+        {
+            UIInfo ret = this.Clone();
+            ret.m_leMinSize = Vector2R.make(size);
+            return ret;
+        }
+
+        public UIInfo leFlexWeight(float size) { return leFlexWeight(new Vector2(size, size)); }
+        public UIInfo leFlexWeight(float wWeight, float hWeight) { return leFlexWeight(new Vector2(wWeight, hWeight)); }
+        public UIInfo leFlexWeight(Vector2 weight)
+        {
+            UIInfo ret = this.Clone();
+            ret.m_leFlexWeight = Vector2R.make(weight);
+            return ret;
+        }
+
+        // ********************** Syntax Sugars **********************************
+        public UIInfo rtAnchorParent() { return rtAnchorMin(0).rtAnchorMax(1).rtAnchoredPosition(0, 0); }
 
         // ********************** Other Methods **********************************
 

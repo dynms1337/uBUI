@@ -63,29 +63,35 @@ namespace uBUI
             TEXT_FONT = UnityEngine.Resources.GetBuiltinResource<Font>("Arial.ttf");
         }
 
-        private static GameObject CreateUIElement(string goName, UIInfo uiInfo, Vector2 sizeDelta = default(Vector2), GameObject parent = null)
+        private static GameObject CreateUIElement(string goName, UIInfo uiInfo, GameObject parent = null)
         {
-            if (sizeDelta == default(Vector2)) sizeDelta = UIELEMENT_SIZE;
             GameObject ret = new GameObject(goName);
-            RectTransform rectTransform = ret.AddComponent<RectTransform>();
-            rectTransform.sizeDelta = sizeDelta;
+            {
+                RectTransform rt = ret.AddComponent<RectTransform>();
+                
+                if (uiInfo.m_rtSizeDelta.notNull) rt.sizeDelta = uiInfo.m_rtSizeDelta.Value;
+                if (uiInfo.m_rtPosition.notNull) rt.position = uiInfo.m_rtPosition.Value;
+                if (uiInfo.m_rtAnchoredPosition.notNull) rt.anchoredPosition = uiInfo.m_rtAnchoredPosition.Value;
+                if (uiInfo.m_rtAnchorMin.notNull) rt.anchorMin = uiInfo.m_rtAnchorMin.Value;
+                if (uiInfo.m_rtAnchorMax.notNull) rt.anchorMax = uiInfo.m_rtAnchorMax.Value;
+                if (uiInfo.m_rtPivot.notNull) rt.pivot = uiInfo.m_rtPivot.Value;
+                if (uiInfo.m_rtOffsetMin.notNull) rt.offsetMin = uiInfo.m_rtOffsetMin.Value;
+                if (uiInfo.m_rtOffsetMax.notNull) rt.offsetMax = uiInfo.m_rtOffsetMax.Value;
+            }
 
-            if (!(uiInfo.m_leMinSize == Vector2.zero &
-                uiInfo.m_lePreferredSize == Vector2.zero &
-                uiInfo.m_leFlexWeight == Vector2.zero))
+            if (uiInfo.m_leMinSize.notNull |
+                uiInfo.m_lePreferredSize.notNull |
+                uiInfo.m_leFlexWeight.notNull)
             {
                 LayoutElement le = ret.AddComponent<LayoutElement>();
-                if (uiInfo.m_leMinSize.x != 0) le.minWidth = uiInfo.m_leMinSize.x;
-                if (uiInfo.m_leMinSize.y != 0) le.minHeight = uiInfo.m_leMinSize.y;
-                if (uiInfo.m_lePreferredSize.x != 0) le.preferredWidth = uiInfo.m_lePreferredSize.x;
-                if (uiInfo.m_lePreferredSize.y != 0) le.preferredHeight = uiInfo.m_lePreferredSize.y;
-                if (uiInfo.m_leFlexWeight.x != 0) le.flexibleWidth = uiInfo.m_leFlexWeight.x;
-                if (uiInfo.m_leFlexWeight.y != 0) le.flexibleHeight = uiInfo.m_leFlexWeight.y;
+                if (uiInfo.m_leMinSize.notNull) { le.minWidth = uiInfo.m_leMinSize.Value.x; le.minHeight = uiInfo.m_leMinSize.Value.y; }
+                if (uiInfo.m_lePreferredSize.notNull) { le.preferredWidth = uiInfo.m_lePreferredSize.Value.x; le.preferredHeight = uiInfo.m_lePreferredSize.Value.y; }
+                if (uiInfo.m_leFlexWeight.notNull) { le.flexibleWidth = uiInfo.m_leFlexWeight.Value.x; le.flexibleHeight = uiInfo.m_leFlexWeight.Value.y; }
             }
-            if (default_layer != -1)
-                ret.layer = default_layer;
-            else
-                ret.layer = LayerMask.NameToLayer(UI_LAYER_NAME);
+
+            if (default_layer != -1) ret.layer = default_layer;
+            else ret.layer = LayerMask.NameToLayer(UI_LAYER_NAME);
+
             if (parent != null)
             {
                 ret.transform.SetParent(parent.transform, false);
@@ -277,7 +283,7 @@ namespace uBUI
             //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Fixed();
             if (position == default(Vector2)) position = WINDOW_POSITION;
             if (size == default(Vector2)) size = WINDOW_SIZE;
-            var goCanvas = CreateUIElement(goName == "" ? goname_Canvas.get() : goName, uiInfo, size, parent: parent); // new GameObject(goName == "" ? goname_Canvas.get() : goName);
+            var goCanvas = CreateUIElement(goName == "" ? goname_Canvas.get() : goName, uiInfo.rtSizeDelta(size), parent: parent); // new GameObject(goName == "" ? goname_Canvas.get() : goName);
             Canvas canvas = goCanvas.AddComponent<Canvas>();
             canvas.renderMode = renderMode;
             goCanvas.AddComponent<CanvasScaler>();
@@ -311,15 +317,11 @@ namespace uBUI
             canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
             canvasScaler.scaleFactor = canvasScale;
 
-            LayoutGroup container = CreatePanel(UIInfo.PANEL_DEFAULT.lePreferredSize(size.x, size.y), layoutGroup, canvas.gameObject, "container");
-
-            RectTransform rt = container.gameObject.GetOrAddComponent<RectTransform>();
-            rt.anchorMin = Vector2.zero;            //anchorMin/Max 画面左下が原点。
-            rt.anchorMax = Vector2.zero;
-            rt.pivot = Vector2.zero;
-            rt.sizeDelta = size;
-            rt.anchoredPosition = leftbottom;
-
+            var ui = UIInfo.PANEL_DEFAULT.rtSizeDelta(size).rtAnchoredPosition(leftbottom)
+                .rtAnchorMin(Vector2.zero).rtAnchorMax(Vector2.zero).rtPivot(Vector2.zero);
+            //Debug.Log($"cwwcs 3 {ui.m_rtSizeDelta == null}");
+            LayoutGroup container = CreatePanel(ui,
+                layoutGroup, canvas.gameObject, "container");
             if (draggable) container.gameObject.GetOrAddComponent<DragBehaviour>();
             return container;
         }
@@ -524,10 +526,10 @@ namespace uBUI
             if (tex == null) return CreateButton(parent, TaskOnClick: TaskOnClick, labelStr: labelStr, sprite: null, imgSize: imgSize, uiInfo: uiInfo, goName: goName);
             int width = tex.width;
             int height = tex.height;
-            if (uiInfo != null && uiInfo.m_lePreferredSize.x != 0f & uiInfo.m_lePreferredSize.y != 0f)
+            if (uiInfo != null && uiInfo.m_lePreferredSize.Value.x != 0f & uiInfo.m_lePreferredSize.Value.y != 0f)
             {
-                width = (int)uiInfo.m_lePreferredSize.x;
-                height = (int)uiInfo.m_lePreferredSize.y;
+                width = (int)uiInfo.m_lePreferredSize.Value.x;
+                height = (int)uiInfo.m_lePreferredSize.Value.y;
                 tex = ResizeTexture(tex, width, height);
             }
             return CreateButton(parent, TaskOnClick, labelStr, Sprite.Create(tex, new Rect(0, 0, width, height), Vector2.zero), imgSize: imgSize, imgColor: imgColor, uiInfo, goName);
@@ -578,56 +580,30 @@ namespace uBUI
         public static Slider CreateSlider(GameObject parent, UnityAction<float> onValueChanged, float initialValue, float max = 1f, float min = 0f, bool wholeNumbers = false, string goName = "")
         {
             // Create GOs Hierarchy
-            GameObject root = CreateUIElement(goName == "" ? goname_Slider.get() : goName, new UIInfo(), parent: parent);
-            GameObject background = CreateUIElement("Background", new UIInfo(), parent: root);
-            GameObject fillArea = CreateUIElement("Fill Area", new UIInfo(), parent: root);
-            GameObject fill = CreateUIElement("Fill", new UIInfo(), parent: fillArea);
-            GameObject handleArea = CreateUIElement("Handle Slide Area", new UIInfo(), parent: root);
-            GameObject handle = CreateUIElement("Handle", new UIInfo(), parent: handleArea);
+            GameObject root = CreateUIElement(goName == "" ? goname_Slider.get() : goName, new UIInfo().leFlexWeight(1, 0).leMinSize(SLIDER_MIN_WIDTH, SLIDER_MIN_HEIGHT), parent: parent);
 
-            // Background
-            Image backgroundImage = addImageComponent(background, uiInfo: new UIInfo().leFlexWeight(1, 0).bgColor(COLOR_SLIDER_BACKGROUND));
-            RectTransform backgroundRect = background.GetComponent<RectTransform>();
-            backgroundRect.anchorMin = new Vector2(0, 0.25f);
-            backgroundRect.anchorMax = new Vector2(1, 0.75f);
-            backgroundRect.sizeDelta = new Vector2(0, 0);
+            GameObject background = CreateUIElement("Background", new UIInfo().rtAnchorMin(0, 0.25f).rtAnchorMax(1, 0.75f).rtSizeDelta(0, 0), parent: root);
+            Image backgroundImage = addImageComponent(background, uiInfo: new UIInfo().bgColor(COLOR_SLIDER_BACKGROUND));
 
-            // Fill Area
-            RectTransform fillAreaRect = fillArea.GetComponent<RectTransform>();
-            fillAreaRect.anchorMin = new Vector2(0, 0.25f);
-            fillAreaRect.anchorMax = new Vector2(1, 0.75f);
-            fillAreaRect.anchoredPosition = new Vector2(-5, 0);
-            fillAreaRect.sizeDelta = new Vector2(-20, 0);
+            GameObject fillArea = CreateUIElement("Fill Area", new UIInfo().rtAnchorMin(0, 0.25f).rtAnchorMax(1, 0.75f).rtAnchoredPosition(-5, 0).rtSizeDelta(-20, 0), parent: root);
 
-            // Fill
-            addImageComponent(fill, uiInfo: new UIInfo().leFlexWeight(1, 0).bgColor(COLOR_AREA_BG));
+            GameObject fill = CreateUIElement("Fill", new UIInfo().rtSizeDelta(10, 0), parent: fillArea);
+            addImageComponent(fill, uiInfo: new UIInfo().rtAnchorMin(0, 0).rtAnchorMax(1, 1).rtAnchoredPosition(0, 0).bgColor(COLOR_AREA_BG));
 
-            RectTransform fillRect = fill.GetComponent<RectTransform>();
-            fillRect.sizeDelta = new Vector2(10, 0);
+            GameObject handleArea = CreateUIElement("Handle Slide Area", new UIInfo().rtSizeDelta(-20, 0).rtAnchorMin(0, 0).rtAnchorMax(1, 1), parent: root);
 
-            // Handle Area
-            RectTransform handleAreaRect = handleArea.GetComponent<RectTransform>();
-            handleAreaRect.sizeDelta = new Vector2(-20, 0);
-            handleAreaRect.anchorMin = new Vector2(0, 0);
-            handleAreaRect.anchorMax = new Vector2(1, 1);
+            GameObject handle = CreateUIElement("Handle", new UIInfo().rtSizeDelta(20, 0), parent: handleArea);
+            Image handleImage = addImageComponent(handle, uiInfo: new UIInfo().rtAnchorMin(0, 0).rtAnchorMax(1, 1).rtAnchoredPosition(0, 0).bgColor(COLOR_SLIDER_HANDLE));
 
-            // Handle
-            Image handleImage = addImageComponent(handle, uiInfo: new UIInfo().leFlexWeight(1, 0).bgColor(COLOR_SLIDER_HANDLE));
-
-            RectTransform handleRect = handle.GetComponent<RectTransform>();
-            handleRect.sizeDelta = new Vector2(20, 0);
 
             // Setup slider component
-            LayoutElement sliderLe = root.GetOrAddComponent<LayoutElement>();
-            sliderLe.flexibleWidth = 1f;
-            sliderLe.minWidth = SLIDER_MIN_WIDTH; sliderLe.minHeight = SLIDER_MIN_HEIGHT;
             Slider slider = root.AddComponent<Slider>();
             slider.fillRect = fill.GetComponent<RectTransform>();
             slider.handleRect = handle.GetComponent<RectTransform>();
             slider.targetGraphic = handleImage;
             slider.direction = Slider.Direction.LeftToRight;
             configSelectableColors(slider);
-            slider.wholeNumbers = wholeNumbers; //整数のみ
+            slider.wholeNumbers = wholeNumbers;
             slider.maxValue = max;
             slider.minValue = min;
             slider.value = initialValue;
@@ -641,27 +617,18 @@ namespace uBUI
         public static Scrollbar CreateScrollbar(GameObject parent, UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.SCROLLBAR_DEFAULT;
-            //if (uiInfo.is_fit_UnSpecified()) uiInfo = UIInfo.SCROLLBAR_DEFAULT.rtSizeDelta(UIELEMENT_SIZE);
             // Create GOs Hierarchy
             GameObject scrollbarRoot = CreateUIElement(goName == "" ? goname_ScrollBar.get() : goName, uiInfo, parent: parent);
-            GameObject sliderArea = CreateUIElement("Sliding Area", new UIInfo(), parent: scrollbarRoot);
-            GameObject handle = CreateUIElement("Handle", new UIInfo(), parent: sliderArea);
 
+            GameObject sliderArea = CreateUIElement("Sliding Area", new UIInfo().rtSizeDelta(-20, -20).rtAnchorMin(0, 0).rtAnchorMax(1, 1), parent: scrollbarRoot);
+
+            GameObject handle = CreateUIElement("Handle", new UIInfo().rtSizeDelta(20, 20), parent: sliderArea);
 
             Image bgImage = addImageComponent(scrollbarRoot, uiInfo: new UIInfo().leFlexWeight(1, 0).bgColor(COLOR_SLIDER_BACKGROUND));
-
             Image handleImage = addImageComponent(handle);
 
-            RectTransform sliderAreaRect = sliderArea.GetComponent<RectTransform>();
-            sliderAreaRect.sizeDelta = new Vector2(-20, -20);
-            sliderAreaRect.anchorMin = Vector2.zero;
-            sliderAreaRect.anchorMax = Vector2.one;
-
-            RectTransform handleRect = handle.GetComponent<RectTransform>();
-            handleRect.sizeDelta = new Vector2(20, 20);
-
             Scrollbar scrollbar = scrollbarRoot.AddComponent<Scrollbar>();
-            scrollbar.handleRect = handleRect;
+            scrollbar.handleRect = handle.GetComponent<RectTransform>();
             scrollbar.targetGraphic = handleImage;
             configSelectableColors(scrollbar);
             return scrollbar;
@@ -693,16 +660,10 @@ namespace uBUI
             GameObject goBackground = bgImage.gameObject;
 
             Image checkmarkImage = CreateImage(parent: goBackground,
-              uiInfo: new UIInfo().bgColor(Color.white), goName: "Checkmark");
-            GameObject goCheckmark = checkmarkImage.gameObject;
-            RectTransform checkmarkRect = goCheckmark.GetComponent<RectTransform>();
-            checkmarkRect.anchorMin = new Vector2(0.5f, 0.5f);
-            checkmarkRect.anchorMax = new Vector2(0.5f, 0.5f);
-            checkmarkRect.anchoredPosition = Vector2.zero;
-            checkmarkRect.sizeDelta = new Vector2(TOGGLE_BACKGROUND_SIZE / 2, TOGGLE_BACKGROUND_SIZE / 2);
+              uiInfo: new UIInfo().bgColor(Color.white).rtAnchorMin(0.5f).rtAnchorMax(0.5f).rtAnchoredPosition(0, 0).rtSizeDelta(TOGGLE_BACKGROUND_SIZE / 2),
+              goName: "Checkmark");
 
-            Text label = CreateText(parent: goToggleRoot, uiInfo: new UIInfo()/*.fit_Parent()*/, label: labelStr);
-            label.gameObject.getParent().GetOrAddComponent<LayoutElement>().flexibleWidth = 1;
+            Text label = CreateText(parent: goToggleRoot, uiInfo: new UIInfo().rtAnchorParent().leFlexWeight(1,0), label: labelStr);
 
             Toggle toggle = goToggleRoot.AddComponent<Toggle>();
             toggle.isOn = isOn;
@@ -751,16 +712,18 @@ namespace uBUI
         {
             if (uiInfo == null) uiInfo = UIInfo.INPUTFIELD_DEFAULT;
             //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_WParentHSelf();
-            GameObject goInputField = CreateUIElement(goName == "" ? goname_InputField.get() : goName, uiInfo, parent: parent);
-            GameObject goPlaceholder = CreateUIElement("Placeholder", new UIInfo(), parent: goInputField);
-            GameObject goText = CreateUIElement("Text", new UIInfo(), parent: goInputField);
-
-            Image image = addImageComponent(goInputField, uiInfo: new UIInfo()/*.fit_Parent()*/.bgColor(COLOR_SELECTABLE));
-
+            GameObject goInputField = CreateUIElement(goName == "" ? goname_InputField.get() : goName, uiInfo.leMinSize(INPUTFIELD_MIN_SIZE), parent: parent);
             InputField inputField = goInputField.AddComponent<InputField>();
             LayoutElement leInputField = goInputField.GetOrAddComponent<LayoutElement>();
-            leInputField.minWidth = INPUTFIELD_MIN_SIZE.x;
-            leInputField.minHeight = INPUTFIELD_MIN_SIZE.y;
+
+            GameObject goPlaceholder = CreateUIElement("Placeholder", new UIInfo().rtAnchorParent().rtSizeDelta(0).rtOffsetMin(10,6).rtOffsetMax(-10,-7),
+                parent: goInputField);
+
+            GameObject goText = CreateUIElement("Text", new UIInfo().rtAnchorParent().rtSizeDelta(0).rtOffsetMin(10,6).rtOffsetMax(-10,-7),
+                parent: goInputField);
+
+            Image image = addImageComponent(goInputField, uiInfo: new UIInfo().rtAnchorParent().bgColor(COLOR_SELECTABLE));
+
 
             Text text = addTextComponent(goText, "", uiInfo);
             text.supportRichText = false;
@@ -776,20 +739,6 @@ namespace uBUI
                 text.alignment = TextAnchor.UpperLeft;
                 placeholder.alignment = TextAnchor.UpperLeft;
             }
-
-            RectTransform textRectTransform = goText.GetComponent<RectTransform>();
-            textRectTransform.anchorMin = Vector2.zero;
-            textRectTransform.anchorMax = Vector2.one;
-            textRectTransform.sizeDelta = Vector2.zero;
-            textRectTransform.offsetMin = new Vector2(10, 6);
-            textRectTransform.offsetMax = new Vector2(-10, -7);
-
-            RectTransform placeholderRectTransform = goPlaceholder.GetComponent<RectTransform>();
-            placeholderRectTransform.anchorMin = Vector2.zero;
-            placeholderRectTransform.anchorMax = Vector2.one;
-            placeholderRectTransform.sizeDelta = Vector2.zero;
-            placeholderRectTransform.offsetMin = new Vector2(10, 6);
-            placeholderRectTransform.offsetMax = new Vector2(-10, -7);
 
             inputField.textComponent = text;
             inputField.placeholder = placeholder;
@@ -834,37 +783,30 @@ namespace uBUI
             //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Parent();
             if (uiInfo.m_bgColor == default(Color)) uiInfo = uiInfo.bgColor(COLOR_AREA_BG);
             GameObject goScrollView = CreateUIElement(goName == "" ? goname_ScrollView.get() : goName, uiInfo, parent: parent);
-            GameObject goViewport = CreateUIElement("Viewport", new UIInfo()/*.fit_Parent()*/, parent: goScrollView);
-            GameObject goContent = CreateUIElement("Content", new UIInfo()/*.fit_Self()*/, parent: goViewport);
+            GameObject goViewport = CreateUIElement("Viewport", new UIInfo().rtAnchorParent(), parent: goScrollView);
 
-            GameObject hScrollbar = CreateScrollbar(parent: goScrollView).gameObject;
+            GameObject goContent = CreateUIElement("Content",  parent: goViewport,
+                uiInfo: new UIInfo().rtAnchorMin(Vector2.up).rtAnchorMax(1).rtSizeDelta(0, 300).rtPivot(Vector2.up)/*.fit_Self()*/);
+
+            GameObject hScrollbar = CreateScrollbar(uiInfo:UIInfo.SCROLLBAR_DEFAULT.rtAnchorMin(0).rtAnchorMax(Vector2.right).rtPivot(0,0) ,
+                parent: goScrollView).gameObject;
             hScrollbar.name = "ScrollbarHorizontal";
             RectTransform hScrollbarRT = hScrollbar.GetComponent<RectTransform>();
-            hScrollbarRT.anchorMin = Vector2.zero;
-            hScrollbarRT.anchorMax = Vector2.right;
-            hScrollbarRT.pivot = Vector2.zero;
             hScrollbarRT.sizeDelta = new Vector2(0, hScrollbarRT.sizeDelta.y);
 
-            GameObject vScrollbar = CreateScrollbar(parent: goScrollView).gameObject;
+            GameObject vScrollbar = CreateScrollbar(uiInfo:UIInfo.SCROLLBAR_DEFAULT.rtAnchorMin(Vector2.right).rtAnchorMax(1).rtPivot(1,1),
+                parent: goScrollView).gameObject;
             vScrollbar.name = "Scrollbar Vertical";
             vScrollbar.GetComponent<Scrollbar>().SetDirection(Scrollbar.Direction.BottomToTop, true);
             RectTransform vScrollbarRT = vScrollbar.GetComponent<RectTransform>();
-            vScrollbarRT.anchorMin = Vector2.right;
-            vScrollbarRT.anchorMax = Vector2.one;
-            vScrollbarRT.pivot = Vector2.one;
             vScrollbarRT.sizeDelta = new Vector2(vScrollbarRT.sizeDelta.x, 0);
 
             RectTransform viewportRT = goViewport.GetComponent<RectTransform>();
             viewportRT.pivot = Vector2.up;
 
-            RectTransform contentRT = goContent.GetComponent<RectTransform>();
-            contentRT.anchorMin = Vector2.up;
-            contentRT.anchorMax = Vector2.one;
-            contentRT.sizeDelta = new Vector2(0, 300);
-            contentRT.pivot = Vector2.up;
 
             ScrollRect scrollRect = goScrollView.AddComponent<ScrollRect>();
-            scrollRect.content = contentRT;
+            scrollRect.content = goContent.GetComponent<RectTransform>();
             scrollRect.viewport = viewportRT;
             scrollRect.horizontalScrollbar = hScrollbar.GetComponent<Scrollbar>();
             scrollRect.verticalScrollbar = vScrollbar.GetComponent<Scrollbar>();
