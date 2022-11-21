@@ -43,8 +43,6 @@ namespace uBUI
         public Vector2R m_rtOffsetMin = new Vector2R();
         public Vector2R m_rtOffsetMax = new Vector2R();
 
-        public Vector2 m_margin = Vector2.zero;   //Parentで使用
-
         public int m_textSize = SWHelper.FONT_SIZE;
         public Color m_textColor = SWHelper.COLOR_TEXT;
         public Color m_bgColor = default(Color);      //デフォルト値なら、各UI要素作成時に適切な色を選択
@@ -79,7 +77,6 @@ namespace uBUI
          *  UIInfo uiInfo1 = new UIInfo().fit_Parent().bgColor(Color.red);
          *  UIInfo uiInfo2 = uiInfo1.textSize(14);
         */
-        public UIInfo margin(Vector2 margin) { UIInfo ret = this.Clone(); ret.m_margin = margin; return ret; }
         public UIInfo textSize(int sizePx) { UIInfo ret = this.Clone(); ret.m_textSize = sizePx; return ret; }
         public UIInfo textColor(Color textColor) { UIInfo ret = this.Clone(); ret.m_textColor = textColor; return ret; }
         public UIInfo bgColor(Color bgColor) { UIInfo ret = this.Clone(); ret.m_bgColor = bgColor; return ret; }
