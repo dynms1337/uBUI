@@ -655,8 +655,9 @@ namespace uBUI
             GameObject goToggleRoot = CreateUIElement(goName == "" ? goname_Toggle.get() : goName, uiInfo, parent: parent);
             LayoutGroup lg = addLyaoutGroup(goToggleRoot, LayoutType.Horizontal, uiInfo.padding(0));
             lg.childAlignment = TextAnchor.MiddleLeft;
+
             Image bgImage = CreateImage(parent: goToggleRoot,
-                uiInfo: new UIInfo().rtSizeDelta(new Vector2(TOGGLE_BACKGROUND_SIZE, TOGGLE_BACKGROUND_SIZE)).bgColor(COLOR_SELECTABLE_ON), goName: "Background");
+                uiInfo: new UIInfo().leMinSize(TOGGLE_BACKGROUND_SIZE).bgColor(COLOR_SELECTABLE_ON), goName: "Background");
             GameObject goBackground = bgImage.gameObject;
 
             Image checkmarkImage = CreateImage(parent: goBackground,
