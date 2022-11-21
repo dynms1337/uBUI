@@ -154,11 +154,19 @@ public class Example01 : MonoBehaviour
 
 
 
+# --- Specifications ---
 
+# UIInfo attributes
 
+### **Correspondence between UIInfo and LayoutElement Attribute**
 
+| **UIInfo**             | **LayoutElement**                          |
+| ---------------------- | ------------------------------------------ |
+| **leFlexibleWeight**   | LayoutElement#flexibleWidth/flexibleHeight |
+| **leMinSize　※**       | LayoutElement#minWidth/Height              |
+| **lePreferredSize　※** | LayoutElement#preferredWidth/Height        |
 
-
+※When 0, do not assign values to attributes of LayoutElement
 
 
 

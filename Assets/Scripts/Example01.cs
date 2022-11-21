@@ -10,7 +10,7 @@ public class Example01 : MonoBehaviour
 
     private void example01()
     {
-        var (window_width, window_height, window_left, window_bottom) = (300, 800, 420, 20);
+        var (window_width, window_height, window_left, window_bottom) = (400, 800, 420, 20);
 
         SWindow window = new SWindow();
         window.init_onScreen("Example01 - Components", leftbottom: new Vector2(window_left, window_bottom), windowSize: new Vector2(window_width, window_height), hooterLayout: LayoutType.Vertical);
@@ -32,7 +32,7 @@ public class Example01 : MonoBehaviour
         SPanel content = window.content;
 
         UIInfo uiTitle = UIInfo.TEXT_DEFAULT.textSize(18);
-        UIInfo uiDesc = UIInfo.TEXT_DEFAULT.textSize(14);
+        UIInfo uiDesc = UIInfo.TEXT_DEFAULT.textSize(14).lePreferredSize(350,0);
 
         content.addText("------ Content ------", uiTitle.layoutAlignment(TextAnchor.MiddleCenter));
         {
@@ -95,7 +95,7 @@ public class Example01 : MonoBehaviour
 
         {
             content.addText("Image, Spacer", uiTitle);
-            content.addText("By placing a Spacer in the middle of the HorizontalPanel, objects can be placed on both sides.", uiDesc/*.uiSize(new Vector2(window_width, 0))*/);
+            content.addText("By placing a Spacer in the middle of the HorizontalPanel, objects can be placed on both sides.", uiDesc);
             SPanel hp = content.addPanel_Horizontal(UIInfo.PANEL_DEFAULT.layoutAlignment(TextAnchor.LowerRight));
             hp.addImage(size: new Vector2(100, 100), color: Color.red);
             hp.addSpacer();

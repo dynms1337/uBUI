@@ -68,7 +68,7 @@ namespace uBUI
             GameObject ret = new GameObject(goName);
             {
                 RectTransform rt = ret.AddComponent<RectTransform>();
-                
+
                 if (uiInfo.m_rtSizeDelta.notNull) rt.sizeDelta = uiInfo.m_rtSizeDelta.Value;
                 if (uiInfo.m_rtPosition.notNull) rt.position = uiInfo.m_rtPosition.Value;
                 if (uiInfo.m_rtAnchoredPosition.notNull) rt.anchoredPosition = uiInfo.m_rtAnchoredPosition.Value;
@@ -84,9 +84,21 @@ namespace uBUI
                 uiInfo.m_leFlexWeight.notNull)
             {
                 LayoutElement le = ret.AddComponent<LayoutElement>();
-                if (uiInfo.m_leMinSize.notNull) { le.minWidth = uiInfo.m_leMinSize.Value.x; le.minHeight = uiInfo.m_leMinSize.Value.y; }
-                if (uiInfo.m_lePreferredSize.notNull) { le.preferredWidth = uiInfo.m_lePreferredSize.Value.x; le.preferredHeight = uiInfo.m_lePreferredSize.Value.y; }
-                if (uiInfo.m_leFlexWeight.notNull) { le.flexibleWidth = uiInfo.m_leFlexWeight.Value.x; le.flexibleHeight = uiInfo.m_leFlexWeight.Value.y; }
+                if (uiInfo.m_leMinSize.notNull)
+                {
+                    if (uiInfo.m_leMinSize.Value.x != 0) le.minWidth = uiInfo.m_leMinSize.Value.x;
+                    if (uiInfo.m_leMinSize.Value.y != 0) le.minHeight = uiInfo.m_leMinSize.Value.y;
+                }
+                if (uiInfo.m_lePreferredSize.notNull)
+                {
+                    if (uiInfo.m_lePreferredSize.Value.x != 0) le.preferredWidth = uiInfo.m_lePreferredSize.Value.x;
+                    if (uiInfo.m_lePreferredSize.Value.y != 0) le.preferredHeight = uiInfo.m_lePreferredSize.Value.y;
+                }
+                if (uiInfo.m_leFlexWeight.notNull)
+                {
+                    le.flexibleWidth = uiInfo.m_leFlexWeight.Value.x;
+                    le.flexibleHeight = uiInfo.m_leFlexWeight.Value.y;
+                }
             }
 
             if (default_layer != -1) ret.layer = default_layer;
@@ -650,8 +662,7 @@ namespace uBUI
             UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.TOGGLE_DEFAULT;
-            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Parent();
-            // Set up hierarchy
+
             GameObject goToggleRoot = CreateUIElement(goName == "" ? goname_Toggle.get() : goName, uiInfo, parent: parent);
             LayoutGroup lg = addLyaoutGroup(goToggleRoot, LayoutType.Horizontal, uiInfo.padding(0));
             lg.childAlignment = TextAnchor.MiddleLeft;
@@ -664,7 +675,7 @@ namespace uBUI
               uiInfo: new UIInfo().bgColor(Color.white).rtAnchorMin(0.5f).rtAnchorMax(0.5f).rtAnchoredPosition(0, 0).rtSizeDelta(TOGGLE_BACKGROUND_SIZE / 2),
               goName: "Checkmark");
 
-            Text label = CreateText(parent: goToggleRoot, uiInfo: new UIInfo().rtAnchorParent().leFlexWeight(1,0), label: labelStr);
+            Text label = CreateText(parent: goToggleRoot, uiInfo: new UIInfo().rtAnchorParent().leFlexWeight(1, 0), label: labelStr);
 
             Toggle toggle = goToggleRoot.AddComponent<Toggle>();
             toggle.isOn = isOn;
@@ -680,7 +691,7 @@ namespace uBUI
             LayoutType layoutGroup = LayoutType.Horizontal, UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.RADIO_BUTTON_DEFAULT;
-            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_WParentHSelf();
+
             GameObject goRadioPanel = CreatePanel(parent: parent, layoutGroup: layoutGroup, uiInfo: uiInfo, goName: goname_RadioButton.get()).gameObject;
             ToggleGroup toggleGroup = goRadioPanel.AddComponent<ToggleGroup>();
             int i = 0;
@@ -717,10 +728,10 @@ namespace uBUI
             InputField inputField = goInputField.AddComponent<InputField>();
             LayoutElement leInputField = goInputField.GetOrAddComponent<LayoutElement>();
 
-            GameObject goPlaceholder = CreateUIElement("Placeholder", new UIInfo().rtAnchorParent().rtSizeDelta(0).rtOffsetMin(10,6).rtOffsetMax(-10,-7),
+            GameObject goPlaceholder = CreateUIElement("Placeholder", new UIInfo().rtAnchorParent().rtSizeDelta(0).rtOffsetMin(10, 6).rtOffsetMax(-10, -7),
                 parent: goInputField);
 
-            GameObject goText = CreateUIElement("Text", new UIInfo().rtAnchorParent().rtSizeDelta(0).rtOffsetMin(10,6).rtOffsetMax(-10,-7),
+            GameObject goText = CreateUIElement("Text", new UIInfo().rtAnchorParent().rtSizeDelta(0).rtOffsetMin(10, 6).rtOffsetMax(-10, -7),
                 parent: goInputField);
 
             Image image = addImageComponent(goInputField, uiInfo: new UIInfo().rtAnchorParent().bgColor(COLOR_SELECTABLE));
@@ -785,16 +796,16 @@ namespace uBUI
             GameObject goScrollView = CreateUIElement(goName == "" ? goname_ScrollView.get() : goName, uiInfo, parent: parent);
             GameObject goViewport = CreateUIElement("Viewport", new UIInfo().rtAnchorParent(), parent: goScrollView);
 
-            GameObject goContent = CreateUIElement("Content",  parent: goViewport,
+            GameObject goContent = CreateUIElement("Content", parent: goViewport,
                 uiInfo: new UIInfo().rtAnchorMin(Vector2.up).rtAnchorMax(1).rtSizeDelta(0, 300).rtPivot(Vector2.up)/*.fit_Self()*/);
 
-            GameObject hScrollbar = CreateScrollbar(uiInfo:UIInfo.SCROLLBAR_DEFAULT.rtAnchorMin(0).rtAnchorMax(Vector2.right).rtPivot(0,0) ,
+            GameObject hScrollbar = CreateScrollbar(uiInfo: UIInfo.SCROLLBAR_DEFAULT.rtAnchorMin(0).rtAnchorMax(Vector2.right).rtPivot(0, 0),
                 parent: goScrollView).gameObject;
             hScrollbar.name = "ScrollbarHorizontal";
             RectTransform hScrollbarRT = hScrollbar.GetComponent<RectTransform>();
             hScrollbarRT.sizeDelta = new Vector2(0, hScrollbarRT.sizeDelta.y);
 
-            GameObject vScrollbar = CreateScrollbar(uiInfo:UIInfo.SCROLLBAR_DEFAULT.rtAnchorMin(Vector2.right).rtAnchorMax(1).rtPivot(1,1),
+            GameObject vScrollbar = CreateScrollbar(uiInfo: UIInfo.SCROLLBAR_DEFAULT.rtAnchorMin(Vector2.right).rtAnchorMax(1).rtPivot(1, 1),
                 parent: goScrollView).gameObject;
             vScrollbar.name = "Scrollbar Vertical";
             vScrollbar.GetComponent<Scrollbar>().SetDirection(Scrollbar.Direction.BottomToTop, true);
