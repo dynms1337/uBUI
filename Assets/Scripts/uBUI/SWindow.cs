@@ -85,9 +85,9 @@ namespace uBUI
              LayoutType hooterLayout = LayoutType.Horizontal, UIInfo uiInfo = null, bool draggable = true,
              float canvasScale = 1f, GameObject parent = null)
         {
-            LayoutGroup lg = SWHelper.CreateWindowWithCanvas_onScreen(leftbottom, windowSize,
+            LayoutGroup lg = SWHelper.CreateCanvas(RenderMode.ScreenSpaceOverlay, leftbottom, windowSize,
                 uiInfo: uiContainerPanel, layoutGroup: LayoutType.Vertical,
-                draggable: draggable, canvasScale: canvasScale, parent: parent, goName: title + "-window");
+                draggable4screen: draggable, canvasScale: canvasScale, parent: parent, goName: title + "-window");
             _SWindow(lg, title, hooterLayout, uiInfo, parent);
             onStartInit();
             onEndInit();
@@ -111,9 +111,9 @@ namespace uBUI
             LayoutType hooterLayout = LayoutType.Horizontal, UIInfo uiInfo = null,
              Camera camera = null, float meterPerPx = 0.001f, float canvasScale = 1f, GameObject parent = null)
         {
-            LayoutGroup lg = SWHelper.CreateWindowWithCanvas_onWorld(leftbottom, windowSize,
+            LayoutGroup lg = SWHelper.CreateCanvas(RenderMode.WorldSpace, leftbottom, windowSize,
                 uiInfo: uiContainerPanel, layoutGroup: LayoutType.Vertical,
-                  parent: parent, camera: camera, meterPerPx: meterPerPx, canvasScale: canvasScale, goName: title + "-window");
+                  parent: parent, camera4world: camera, meterPerPx4world: meterPerPx, canvasScale: canvasScale, goName: title + "-window");
             _SWindow(lg, title, hooterLayout, uiInfo, parent: parent);
             onStartInit();
             onEndInit();
@@ -152,7 +152,7 @@ namespace uBUI
         /// <param name="bottom">ウィンドウ左下角の点のY座標</param>
         /// <param name="width">ウィンドウの幅</param>
         /// <param name="height">ウィンドウの高さ</param>
-        public void locate_byPosition(int? left, int? bottom, int? width, int? height)
+        public void locate_byPosition(float? left, float? bottom, float? width, float? height)
         {
             RectTransform rt = container.goPanel.GetComponent<RectTransform>();
             rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.zero;
@@ -185,7 +185,7 @@ namespace uBUI
         /// <param name="right">スクリーン右端からのピクセル数</param>
         /// <param name="top">スクリーン上端からのピクセル数</param>
         /// <param name="bottom">スクリーン下端からのピクセル数</param>
-        public void locate_byMarginPx(int? left, int? right, int? top, int? bottom)
+        public void locate_byMarginPx(float? left, float? right, float? top, float? bottom)
         {
             RectTransform rt = container.goPanel.GetComponent<RectTransform>();
             rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;

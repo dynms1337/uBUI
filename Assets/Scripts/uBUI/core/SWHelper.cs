@@ -123,16 +123,6 @@ namespace uBUI
             }
             return esys;
         }
-        private static LayoutType getLayoutGroupTyep(GameObject go)
-        {
-            if (go == null) return LayoutType.None;
-            LayoutGroup lg = go.GetComponent<LayoutGroup>();
-            if (lg is VerticalLayoutGroup) return LayoutType.Vertical;
-            else if (lg is HorizontalLayoutGroup) return LayoutType.Horizontal;
-            else if (lg is GridLayoutGroup) return LayoutType.Grid;
-            else return LayoutType.None;
-        }
-
 
         private static void configSelectableColors(Selectable selectable)
         {
@@ -278,78 +268,68 @@ namespace uBUI
             return tex;
         }
 
-        public static Canvas CreateCanvas(GameObject parent = null, RenderMode renderMode = RenderMode.ScreenSpaceOverlay, UIInfo uiInfo = null,
-            Vector2 position = default(Vector2), Vector2 size = default(Vector2), string goName = "")
+        /// <param name="renderMode">RenderMode.WorldSpace or RenderMode.ScreenSpaceOverlay</param>
+        public static LayoutGroup CreateCanvas(RenderMode renderMode, Vector2? leftbottom = null, Vector2? size = null,
+            UIInfo uiInfo = null, LayoutType layoutGroup = LayoutType.Vertical, float canvasScale = 1f,
+            Camera camera4world = null, float meterPerPx4world = 0.001f,  // parameters for world space
+            bool draggable4screen = true,   // parameters for screen space
+            GameObject parent = null, string goName = "")
         {
+            if (leftbottom == null) leftbottom = WINDOW_POSITION;
+            if (size == null) size = WINDOW_SIZE;
             if (uiInfo == null) uiInfo = UIInfo.CANVAS_DEFAULT;
-            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Fixed();
-            if (position == default(Vector2)) position = WINDOW_POSITION;
-            if (size == default(Vector2)) size = WINDOW_SIZE;
-            var goCanvas = CreateUIElement(goName == "" ? goname_Canvas.get() : goName, uiInfo.rtSizeDelta(size), parent: parent); // new GameObject(goName == "" ? goname_Canvas.get() : goName);
-            Canvas canvas = goCanvas.AddComponent<Canvas>();
-            canvas.renderMode = renderMode;
-            goCanvas.AddComponent<CanvasScaler>();
-            var gr = goCanvas.AddComponent<GraphicRaycaster>();
 
-            CreateEventSystem();
-
-            if (goCanvas.transform.parent as RectTransform)
+            //Canvas canvas = CreateCanvas(parent, renderMode, UIInfo.CANVAS_DEFAULT, leftbottom.Value, size.Value, goName);
+            Canvas canvas = null;
             {
-                RectTransform rect = goCanvas.transform as RectTransform;
-                rect.anchorMin = Vector2.zero;
-                rect.anchorMax = Vector2.one;
-                rect.anchoredPosition = Vector2.zero;
-                rect.sizeDelta = Vector2.zero;
+                var goCanvas = CreateUIElement(goName == "" ? goname_Canvas.get() : goName, uiInfo.rtSizeDelta(size.Value), parent: parent);
+                canvas = goCanvas.AddComponent<Canvas>();
+                canvas.renderMode = renderMode;
+                goCanvas.AddComponent<CanvasScaler>();
+                goCanvas.AddComponent<GraphicRaycaster>();
+
+                CreateEventSystem();
+
+                //if (goCanvas.transform.parent as RectTransform)
+                //{
+                //    RectTransform rect = goCanvas.transform as RectTransform;
+                //    rect.anchorMin = Vector2.zero;
+                //    rect.anchorMax = Vector2.one;
+                //    rect.anchoredPosition = Vector2.zero;
+                //    rect.sizeDelta = Vector2.zero;
+                //}
+                var collider = addBoxCollider(goCanvas);
             }
-            var collider = addBoxCollider(goCanvas);
-            return canvas;
-        }
-
-        public static LayoutGroup CreateWindowWithCanvas_onScreen(Vector2 leftbottom = default(Vector2), Vector2 size = default(Vector2),
-            UIInfo uiInfo = null, LayoutType layoutGroup = LayoutType.Vertical, bool draggable = true, float canvasScale = 1f,
-            GameObject parent = null, string goName = "")
-        {
-            if (uiInfo == null) uiInfo = new UIInfo();
-            if (leftbottom == default(Vector2)) leftbottom = WINDOW_POSITION;
-            if (size == default(Vector2)) size = WINDOW_SIZE;
-            Canvas canvas = CreateCanvas(parent, RenderMode.ScreenSpaceOverlay, UIInfo.CANVAS_DEFAULT, leftbottom, size, goName);
 
             CanvasScaler canvasScaler = canvas.gameObject.GetOrAddComponent<CanvasScaler>();
             canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
             canvasScaler.scaleFactor = canvasScale;
 
-            var ui = UIInfo.PANEL_DEFAULT.rtSizeDelta(size).rtAnchoredPosition(leftbottom)
-                .rtAnchorMin(Vector2.zero).rtAnchorMax(Vector2.zero).rtPivot(Vector2.zero);
-            //Debug.Log($"cwwcs 3 {ui.m_rtSizeDelta == null}");
-            LayoutGroup container = CreatePanel(ui,
-                layoutGroup, canvas.gameObject, "container");
-            if (draggable) container.gameObject.GetOrAddComponent<DragBehaviour>();
+            UIInfo uiInfo2 = null;
+            if (renderMode == RenderMode.WorldSpace)
+            {
+                if (camera4world == null) camera4world = Camera.main;
+                canvas.worldCamera = camera4world;
+                // Resolution for text. Because the default value of 1 is blurred.
+                // If the scale is 0.001, it will be 0.001m/px, and if the width of the window is 800px, the width in the game space will be 80cm.
+                canvas.gameObject.GetComponent<CanvasScaler>().dynamicPixelsPerUnit = 2;
+
+                canvas.gameObject.GetComponent<RectTransform>().localScale = new Vector3(meterPerPx4world, meterPerPx4world, meterPerPx4world);
+                uiInfo2 = UIInfo.PANEL_DEFAULT.lePreferredSize(size.Value);
+            }
+            else if (renderMode == RenderMode.ScreenSpaceOverlay)
+            {
+                uiInfo2 = UIInfo.PANEL_DEFAULT.rtSizeDelta(size.Value).rtAnchoredPosition(leftbottom.Value)
+                    .rtAnchorMin(Vector2.zero).rtAnchorMax(Vector2.zero).rtPivot(Vector2.zero);
+            }
+            else { Debug.LogError($"CreateCanvas : process not implemented for {renderMode}"); }
+
+            LayoutGroup container = CreatePanel(uiInfo2, layoutGroup, canvas.gameObject, "container");
+            if (renderMode == RenderMode.ScreenSpaceOverlay & draggable4screen) container.gameObject.GetOrAddComponent<DragBehaviour>();
+
             return container;
         }
 
-        public static LayoutGroup CreateWindowWithCanvas_onWorld(Vector2 positionFromLeftBottom = default(Vector2), Vector2 size = default(Vector2),
-            UIInfo uiInfo = null, LayoutType layoutGroup = LayoutType.Vertical, Camera camera = null, float meterPerPx = 0.001f, float canvasScale = 1f,
-            GameObject parent = null, string goName = "")
-        {
-            if (uiInfo == null) uiInfo = new UIInfo();
-            if (positionFromLeftBottom == default(Vector2)) positionFromLeftBottom = WINDOW_POSITION;
-            if (size == default(Vector2)) size = WINDOW_SIZE;
-            Canvas canvas = CreateCanvas(parent, RenderMode.WorldSpace, UIInfo.CANVAS_DEFAULT, positionFromLeftBottom, size, goName);
-
-
-            CanvasScaler canvasScaler = canvas.gameObject.GetOrAddComponent<CanvasScaler>();
-            canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
-            canvasScaler.scaleFactor = canvasScale;
-
-            if (camera == null) camera = Camera.main;
-            canvas.worldCamera = camera;
-            canvas.gameObject.GetComponent<CanvasScaler>().dynamicPixelsPerUnit = 2;  //テキストに対する解像度。初期値1だとボケるため。
-                                                                                      //スケールが0.001なら、0.001m/pxとなり、Windowの幅が800pxならゲーム空間での幅が80cmになる。
-            canvas.gameObject.GetComponent<RectTransform>().localScale = new Vector3(meterPerPx, meterPerPx, meterPerPx);
-
-            LayoutGroup container = CreatePanel(UIInfo.PANEL_DEFAULT.lePreferredSize(size.x, size.y), layoutGroup, canvas.gameObject, "container");
-            return container;
-        }
 
         public static LayoutGroup CreatePanel(UIInfo uiInfo = null, LayoutType layoutGroup = LayoutType.Vertical, GameObject parent = null, string goName = "")
         {

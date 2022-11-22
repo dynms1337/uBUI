@@ -6,19 +6,25 @@ using UnityEngine.UI;
 
 public class Example01 : MonoBehaviour
 {
+    
+
     void Start() { example01(); }
 
     private void example01()
     {
-        var (window_width, window_height, window_left, window_bottom) = (400, 800, 420, 20);
+        string Title = "Example01 - Components";
+        //var (window_width, window_height, window_left, window_bottom) = (400, 800, 420, 20);
+        var (window_size, window_leftbottom) = (new Vector2(400, 800), new Vector2(420, 20));
+
+        //var container = SPanel.CreateContainer(Title, window_leftbottom, window_size);
 
         SWindow window = new SWindow();
-        window.init_onScreen("Example01 - Components", leftbottom: new Vector2(window_left, window_bottom), windowSize: new Vector2(window_width, window_height), hooterLayout: LayoutType.Vertical);
+        window.init_onScreen(Title, leftbottom: window_leftbottom, windowSize: window_size, hooterLayout: LayoutType.Vertical);
 
         // ************************ Caption buttons ************************
         // △ Basic Position
         var uiCaption = UIInfo.BUTTON_DEFAULT.lePreferredSize(20,20);
-        window.caption.addButton(() => { window.locate_byPosition(left: window_left, bottom: window_bottom, width: window_width, height: window_height); },
+        window.caption.addButton(() => { window.locate_byPosition(left: window_leftbottom.x, bottom: window_leftbottom.y, width: window_size.x, height: window_size.y); },
             labelStr: "△", uiInfo: uiCaption);
         // □ Maximize
         window.caption.addButton(() => { window.locate_byMarginPx(left: 10, right: 10, top: 10, bottom: 10); }, labelStr: "□"
