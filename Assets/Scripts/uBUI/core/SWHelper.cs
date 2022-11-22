@@ -278,16 +278,6 @@ namespace uBUI
             return tex;
         }
 
-        /// <summary>
-        /// - goCanvas  : Canvas, CanvasScaler, GraphicRaycaster, BoxCollider
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="renderMode"></param>
-        /// <param name="uiInfo"></param>
-        /// <param name="position"></param>
-        /// <param name="size"></param>
-        /// <param name="goName"></param>
-        /// <returns></returns>
         public static Canvas CreateCanvas(GameObject parent = null, RenderMode renderMode = RenderMode.ScreenSpaceOverlay, UIInfo uiInfo = null,
             Vector2 position = default(Vector2), Vector2 size = default(Vector2), string goName = "")
         {
@@ -315,7 +305,6 @@ namespace uBUI
             return canvas;
         }
 
-        /// <summary>スクリーンにUIを描画する場合</summary>
         public static LayoutGroup CreateWindowWithCanvas_onScreen(Vector2 leftbottom = default(Vector2), Vector2 size = default(Vector2),
             UIInfo uiInfo = null, LayoutType layoutGroup = LayoutType.Vertical, bool draggable = true, float canvasScale = 1f,
             GameObject parent = null, string goName = "")
@@ -337,7 +326,7 @@ namespace uBUI
             if (draggable) container.gameObject.GetOrAddComponent<DragBehaviour>();
             return container;
         }
-        /// <summary>ゲーム空間にUIを描画する場合</summary>
+
         public static LayoutGroup CreateWindowWithCanvas_onWorld(Vector2 positionFromLeftBottom = default(Vector2), Vector2 size = default(Vector2),
             UIInfo uiInfo = null, LayoutType layoutGroup = LayoutType.Vertical, Camera camera = null, float meterPerPx = 0.001f, float canvasScale = 1f,
             GameObject parent = null, string goName = "")
@@ -391,7 +380,6 @@ namespace uBUI
         }
 
 
-        /// <summary>HorizontalLayoutで左端・右端に配置したいとき、中間を埋めるためのUI要素。heightを指定することで縦方向の余白にも使える。</summary>
         public static Image CreateSpacer(GameObject parent, int height = 0, string goName = "Spacer")
         {
 
@@ -402,7 +390,6 @@ namespace uBUI
             return ret;
         }
 
-        /// <summary>水平な区切り線</summary>
         public static Image CreateHorizontalBar(GameObject parent, int height = HR_HEIGHT, Color color = default(Color), string goName = "HorizontalBar")
         {
             if (color == default(Color)) color = Color.black;
@@ -413,15 +400,6 @@ namespace uBUI
             return ret;
         }
 
-        /// <summary>
-        /// - TetContainer  Component:Image, VerticalLayoutGroup
-        ///   - Text        Component:Text
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="label"></param>
-        /// <param name="uiInfo"></param>
-        /// <param name="goName"></param>
-        /// <returns></returns>
         public static Text CreateText(GameObject parent, string label, UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.TEXT_DEFAULT;
@@ -438,13 +416,6 @@ namespace uBUI
             return ret;
         }
 
-
-
-        /// <summary>
-        /// - Button　　    Component:Button, Image（背景色用）, VerticalLayoutGroup
-        ///   - buttonImage Component:Image　（ボタンの画像用）
-        ///   - Text        Component:Text
-        /// </summary>
         public static Button CreateButton(GameObject parent, UnityAction TaskOnClick, string labelStr = "",
             Sprite sprite = null, int imgSize = -1, Color? imgColor = null, UIInfo uiInfo = null, string goName = "")
         {
@@ -460,18 +431,18 @@ namespace uBUI
             Image img = goButton.GetOrAddComponent<Image>();
             img.setUIInfo(uiInfo);
 
-            if (sprite != null)  //ボタン画像がないときはGameObjectを追加しない。レイアウトが崩れないようにするため。
+            if (sprite != null)  //Don't add a GameObject when there is no button image. To keep the layout from collapsing.
             {
                 UIInfo uiImage = uiInfo;   //.fit_Self();
                 if (imgSize > 0)
                     uiImage = uiImage.lePreferredSize(imgSize, imgSize); //.fit_Fixed();
                 Image buttonImage = CreateImage(goButton, uiInfo: uiImage, goName: "buttonImage");
                 buttonImage.sprite = sprite;
-                buttonImage.preserveAspect = true;  //引き伸ばしたときに画像のアスペクト比を保つ
-                buttonImage.gameObject.transform.SetSiblingIndex(0);  //画像がテキストの上にくるように、GameObjectの順番を入れ替え
-                if (imgColor == null) buttonImage.color = Color.white;        // new Color(1f, 1f, 1f, 0.5f);  //画像の色は変えずに半透明にする。
+                buttonImage.preserveAspect = true;  //Keep image aspect ratio when stretched
+                buttonImage.gameObject.transform.SetSiblingIndex(0);  //Swap the order of GameObjects so that the image is above the text
+                if (imgColor == null) buttonImage.color = Color.white;        // new Color(1f, 1f, 1f, 0.5f);  //Makes the image semi-transparent without changing its color.
                 else buttonImage.color = imgColor.Value;
-                //ボタン画像あり・テキストが空のときは、Textに対応するGameObjectをActive:falseにする
+                // When there is a button image and the text is empty, set the GameObject corresponding to the Text to Active: false
                 text.gameObject.SetActive(false);
             }
 
@@ -574,21 +545,6 @@ namespace uBUI
         }
 
         // <param name="wholeNumbers">整数のみに制限</param>
-
-        /// <summary>
-        /// - root      Component:Slider
-        ///     - background
-        ///     - fillArea
-        ///     - handleArea
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="onValueChanged"></param>
-        /// <param name="initialValue"></param>
-        /// <param name="max"></param>
-        /// <param name="min"></param>
-        /// <param name="wholeNumbers"></param>
-        /// <param name="goName"></param>
-        /// <returns></returns>
         public static Slider CreateSlider(GameObject parent, UnityAction<float> onValueChanged, float initialValue, float max = 1f, float min = 0f, bool wholeNumbers = false, string goName = "")
         {
             // Create GOs Hierarchy
@@ -646,18 +602,6 @@ namespace uBUI
             return scrollbar;
         }
 
-        /// <summary>
-        /// - goToggleRoot      Component:Toggle
-        ///     - bgImage
-        ///     - label
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="onValueChanged"></param>
-        /// <param name="labelStr"></param>
-        /// <param name="isOn"></param>
-        /// <param name="uiInfo"></param>
-        /// <param name="goName"></param>
-        /// <returns></returns>
         public static Toggle CreateToggle(GameObject parent, UnityAction<bool> onValueChanged, string labelStr = "Toggle", bool isOn = true,
             UIInfo uiInfo = null, string goName = "")
         {
@@ -706,19 +650,6 @@ namespace uBUI
             return toggleGroup;
         }
 
-        /// <summary>
-        /// - goInputField      Component : InputField, Image, LayoutElement
-        ///     - goPlaceholder         : Text
-        ///     - goText                : Text
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="onEndEdit"></param>
-        /// <param name="onValueChanged"></param>
-        /// <param name="initialText"></param>
-        /// <param name="lineCount"></param>
-        /// <param name="uiInfo"></param>
-        /// <param name="goName"></param>
-        /// <returns></returns>
         public static InputField CreateInputField(GameObject parent, UnityAction<string> onEndEdit, UnityAction<string> onValueChanged,
            string initialText = "", int lineCount = 1, UIInfo uiInfo = null, string goName = "")
         {
@@ -744,9 +675,9 @@ namespace uBUI
             placeholderColor.a *= 0.5f;
             Text placeholder = addTextComponent(goPlaceholder, "Enter text...", uiInfo: new UIInfo().textColor(placeholderColor));
 
-            if (lineCount >= 2)  //複数行の入力の場合の設定
+            if (lineCount >= 2)  // Settings for multi-line input
             {
-                inputField.lineType = InputField.LineType.MultiLineNewline;     //垂直にスクロールし、オーバーフローし、リターンキーで改行文字を挿入する複数行の InputField です。
+                inputField.lineType = InputField.LineType.MultiLineNewline;     // A multiline InputField that scrolls vertically, overflows, and inserts a newline character on the return key.
                 leInputField.minHeight = (INPUTFIELD_MIN_SIZE.y - INPUTFIELD_LINE_HEIGHT) + INPUTFIELD_LINE_HEIGHT * lineCount;
                 text.alignment = TextAnchor.UpperLeft;
                 placeholder.alignment = TextAnchor.UpperLeft;
@@ -763,7 +694,6 @@ namespace uBUI
             return inputField;
         }
 
-
         public static void setUIInfo(this InputField inputfield, UIInfo uiInfo)
         {
             Foreach(inputfield.gameObject, g =>
@@ -774,19 +704,6 @@ namespace uBUI
         }
 
 
-        /// <summary>
-        /// - goScrollView      Component : ScrollRect, Image
-        ///     - goViewport                Mask, Image
-        ///         - goContent             LayoutGroup
-        ///     - hScrollbar                Scrollbar
-        ///     - vScrollbar                Scrollbar
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="contentPanelLayoutGroupType"></param>
-        /// <param name="scrollSensitivity"></param>
-        /// <param name="uiInfo"></param>
-        /// <param name="goName"></param>
-        /// <returns>contentのGameObject,ScrollViewに要素を追加するときはこのGameObjectに追加すること。</returns>
         public static LayoutGroup CreateScrollView(GameObject parent, LayoutType contentPanelLayoutGroupType = LayoutType.Vertical,
             float scrollSensitivity = 20, UIInfo uiInfo = null, string goName = "")
         {
