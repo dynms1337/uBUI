@@ -17,7 +17,7 @@ namespace uBUI
         int MAX_ITEM_COUNT = 200;
 
         List<Item> itemList = new List<Item>();
-        private SPanel container;
+        private BPanel container;
         private Func<GameObject, int, Item> itemBuildFunc;
         RectTransform rt;
         int currentIdx = 0;
@@ -25,7 +25,7 @@ namespace uBUI
         private int itemCount;
         private bool _forceUpdate = true;
 
-        public void initFields(SPanel spanel, Func<GameObject, int, Item> itemBuildFunc, float itemHeight, int initialItemCount)
+        public void initFields(BPanel spanel, Func<GameObject, int, Item> itemBuildFunc, float itemHeight, int initialItemCount)
         {
             this.container = spanel;
             this.itemBuildFunc = itemBuildFunc;
@@ -74,15 +74,15 @@ namespace uBUI
         public abstract class Item
         {
             protected GameObject parent;
-            internal SPanel spanel;
+            internal BPanel spanel;
             internal LayoutGroup lg;
             internal RectTransform rt;
 
             internal Item(GameObject parent, int itemWidth)
             {
-                this.lg = SWHelper.CreatePanel(uiInfo: UIInfo.PANEL_DEFAULT.lePreferredSize(itemWidth, 30)  //.fit_Fixed(uiSize: new Vector2(itemWidth, 30))
+                this.lg = BHelper.CreatePanel(uiInfo: UIInfo.PANEL_DEFAULT.lePreferredSize(itemWidth, 30)  //.fit_Fixed(uiSize: new Vector2(itemWidth, 30))
                     , layoutGroup: LayoutType.Horizontal, parent: parent) ;
-                this.spanel = SPanel.CreateFromPanel(lg);
+                this.spanel = BPanel.CreateFromPanel(lg);
                 this.rt = spanel.gameObject.GetComponent<RectTransform>();  //GetComponentは遅いのであらかじめインスタンス取得しておく
                 rt.anchorMin = new Vector2(0, 1);
                 rt.anchorMax = new Vector2(0, 1);

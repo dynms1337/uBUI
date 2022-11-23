@@ -10,12 +10,12 @@ namespace uBUI
 {
     public class SWindow
     {
-        public SPanel container { get; protected internal set; }
-        public SPanel header { get; protected internal set; }
-        public SPanel title { get; protected internal set; }
-        public SPanel caption { get; protected internal set; }
-        public SPanel content { get; protected internal set; }
-        public SPanel hooter { get; protected internal set; }
+        public BPanel container { get; protected internal set; }
+        public BPanel header { get; protected internal set; }
+        public BPanel title { get; protected internal set; }
+        public BPanel caption { get; protected internal set; }
+        public BPanel content { get; protected internal set; }
+        public BPanel hooter { get; protected internal set; }
         public Text uiTitle { get; protected internal set; }
 
         UIInfo uiContainerPanel = new UIInfo().bgColor(new Color(1f, 1f, 1f, 0.1f));
@@ -28,22 +28,22 @@ namespace uBUI
             UIInfo uiInfo = null, GameObject parent = null)
         {
             if (uiInfo == null) uiInfo = uiContentPanel.Clone();
-            this.container = SPanel.CreateFromPanel(lgContainer);
+            this.container = BPanel.CreateFromPanel(lgContainer);
 
-            this.header = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().leFlexWeight(1,0).bgColor(uiInfo.m_bgColor),
+            this.header = BPanel.CreateFromPanel(BHelper.CreatePanel(uiInfo: new UIInfo().leFlexWeight(1,0).bgColor(uiInfo.m_bgColor),
                 layoutGroup: LayoutType.Vertical, parent: container.gameObject, goName: title + "-header"));
-            SPanel _title_caption_container = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().leFlexWeight(1,0).bgColor(uiInfo.m_bgColor),
+            BPanel _title_caption_container = BPanel.CreateFromPanel(BHelper.CreatePanel(uiInfo: new UIInfo().leFlexWeight(1,0).bgColor(uiInfo.m_bgColor),
                 layoutGroup: LayoutType.Horizontal, parent: header.gameObject, goName: title + "-title-caption-container"));
-            this.title = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().leFlexWeight(1,0).bgColor(uiInfo.m_bgColor),
+            this.title = BPanel.CreateFromPanel(BHelper.CreatePanel(uiInfo: new UIInfo().leFlexWeight(1,0).bgColor(uiInfo.m_bgColor),
                 layoutGroup: LayoutType.Horizontal, parent: _title_caption_container.gameObject, "left"));  //子要素のサイズに合わせる
-            this.caption = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().bgColor(uiInfo.m_bgColor),
+            this.caption = BPanel.CreateFromPanel(BHelper.CreatePanel(uiInfo: new UIInfo().bgColor(uiInfo.m_bgColor),
                 layoutGroup: LayoutType.Horizontal, parent: _title_caption_container.gameObject, "right")); //子要素のサイズに合わせる
             uiTitle = this.title.AddText(title);
 
-            this.content = SPanel.CreateFromPanel(
-                SWHelper.CreateScrollView(container.gameObject, uiInfo: uiInfo.leFlexWeight(1,1), goName: title + "-content"));
-            this.hooter = SPanel.CreateFromPanel(
-                SWHelper.CreatePanel(uiInfo: uiInfo, layoutGroup: hooterLayout, parent: container.gameObject, goName: title + "-hooter"));
+            this.content = BPanel.CreateFromPanel(
+                BHelper.CreateScrollView(container.gameObject, uiInfo: uiInfo.leFlexWeight(1,1), goName: title + "-content"));
+            this.hooter = BPanel.CreateFromPanel(
+                BHelper.CreatePanel(uiInfo: uiInfo, layoutGroup: hooterLayout, parent: container.gameObject, goName: title + "-hooter"));
 
             actionRunner = container.gameObject.AddComponent<ActionRunner>();
         }
@@ -64,7 +64,7 @@ namespace uBUI
         }
 
         public float calcScrollViewWidth()
-        { return SWHelper.calcScrollViewWidth(container.gameObject); }
+        { return BHelper.calcScrollViewWidth(container.gameObject); }
 
 
 
@@ -85,7 +85,7 @@ namespace uBUI
              LayoutType hooterLayout = LayoutType.Horizontal, UIInfo uiInfo = null, bool draggable = true,
              float canvasScale = 1f, GameObject parent = null)
         {
-            LayoutGroup lg = SWHelper.CreateCanvas(RenderMode.ScreenSpaceOverlay, leftbottom, windowSize,
+            LayoutGroup lg = BHelper.CreateCanvas(RenderMode.ScreenSpaceOverlay, leftbottom, windowSize,
                 uiInfo: uiContainerPanel, layoutGroup: LayoutType.Vertical,
                 draggable4screen: draggable, canvasScale: canvasScale, parent: parent, goName: title + "-window");
             _SWindow(lg, title, hooterLayout, uiInfo, parent);
@@ -111,7 +111,7 @@ namespace uBUI
             LayoutType hooterLayout = LayoutType.Horizontal, UIInfo uiInfo = null,
              Camera camera = null, float meterPerPx = 0.001f, float canvasScale = 1f, GameObject parent = null)
         {
-            LayoutGroup lg = SWHelper.CreateCanvas(RenderMode.WorldSpace, leftbottom, windowSize,
+            LayoutGroup lg = BHelper.CreateCanvas(RenderMode.WorldSpace, leftbottom, windowSize,
                 uiInfo: uiContainerPanel, layoutGroup: LayoutType.Vertical,
                   parent: parent, camera4world: camera, meterPerPx4world: meterPerPx, canvasScale: canvasScale, goName: title + "-window");
             _SWindow(lg, title, hooterLayout, uiInfo, parent: parent);
@@ -141,7 +141,7 @@ namespace uBUI
         {
             LayoutElement le = go.GetComponent<LayoutElement>();
             if (le != null) le.flexibleWidth = 0f;
-            SWHelper.Foreach(go, _disable_flexWidth);
+            BHelper.Foreach(go, _disable_flexWidth);
         }
 
         /// <summary>

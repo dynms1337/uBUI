@@ -61,10 +61,10 @@
     <Compile Include="Assets\Scripts\uBUI\BContainer.cs" />
     <Compile Include="Assets\Scripts\uBUI\SWindow.cs" />
     <Compile Include="Assets\Scripts\uBUI\core\UIInfo.cs" />
-    <Compile Include="Assets\Scripts\uBUI\SPanel.cs" />
+    <Compile Include="Assets\Scripts\uBUI\BPanel.cs" />
     <Compile Include="Assets\Scripts\uBUI\core\DragBehaviour.cs" />
     <Compile Include="Assets\Scripts\uBUI\core\InfiniteScroll.cs" />
-    <Compile Include="Assets\Scripts\uBUI\core\SWHelper.cs" />
+    <Compile Include="Assets\Scripts\uBUI\core\BHelper.cs" />
     <Compile Include="Assets\Scripts\Example01.cs" />
   </ItemGroup>
   <ItemGroup>

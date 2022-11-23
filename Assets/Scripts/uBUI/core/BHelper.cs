@@ -12,7 +12,8 @@ using Assets.core;
 
 namespace uBUI
 {
-    public static class SWHelper
+    /// <summary> uGUI Builder Helper</summary>
+    public static class BHelper
     {
         internal const string UI_LAYER_NAME = "UI";
         public static int default_layer = 0;  // GameObjectのレイヤ。-1なら、GameObjectのレイヤをUIレイヤ（5）に設定
@@ -58,7 +59,7 @@ namespace uBUI
         private static UniqueName goname_Toggle = new UniqueName("Toggle");
         private static UniqueName goname_RadioButton = new UniqueName("RadioButton");
 
-        static SWHelper()
+        static BHelper()
         {
             TEXT_FONT = UnityEngine.Resources.GetBuiltinResource<Font>("Arial.ttf");
         }

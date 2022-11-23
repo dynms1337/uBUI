@@ -36,7 +36,7 @@ public class Example01 : MonoBehaviour
 
 
         // ************************ Content ************************
-        SPanel content = container.AddScrollPanel(LayoutType.Vertical, UIInfo.SCROLLVIEW_DEFAULT);
+        BPanel content = container.AddScrollPanel(LayoutType.Vertical, UIInfo.SCROLLVIEW_DEFAULT);
 
         UIInfo uiTitle = UIInfo.TEXT_H2;
         UIInfo uiDesc = UIInfo.TEXT_DEFAULT.textSize(14).lePreferredSize(350, 0);
@@ -75,7 +75,7 @@ public class Example01 : MonoBehaviour
         {
             var vp = content.AddVerticalPanel(UIInfo.PANEL_DARK);
             vp.AddText("Toggle", uiTitle);
-            SPanel hp = vp.AddHorizontalPanel();
+            BPanel hp = vp.AddHorizontalPanel();
             Text textToggleStatus = hp.AddText("Toggle Status...");
             hp.AddToggle(b => textToggleStatus.text = "Toggle Status :" + (b ? "ON" : "OFF"), "switch here!", isOn: false);
         }
@@ -84,7 +84,7 @@ public class Example01 : MonoBehaviour
         {
             var vp = content.AddVerticalPanel(UIInfo.PANEL_DARK);
             vp.AddText("Radio Buttons (by ToggleGroup)", uiTitle);
-            SPanel hp = vp.AddHorizontalPanel();
+            BPanel hp = vp.AddHorizontalPanel();
             Text text_radio = hp.AddText("click radio button...");
 
             hp.AddRadioButton(s => text_radio.text = "selected :" + s,
@@ -100,7 +100,7 @@ public class Example01 : MonoBehaviour
         {
             var vp = content.AddVerticalPanel(UIInfo.PANEL_DARK);
             vp.AddText("Slider", uiTitle);
-            SPanel hp = vp.AddHorizontalPanel();
+            BPanel hp = vp.AddHorizontalPanel();
             Text text_slider = hp.AddText("drag slider...");
             hp.AddSlider(f => text_slider.text = "value :" + f.ToString());
         }
@@ -110,7 +110,7 @@ public class Example01 : MonoBehaviour
             var vp = content.AddVerticalPanel(UIInfo.PANEL_DARK);
             vp.AddText("Image, Spacer", uiTitle);
             vp.AddText("By placing a Spacer in the middle of the HorizontalPanel, objects can be placed on both sides.", uiDesc);
-            SPanel hp = vp.AddHorizontalPanel(UIInfo.PANEL_DEFAULT.layoutAlignment(TextAnchor.LowerRight));
+            BPanel hp = vp.AddHorizontalPanel(UIInfo.PANEL_DEFAULT.layoutAlignment(TextAnchor.LowerRight));
             hp.addImage(size: new Vector2(100, 100), color: Color.red);
             hp.AddSpacer();
             hp.addImage(size: new Vector2(150, 150), color: Color.green);

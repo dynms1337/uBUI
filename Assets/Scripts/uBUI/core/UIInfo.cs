@@ -43,11 +43,11 @@ namespace uBUI
         public Vector2R m_rtOffsetMin = new Vector2R();
         public Vector2R m_rtOffsetMax = new Vector2R();
 
-        public int m_textSize = SWHelper.FONT_SIZE;
-        public Color m_textColor = SWHelper.COLOR_TEXT;
+        public int m_textSize = BHelper.FONT_SIZE;
+        public Color m_textColor = BHelper.COLOR_TEXT;
         public Color m_bgColor = default(Color);      //デフォルト値なら、各UI要素作成時に適切な色を選択
         public TextAnchor m_textAlignment = TextAnchor.MiddleLeft;
-        public int m_spacing = SWHelper.LAYOUTGROUP_SPACING;
+        public int m_spacing = BHelper.LAYOUTGROUP_SPACING;
         public int m_padding_left = -1;
         public int m_padding_right = -1;
         public int m_padding_top = -1;
@@ -59,10 +59,10 @@ namespace uBUI
 
 
         public static readonly UIInfo TEXT_DEFAULT = new UIInfo().leFlexWeight(1, 0).bgColor(Color.clear/*SWHelper.COLOR_AREA_BG*/)
-            .textSize(SWHelper.FONT_SIZE).textAlignment(TextAnchor.MiddleLeft);
-        public static readonly UIInfo TEXT_H1 = TEXT_DEFAULT.textSize(SWHelper.FONT_SIZE + 4);
-        public static readonly UIInfo TEXT_H2 = TEXT_DEFAULT.textSize(SWHelper.FONT_SIZE + 2);
-        public static readonly UIInfo TEXT_H3 = TEXT_DEFAULT.textSize(SWHelper.FONT_SIZE + 1);
+            .textSize(BHelper.FONT_SIZE).textAlignment(TextAnchor.MiddleLeft);
+        public static readonly UIInfo TEXT_H1 = TEXT_DEFAULT.textSize(BHelper.FONT_SIZE + 4);
+        public static readonly UIInfo TEXT_H2 = TEXT_DEFAULT.textSize(BHelper.FONT_SIZE + 2);
+        public static readonly UIInfo TEXT_H3 = TEXT_DEFAULT.textSize(BHelper.FONT_SIZE + 1);
 
         public static readonly UIInfo BUTTON_DEFAULT = TEXT_DEFAULT.leFlexWeight(1, 0).bgColor(Color.white)  //ボタンのデフォルト背景色は白。ホバーしたときの色変化を見やすくするため。)
             .textAlignment(TextAnchor.MiddleCenter);
@@ -73,7 +73,7 @@ namespace uBUI
         public static readonly UIInfo TOGGLE_DEFAULT = new UIInfo().leFlexWeight(1, 0);
         public static readonly UIInfo RADIO_BUTTON_DEFAULT = new UIInfo().leFlexWeight(1, 0);
         public static readonly UIInfo SCROLLBAR_DEFAULT = new UIInfo().rtSizeDelta(new Vector2(20, 20)); // .lePreferredSize(20, 20); //  .fit_Fixed().position(Vector2.zero).uiSize(SWHelper.UIELEMENT_SIZE);
-        public static readonly UIInfo SCROLLVIEW_DEFAULT = new UIInfo().bgColor(SWHelper.COLOR_AREA_BG).leFlexWeight(1);
+        public static readonly UIInfo SCROLLVIEW_DEFAULT = new UIInfo().bgColor(BHelper.COLOR_AREA_BG).leFlexWeight(1);
         public static readonly UIInfo CANVAS_DEFAULT = new UIInfo().bgColor(COLOR_DARK);
 
         public static readonly UIInfo PANEL_DEFAULT = new UIInfo()./*leFlexWeight(1, 1).*/bgColor(Color.clear).layoutAlignment(TextAnchor.MiddleLeft);
@@ -93,7 +93,7 @@ namespace uBUI
         public UIInfo textSize(int sizePx) { UIInfo ret = this.Clone(); ret.m_textSize = sizePx; return ret; }
         public UIInfo textColor(Color textColor) { UIInfo ret = this.Clone(); ret.m_textColor = textColor; return ret; }
         public UIInfo bgColor(Color bgColor) { UIInfo ret = this.Clone(); ret.m_bgColor = bgColor; return ret; }
-        public UIInfo bgColor(string colorCode) { UIInfo ret = this.Clone(); ret.m_bgColor = SWHelper.parseColor(colorCode); return ret; }
+        public UIInfo bgColor(string colorCode) { UIInfo ret = this.Clone(); ret.m_bgColor = BHelper.parseColor(colorCode); return ret; }
         public UIInfo textAlignment(TextAnchor textAlignment) { UIInfo ret = this.Clone(); ret.m_textAlignment = textAlignment; return ret; }
         public UIInfo layoutAlignment(TextAnchor layoutAlignment) { UIInfo ret = this.Clone(); ret.m_layoutAlignment = layoutAlignment; return ret; }
         public UIInfo spacing(int space) { UIInfo ret = this.Clone(); ret.m_spacing = space; return ret; }

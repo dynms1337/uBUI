@@ -8,7 +8,8 @@ using System.Reflection;
 
 namespace uBUI
 {
-    public class BContainer : SPanel
+    /// <summary>uGUI Builder Container</summary>
+    public class BContainer : BPanel
     {
         Canvas canvas;
         //SPanel container;
@@ -27,7 +28,7 @@ namespace uBUI
         {
             //if (bgColor == null) bgColor = new Color(1f, 1f, 1f, 0.1f);
             if (uiInfo == null) uiInfo = UIInfo.CANVAS_DEFAULT;
-            LayoutGroup lg = SWHelper.CreateCanvas(renderMode, leftbottom, windowSize,
+            LayoutGroup lg = BHelper.CreateCanvas(renderMode, leftbottom, windowSize,
                 uiInfo: uiInfo, layoutGroup: LayoutType.Vertical,
                 draggable4screen: draggable4screen, canvasScale: canvasScale, parent: parent, goName: goCanvasName);
             var ret = new BContainer(lg);
