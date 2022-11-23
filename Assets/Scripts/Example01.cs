@@ -19,75 +19,75 @@ public class Example01 : MonoBehaviour
         var container = BContainer.Create(RenderMode.ScreenSpaceOverlay, Title, window_leftbottom, window_size);
 
         // ************************ header ************************
-        var header = container.addPanel_Horizontal();
-        header.addText(Title, UIInfo.TEXT_H1);
-        header.addSpacer();
+        var header = container.AddHorizontalPanel();
+        header.AddText(Title, UIInfo.TEXT_H1);
+        header.AddSpacer();
 
         // △ Basic Position
         var uiCaption = UIInfo.BUTTON_CAPTION;
-        header.addButton(() => { container.locate_byPosition(left: window_leftbottom.x, bottom: window_leftbottom.y, width: window_size.x, height: window_size.y); },
+        header.AddButton(() => { container.locate_byPosition(left: window_leftbottom.x, bottom: window_leftbottom.y, width: window_size.x, height: window_size.y); },
             labelStr: "△", uiInfo: uiCaption);
         // □ Maximize
-        header.addButton(() => { container.locate_byMarginPx(left: 10, right: 10, top: 10, bottom: 10); }, labelStr: "□"
+        header.AddButton(() => { container.locate_byMarginPx(left: 10, right: 10, top: 10, bottom: 10); }, labelStr: "□"
             , uiInfo: uiCaption);
         // × Hide
-        header.addButton(() => { container.goPanel.SetActive(false); }, labelStr: "×"
+        header.AddButton(() => { container.gameObject.SetActive(false); }, labelStr: "×"
             , uiInfo: uiCaption);
 
 
         // ************************ Content ************************
-        SPanel content = container.addPanel_Scroll(LayoutType.Vertical, UIInfo.SCROLLVIEW_DEFAULT);
+        SPanel content = container.AddScrollPanel(LayoutType.Vertical, UIInfo.SCROLLVIEW_DEFAULT);
 
         UIInfo uiTitle = UIInfo.TEXT_H2;
         UIInfo uiDesc = UIInfo.TEXT_DEFAULT.textSize(14).lePreferredSize(350, 0);
 
-        content.addText("------ Content ------", uiTitle.textAlignment(TextAnchor.MiddleCenter));
+        content.AddText("------ Content ------", uiTitle.textAlignment(TextAnchor.MiddleCenter));
         {
-            var vp = content.addPanel_Vertical(UIInfo.PANEL_DARK);
-            vp.addText("InputField (Single line)", uiTitle);
+            var vp = content.AddVerticalPanel(UIInfo.PANEL_DARK);
+            vp.AddText("InputField (Single line)", uiTitle);
             string initialText = "entered string: \r\n";
-            Text log = vp.addText(initialText);
-            vp.addTextField(onEndEdit: s => log.text += "\r\n---\r\n\r\n", onValueChanged: s => log.text = $"{initialText}{s}\r\n");
+            Text log = vp.AddText(initialText);
+            vp.AddTextField(onEndEdit: s => log.text += "\r\n---\r\n\r\n", onValueChanged: s => log.text = $"{initialText}{s}\r\n");
         }
-        content.addSpacer();
+        content.AddSpacer();
 
         {
-            var vp = content.addPanel_Vertical(UIInfo.PANEL_DARK);
-            vp.addText("InputField (Multi lines)", uiTitle);
+            var vp = content.AddVerticalPanel(UIInfo.PANEL_DARK);
+            vp.AddText("InputField (Multi lines)", uiTitle);
             string initialText = "entered string: \r\n";
-            Text log = vp.addText(initialText);
-            vp.addTextField(onEndEdit: s => log.text += "\r\n---\r\n\r\n", onValueChanged: s => log.text = $"{initialText}{s}\r\n", areaLines: 2);
+            Text log = vp.AddText(initialText);
+            vp.AddTextField(onEndEdit: s => log.text += "\r\n---\r\n\r\n", onValueChanged: s => log.text = $"{initialText}{s}\r\n", areaLines: 2);
         }
-        content.addSpacer();
+        content.AddSpacer();
         {
-            var vp = content.addPanel_Vertical(UIInfo.PANEL_DARK);
-            vp.addText("Button", uiTitle);
-            Text log = vp.addText("click count : 0");
+            var vp = content.AddVerticalPanel(UIInfo.PANEL_DARK);
+            vp.AddText("Button", uiTitle);
+            Text log = vp.AddText("click count : 0");
             int clickCount = 0;
-            vp.addButton(() =>
+            vp.AddButton(() =>
             {
                 clickCount++;
                 log.text = $"click count : {clickCount}";
             }
             , "click here");
         }
-        content.addSpacer();
+        content.AddSpacer();
         {
-            var vp = content.addPanel_Vertical(UIInfo.PANEL_DARK);
-            vp.addText("Toggle", uiTitle);
-            SPanel hp = vp.addPanel_Horizontal();
-            Text textToggleStatus = hp.addText("Toggle Status...");
-            hp.addToggle(b => textToggleStatus.text = "Toggle Status :" + (b ? "ON" : "OFF"), "switch here!", isOn: false);
+            var vp = content.AddVerticalPanel(UIInfo.PANEL_DARK);
+            vp.AddText("Toggle", uiTitle);
+            SPanel hp = vp.AddHorizontalPanel();
+            Text textToggleStatus = hp.AddText("Toggle Status...");
+            hp.AddToggle(b => textToggleStatus.text = "Toggle Status :" + (b ? "ON" : "OFF"), "switch here!", isOn: false);
         }
-        content.addSpacer();
+        content.AddSpacer();
 
         {
-            var vp = content.addPanel_Vertical(UIInfo.PANEL_DARK);
-            vp.addText("Radio Buttons (by ToggleGroup)", uiTitle);
-            SPanel hp = vp.addPanel_Horizontal();
-            Text text_radio = hp.addText("click radio button...");
+            var vp = content.AddVerticalPanel(UIInfo.PANEL_DARK);
+            vp.AddText("Radio Buttons (by ToggleGroup)", uiTitle);
+            SPanel hp = vp.AddHorizontalPanel();
+            Text text_radio = hp.AddText("click radio button...");
 
-            hp.addRadioButton(s => text_radio.text = "selected :" + s,
+            hp.AddRadioButton(s => text_radio.text = "selected :" + s,
                 showValueDict: new Dictionary<string, string>()
                     {
                         {"name0","value0" },
@@ -96,34 +96,34 @@ public class Example01 : MonoBehaviour
                     },
                 layoutGroup: LayoutType.Horizontal);
         }
-        content.addSpacer();
+        content.AddSpacer();
         {
-            var vp = content.addPanel_Vertical(UIInfo.PANEL_DARK);
-            vp.addText("Slider", uiTitle);
-            SPanel hp = vp.addPanel_Horizontal();
-            Text text_slider = hp.addText("drag slider...");
-            hp.addSlider(f => text_slider.text = "value :" + f.ToString());
+            var vp = content.AddVerticalPanel(UIInfo.PANEL_DARK);
+            vp.AddText("Slider", uiTitle);
+            SPanel hp = vp.AddHorizontalPanel();
+            Text text_slider = hp.AddText("drag slider...");
+            hp.AddSlider(f => text_slider.text = "value :" + f.ToString());
         }
-        content.addSpacer();
+        content.AddSpacer();
 
         {
-            var vp = content.addPanel_Vertical(UIInfo.PANEL_DARK);
-            vp.addText("Image, Spacer", uiTitle);
-            vp.addText("By placing a Spacer in the middle of the HorizontalPanel, objects can be placed on both sides.", uiDesc);
-            SPanel hp = vp.addPanel_Horizontal(UIInfo.PANEL_DEFAULT.layoutAlignment(TextAnchor.LowerRight));
+            var vp = content.AddVerticalPanel(UIInfo.PANEL_DARK);
+            vp.AddText("Image, Spacer", uiTitle);
+            vp.AddText("By placing a Spacer in the middle of the HorizontalPanel, objects can be placed on both sides.", uiDesc);
+            SPanel hp = vp.AddHorizontalPanel(UIInfo.PANEL_DEFAULT.layoutAlignment(TextAnchor.LowerRight));
             hp.addImage(size: new Vector2(100, 100), color: Color.red);
-            hp.addSpacer();
+            hp.AddSpacer();
             hp.addImage(size: new Vector2(150, 150), color: Color.green);
         }
-        content.addSpacer();
+        content.AddSpacer();
 
         // ************************ Hooter ************************
-        var hooter = container.addPanel_Vertical();
-        hooter.addText("------ Hooter ------", uiTitle.textAlignment(TextAnchor.MiddleCenter));
+        var hooter = container.AddVerticalPanel();
+        hooter.AddText("------ Hooter ------", uiTitle.textAlignment(TextAnchor.MiddleCenter));
         {
-            Text log = hooter.addText("click count : 0");
+            Text log = hooter.AddText("click count : 0");
             int clickCount = 0;
-            hooter.addButton(() =>
+            hooter.AddButton(() =>
             {
                 clickCount++;
                 log.text = $"click count : {clickCount}";

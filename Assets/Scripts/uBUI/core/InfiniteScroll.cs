@@ -35,15 +35,15 @@ namespace uBUI
 
         private void _init()
         {
-            container.goPanel.GetComponent<LayoutElement>().preferredHeight = itemHeight * (itemCount + 1.5f);
-            this.rt = container.goPanel.GetComponent<RectTransform>();
+            container.gameObject.GetComponent<LayoutElement>().preferredHeight = itemHeight * (itemCount + 1.5f);
+            this.rt = container.gameObject.GetComponent<RectTransform>();
             rt.anchorMin = new Vector2(0, 1);
             rt.anchorMax = new Vector2(0, 1);
-            float panelHeight = container.goPanel.getParent().GetComponent<RectTransform>().rect.height;
+            float panelHeight = container.gameObject.getParent().GetComponent<RectTransform>().rect.height;
             float hSum = 0;
             for (int i = 0; i < MAX_ITEM_COUNT; i++)
             {
-                var item = itemBuildFunc(container.goPanel, i);
+                var item = itemBuildFunc(container.gameObject, i);
                 itemList.Add(item);
                 hSum += itemHeight;
                 if (hSum > panelHeight) break;
@@ -83,7 +83,7 @@ namespace uBUI
                 this.lg = SWHelper.CreatePanel(uiInfo: UIInfo.PANEL_DEFAULT.lePreferredSize(itemWidth, 30)  //.fit_Fixed(uiSize: new Vector2(itemWidth, 30))
                     , layoutGroup: LayoutType.Horizontal, parent: parent) ;
                 this.spanel = SPanel.CreateFromPanel(lg);
-                this.rt = spanel.goPanel.GetComponent<RectTransform>();  //GetComponentは遅いのであらかじめインスタンス取得しておく
+                this.rt = spanel.gameObject.GetComponent<RectTransform>();  //GetComponentは遅いのであらかじめインスタンス取得しておく
                 rt.anchorMin = new Vector2(0, 1);
                 rt.anchorMax = new Vector2(0, 1);
                 rt.pivot = new Vector2(0, 1);

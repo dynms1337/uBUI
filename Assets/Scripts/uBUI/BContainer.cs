@@ -15,8 +15,8 @@ namespace uBUI
         RectTransform rtContainer;
 
         protected BContainer(LayoutGroup lg) :base(lg){
-            rtContainer = this.goPanel.GetComponent<RectTransform>();
-            canvas = this.goPanel.getParent().GetComponent<Canvas>();
+            rtContainer = this.gameObject.GetComponent<RectTransform>();
+            canvas = this.gameObject.getParent().GetComponent<Canvas>();
         }
 
         /// <param name="renderMode">RenderMode.WorldSpace or RenderMode.ScreenSpaceOverlay</param>

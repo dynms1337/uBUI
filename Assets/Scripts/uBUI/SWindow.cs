@@ -31,21 +31,21 @@ namespace uBUI
             this.container = SPanel.CreateFromPanel(lgContainer);
 
             this.header = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().leFlexWeight(1,0).bgColor(uiInfo.m_bgColor),
-                layoutGroup: LayoutType.Vertical, parent: container.goPanel, goName: title + "-header"));
+                layoutGroup: LayoutType.Vertical, parent: container.gameObject, goName: title + "-header"));
             SPanel _title_caption_container = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().leFlexWeight(1,0).bgColor(uiInfo.m_bgColor),
-                layoutGroup: LayoutType.Horizontal, parent: header.goPanel, goName: title + "-title-caption-container"));
+                layoutGroup: LayoutType.Horizontal, parent: header.gameObject, goName: title + "-title-caption-container"));
             this.title = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().leFlexWeight(1,0).bgColor(uiInfo.m_bgColor),
-                layoutGroup: LayoutType.Horizontal, parent: _title_caption_container.goPanel, "left"));  //子要素のサイズに合わせる
+                layoutGroup: LayoutType.Horizontal, parent: _title_caption_container.gameObject, "left"));  //子要素のサイズに合わせる
             this.caption = SPanel.CreateFromPanel(SWHelper.CreatePanel(uiInfo: new UIInfo().bgColor(uiInfo.m_bgColor),
-                layoutGroup: LayoutType.Horizontal, parent: _title_caption_container.goPanel, "right")); //子要素のサイズに合わせる
-            uiTitle = this.title.addText(title);
+                layoutGroup: LayoutType.Horizontal, parent: _title_caption_container.gameObject, "right")); //子要素のサイズに合わせる
+            uiTitle = this.title.AddText(title);
 
             this.content = SPanel.CreateFromPanel(
-                SWHelper.CreateScrollView(container.goPanel, uiInfo: uiInfo.leFlexWeight(1,1), goName: title + "-content"));
+                SWHelper.CreateScrollView(container.gameObject, uiInfo: uiInfo.leFlexWeight(1,1), goName: title + "-content"));
             this.hooter = SPanel.CreateFromPanel(
-                SWHelper.CreatePanel(uiInfo: uiInfo, layoutGroup: hooterLayout, parent: container.goPanel, goName: title + "-hooter"));
+                SWHelper.CreatePanel(uiInfo: uiInfo, layoutGroup: hooterLayout, parent: container.gameObject, goName: title + "-hooter"));
 
-            actionRunner = container.goPanel.AddComponent<ActionRunner>();
+            actionRunner = container.gameObject.AddComponent<ActionRunner>();
         }
 
         class ActionRunner : MonoBehaviour
@@ -60,11 +60,11 @@ namespace uBUI
 
         internal void updateScrollContentWidth()
         {
-            content.goPanel.GetComponent<LayoutElement>().preferredWidth = calcScrollViewWidth();
+            content.gameObject.GetComponent<LayoutElement>().preferredWidth = calcScrollViewWidth();
         }
 
         public float calcScrollViewWidth()
-        { return SWHelper.calcScrollViewWidth(container.goPanel); }
+        { return SWHelper.calcScrollViewWidth(container.gameObject); }
 
 
 
@@ -133,7 +133,7 @@ namespace uBUI
         public Button addCaptionButton(UnityAction TaskOnClick, string labelStr = "", string texPath = "",
             Texture2D tex = null, Sprite sprite = null, int imgSize = -1, Color? imgColor = null, UIInfo uiInfo = null)
         {
-            Button ret = caption.addButton(TaskOnClick, labelStr, texPath, tex, sprite, imgSize, imgColor, uiInfo);
+            Button ret = caption.AddButton(TaskOnClick, labelStr, texPath, tex, sprite, imgSize, imgColor, uiInfo);
             _disable_flexWidth(ret.gameObject);  //すべてのGameObjectのflexWidthを0に設定
             return ret;
         }
@@ -154,7 +154,7 @@ namespace uBUI
         /// <param name="height">ウィンドウの高さ</param>
         public void locate_byPosition(float? left, float? bottom, float? width, float? height)
         {
-            RectTransform rt = container.goPanel.GetComponent<RectTransform>();
+            RectTransform rt = container.gameObject.GetComponent<RectTransform>();
             rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.zero;
             rt.sizeDelta = new Vector2(width ?? rt.sizeDelta.x, height ?? rt.sizeDelta.y);
             //rt.localPosition = new Vector2(left, bottom);
@@ -171,7 +171,7 @@ namespace uBUI
         /// <param name="bottom">スクリーン下端からの距離の割合</param>
         public void locate_byMarginPct(float? left, float? right, float? top, float? bottom)
         {
-            RectTransform rt = container.goPanel.GetComponent<RectTransform>();
+            RectTransform rt = container.gameObject.GetComponent<RectTransform>();
             rt.anchorMin = new Vector2(left ?? rt.anchorMin.x, bottom ?? rt.anchorMin.y);
             rt.anchorMax = new Vector2((1 - right) ?? rt.anchorMax.x, (1 - top) ?? rt.anchorMax.y);
             rt.offsetMin = Vector2.zero; rt.offsetMax = Vector2.zero;
@@ -187,7 +187,7 @@ namespace uBUI
         /// <param name="bottom">スクリーン下端からのピクセル数</param>
         public void locate_byMarginPx(float? left, float? right, float? top, float? bottom)
         {
-            RectTransform rt = container.goPanel.GetComponent<RectTransform>();
+            RectTransform rt = container.gameObject.GetComponent<RectTransform>();
             rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
             rt.offsetMin = new Vector2(left ?? rt.offsetMin.x, bottom ?? rt.offsetMin.y);
             rt.offsetMax = new Vector2((-right) ?? rt.offsetMax.x, (-top) ?? rt.offsetMin.y);
@@ -197,8 +197,8 @@ namespace uBUI
         public GameObject getCanvasGameObject_orNull()
         {
             if (container == null) return null;
-            if (container.goPanel == null) return null;
-            return container.goPanel.gameObject.getParent();
+            if (container.gameObject == null) return null;
+            return container.gameObject.gameObject.getParent();
         }
 
         /// <summary>
@@ -222,12 +222,12 @@ namespace uBUI
 
         public void setWindowScale(float scale)
         {
-            container.goPanel.gameObject.getParent().GetComponent<Canvas>().scaleFactor = scale;
+            container.gameObject.gameObject.getParent().GetComponent<Canvas>().scaleFactor = scale;
         }
 
         public void setWindowTitle(string title)
         {
-            container.goPanel.gameObject.getParent().name = title;
+            container.gameObject.gameObject.getParent().name = title;
             uiTitle.text = title;
 
         }
