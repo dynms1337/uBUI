@@ -56,7 +56,7 @@ public class Example01 : MonoBehaviour
             vp.addText("InputField (Multi lines)", uiTitle);
             string initialText = "entered string: \r\n";
             Text log = vp.addText(initialText);
-            vp.addTextField(onEndEdit: s => log.text += "\r\n---\r\n\r\n", onValueChanged: s => log.text = $"{initialText}{s}\r\n", lineCount: 2);
+            vp.addTextField(onEndEdit: s => log.text += "\r\n---\r\n\r\n", onValueChanged: s => log.text = $"{initialText}{s}\r\n", areaLines: 2);
         }
         content.addSpacer();
         {
