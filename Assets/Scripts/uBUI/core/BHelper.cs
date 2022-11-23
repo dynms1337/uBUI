@@ -495,22 +495,6 @@ namespace uBUI
             string labelStr = "", int imgSize = -1, Color? imgColor = null, UIInfo uiInfo = null, string goName = "")
         { return CreateButton(parent, TaskOnClick, labelStr, loadTexture(texPath), imgSize, imgColor, uiInfo, goName); }
 
-        //public static Image CreateImage(GameObject parent, Sprite sprite = null, UIInfo uiInfo = null, string goName = "")
-        //{
-        //    if (uiInfo == null) uiInfo = UIInfo.IMAGE_DEFAULT;
-        //    GameObject go = CreateUIElement(goName == "" ? goname_Image.get() : goName, uiInfo, parent: parent);
-        //    return addImageComponent(go, sprite, uiInfo);
-        //}
-        //public static Image CreateImage(GameObject parent, Texture2D tex, UIInfo uiInfo = null, string goName = "")
-        //{ return CreateImage(parent, Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero), uiInfo, goName); }
-        //public static Image CreateImage(GameObject parent, string texturePath, int width = 0, int height = 0, UIInfo uiInfo = null, string goName = "")
-        //{
-        //    Texture2D tex = loadTexture(texturePath);
-        //    if (width != 0 & height != 0) tex = ResizeTexture(tex, width, height);
-        //    return CreateImage(parent, tex, uiInfo, goName);
-        //}
-
-
         /// <param name="tex_sprite_path">Image Texture2D or Sprite or Path to image file. If null, Create without Sprite.</param>
         /// <param name="uiInfo">When tex, resized to uiInfo.lePreferredSize or uiInfo.rtSizeDelta</param>
         public static Image CreateImage(GameObject parent, object tex_sprite_path = null, UIInfo uiInfo = null, string goName = "")

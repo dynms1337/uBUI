@@ -99,26 +99,9 @@ namespace uBUI
         public Toggle AddToggle(UnityAction<bool> onValueChanged, string labelStr, bool isOn = true)
         { return BHelper.CreateToggle(gameObject, onValueChanged, labelStr, isOn: isOn); }
 
-        public Image AddImage(string path, UIInfo uiInfo=null)
-        {
-            if (uiInfo == null) uiInfo = UIInfo.IMAGE_DEFAULT;            
-            //if (size != default(Vector2)) uiInfo = uiInfo.lePreferredSize(size.x, size.y);
-            return BHelper.CreateImage(gameObject, path, uiInfo: uiInfo);
-        }
 
-        public Image addImage(Sprite sprite = null, Vector2 size = default(Vector2), Color color = default(Color))
-        {
-            UIInfo uiInfo = new UIInfo().bgColor(color);
-            if (size != default(Vector2)) uiInfo = uiInfo.lePreferredSize(size.x, size.y); // fit_Fixed(Vector2.zero, size);
-            return BHelper.CreateImage(gameObject, sprite, uiInfo: uiInfo);
-        }
-
-        public Image addImage_byTexture2D(Texture2D tex = null, Vector2 size = default(Vector2), Color color = default(Color))
-        {
-            UIInfo uiInfo = new UIInfo().bgColor(color);
-            if (size != default(Vector2)) uiInfo = uiInfo.lePreferredSize(size.x, size.y);
-            return BHelper.CreateImage(gameObject, tex, uiInfo: uiInfo);
-        }
+        public Image AddImage(object tex_sprite_path = null, UIInfo uiInfo = null, string goName = "")
+        { return BHelper.CreateImage(gameObject, tex_sprite_path, uiInfo: uiInfo, goName: goName); }
 
         public InputField AddTextField(UnityAction<string> onEndEdit = null, UnityAction<string> onValueChanged = null,
             string initialText = "", UIInfo uiInfo = null, int areaLines = 1)

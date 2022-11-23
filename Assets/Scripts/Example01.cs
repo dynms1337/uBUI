@@ -111,9 +111,9 @@ public class Example01 : MonoBehaviour
             vp.AddText("Image, Spacer", uiTitle);
             vp.AddText("By placing a Spacer in the middle of the HorizontalPanel, objects can be placed on both sides.", uiDesc);
             BPanel hp = vp.AddHorizontalPanel(UIInfo.PANEL_DEFAULT.layoutAlignment(TextAnchor.LowerRight));
-            hp.addImage(size: new Vector2(100, 100), color: Color.red);
+            hp.AddImage(uiInfo: UIInfo.IMAGE_DEFAULT.lePreferredSize(100).bgColor(Color.red));
             hp.AddSpacer();
-            hp.addImage(size: new Vector2(150, 150), color: Color.green);
+            hp.AddImage(uiInfo: UIInfo.IMAGE_DEFAULT.lePreferredSize(150).bgColor(Color.green));
         }
         content.AddSpacer();
 
