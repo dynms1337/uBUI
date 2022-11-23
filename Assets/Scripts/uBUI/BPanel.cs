@@ -99,7 +99,8 @@ namespace uBUI
         public Toggle AddToggle(UnityAction<bool> onValueChanged, string labelStr, bool isOn = true)
         { return BHelper.CreateToggle(gameObject, onValueChanged, labelStr, isOn: isOn); }
 
-
+        /// <param name="tex_sprite_path">Image Texture2D or Sprite or Path to image file. If null, Create without Sprite.</param>
+        /// <param name="uiInfo">When tex, resized to uiInfo.lePreferredSize or uiInfo.rtSizeDelta</param>
         public Image AddImage(object tex_sprite_path = null, UIInfo uiInfo = null, string goName = "")
         { return BHelper.CreateImage(gameObject, tex_sprite_path, uiInfo: uiInfo, goName: goName); }
 
