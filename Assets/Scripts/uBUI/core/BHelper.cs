@@ -384,10 +384,9 @@ namespace uBUI
             GameObject container = image.gameObject;
             addLyaoutGroup(container, LayoutType.Vertical, uiInfo.padding(1));
             GameObject go = CreateUIElement(goname_Text.get(), uiInfo, parent: container);
-            (go.transform as RectTransform).pivot = new Vector2(0f, 0.5f);  //拡縮・回転の基点、文字数が増えたときに右へサイズが膨らんでいくようにする。
+            (go.transform as RectTransform).pivot = new Vector2(0f, 0.5f);  // Base point for scaling and rotation. Expands to the right when the number of characters increases.
 
             Text ret = addTextComponent(go, label, uiInfo);
-
             return ret;
         }
 
@@ -399,8 +398,8 @@ namespace uBUI
             Text text = CreateText(parent, labelStr, uiInfo, goName == "" ? goname_Button.get() : goName);
             text.alignment = TextAnchor.MiddleCenter;
 
-            GameObject goButton = text.gameObject.getParent();  //CreateUIElement(goName == "" ? goname_Button.get() : goName, uiInfo, parent: parent);
-            LayoutGroup lg = goButton.GetOrAddComponent<VerticalLayoutGroup>(); //CreateTextで作成したLayoutGroupを取得
+            GameObject goButton = text.gameObject.getParent();
+            LayoutGroup lg = goButton.GetOrAddComponent<VerticalLayoutGroup>();
             lg.childAlignment = TextAnchor.MiddleCenter;
 
             Image img = goButton.GetOrAddComponent<Image>();
@@ -410,12 +409,12 @@ namespace uBUI
             {
                 UIInfo uiImage = uiInfo;   //.fit_Self();
                 if (imgSize > 0)
-                    uiImage = uiImage.lePreferredSize(imgSize, imgSize); //.fit_Fixed();
+                    uiImage = uiImage.lePreferredSize(imgSize, imgSize);
                 Image buttonImage = CreateImage(goButton, uiInfo: uiImage, goName: "buttonImage");
                 buttonImage.sprite = sprite;
                 buttonImage.preserveAspect = true;  //Keep image aspect ratio when stretched
                 buttonImage.gameObject.transform.SetSiblingIndex(0);  //Swap the order of GameObjects so that the image is above the text
-                if (imgColor == null) buttonImage.color = Color.white;        // new Color(1f, 1f, 1f, 0.5f);  //Makes the image semi-transparent without changing its color.
+                if (imgColor == null) buttonImage.color = Color.white;   //Makes the image semi-transparent without changing its color.
                 else buttonImage.color = imgColor.Value;
                 // When there is a button image and the text is empty, set the GameObject corresponding to the Text to Active: false
                 text.gameObject.SetActive(false);
@@ -496,20 +495,47 @@ namespace uBUI
             string labelStr = "", int imgSize = -1, Color? imgColor = null, UIInfo uiInfo = null, string goName = "")
         { return CreateButton(parent, TaskOnClick, labelStr, loadTexture(texPath), imgSize, imgColor, uiInfo, goName); }
 
-        public static Image CreateImage(GameObject parent, Sprite sprite = null, UIInfo uiInfo = null, string goName = "")
+        //public static Image CreateImage(GameObject parent, Sprite sprite = null, UIInfo uiInfo = null, string goName = "")
+        //{
+        //    if (uiInfo == null) uiInfo = UIInfo.IMAGE_DEFAULT;
+        //    GameObject go = CreateUIElement(goName == "" ? goname_Image.get() : goName, uiInfo, parent: parent);
+        //    return addImageComponent(go, sprite, uiInfo);
+        //}
+        //public static Image CreateImage(GameObject parent, Texture2D tex, UIInfo uiInfo = null, string goName = "")
+        //{ return CreateImage(parent, Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero), uiInfo, goName); }
+        //public static Image CreateImage(GameObject parent, string texturePath, int width = 0, int height = 0, UIInfo uiInfo = null, string goName = "")
+        //{
+        //    Texture2D tex = loadTexture(texturePath);
+        //    if (width != 0 & height != 0) tex = ResizeTexture(tex, width, height);
+        //    return CreateImage(parent, tex, uiInfo, goName);
+        //}
+
+
+        /// <param name="tex_sprite_path">Image Texture2D or Sprite or Path to image file. If null, Create without Sprite.</param>
+        /// <param name="uiInfo">When tex, resized to uiInfo.lePreferredSize or uiInfo.rtSizeDelta</param>
+        public static Image CreateImage(GameObject parent, object tex_sprite_path = null, UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.IMAGE_DEFAULT;
-            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Self();
-            GameObject go = CreateUIElement(goName == "" ? goname_Image.get() : goName, uiInfo, parent: parent);
-            return addImageComponent(go, sprite, uiInfo);
-        }
-        public static Image CreateImage(GameObject parent, Texture2D tex, UIInfo uiInfo = null, string goName = "")
-        { return CreateImage(parent, Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero), uiInfo, goName); }
-        public static Image CreateImage(GameObject parent, string texturePath, int width = 0, int height = 0, UIInfo uiInfo = null, string goName = "")
-        {
-            Texture2D tex = loadTexture(texturePath);
-            if (width != 0 & height != 0) tex = ResizeTexture(tex, width, height);
-            return CreateImage(parent, tex, uiInfo, goName);
+            if (tex_sprite_path == null | tex_sprite_path is Sprite)
+            {
+                GameObject go = CreateUIElement(goName == "" ? goname_Image.get() : goName, uiInfo, parent: parent);
+                return addImageComponent(go, tex_sprite_path as Sprite, uiInfo);
+            }
+            else if (tex_sprite_path is Texture2D)
+            {
+                Texture2D tex = tex_sprite_path as Texture2D;
+                return CreateImage(parent, Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero), uiInfo, goName);
+            }
+            else if (tex_sprite_path is string)
+            {
+                Texture2D tex = loadTexture(tex_sprite_path as string);
+                (int width, int height) = (0, 0);
+                if (uiInfo.m_lePreferredSize.notNull) (width, height) = ((int)uiInfo.m_lePreferredSize.Value.x, (int)uiInfo.m_lePreferredSize.Value.y);
+                else if (uiInfo.m_rtSizeDelta.notNull) (width, height) = ((int)uiInfo.m_rtSizeDelta.Value.x, (int)uiInfo.m_rtSizeDelta.Value.y);
+                if (width != 0 & height != 0) tex = ResizeTexture(tex, width, height);
+                return CreateImage(parent, tex, uiInfo, goName);
+            }
+            else throw new ArgumentException($"CreateImage > tex_sprite_path `{tex_sprite_path}` is not PathString or Texture2D or Sprite.");
         }
 
         public static Texture2D ResizeTexture(Texture2D srcTexture, int newWidth, int newHeight)
@@ -519,7 +545,7 @@ namespace uBUI
             return resizedTexture;
         }
 
-        // <param name="wholeNumbers">整数のみに制限</param>
+        // <param name="wholeNumbers">Limit to Integer if True</param>
         public static Slider CreateSlider(GameObject parent, UnityAction<float> onValueChanged, float initialValue, float max = 1f, float min = 0f, bool wholeNumbers = false, string goName = "")
         {
             // Create GOs Hierarchy
@@ -568,7 +594,7 @@ namespace uBUI
             GameObject handle = CreateUIElement("Handle", new UIInfo().rtSizeDelta(20, 20), parent: sliderArea);
 
             Image bgImage = addImageComponent(scrollbarRoot, uiInfo: new UIInfo().leFlexWeight(1, 0).bgColor(COLOR_SLIDER_BACKGROUND));
-            Image handleImage = addImageComponent(handle);
+            Image handleImage = addImageComponent(handle, uiInfo: new UIInfo().bgColor(COLOR_SLIDER_HANDLE));
 
             Scrollbar scrollbar = scrollbarRoot.AddComponent<Scrollbar>();
             scrollbar.handleRect = handle.GetComponent<RectTransform>();

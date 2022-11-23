@@ -81,11 +81,8 @@ namespace uBUI
         public Button AddButton(UnityAction TaskOnClick, string labelStr = "", string texPath = "",
             Texture2D tex = null, Sprite sprite = null, int imgSize = -1, Color? imgColor = null, UIInfo uiInfo = null)
         {
-            // Spriteからボタンを作る場合
             if (sprite != null) return BHelper.CreateButton(gameObject, TaskOnClick: TaskOnClick, labelStr: labelStr, sprite: sprite, imgSize: imgSize, imgColor: imgColor, uiInfo: uiInfo);
-            // labelStrとTexture2Dオブジェクトからボタンを作る場合
             if (texPath == "") return BHelper.CreateButton(gameObject, TaskOnClick: TaskOnClick, labelStr: labelStr, tex: tex, imgSize: imgSize, imgColor: imgColor, uiInfo: uiInfo);
-            // texPathからTexture2Dを読込んでボタンを作る場合
             else return BHelper.CreateButton(gameObject, texPath: texPath, TaskOnClick: TaskOnClick, labelStr: labelStr, imgSize: imgSize, imgColor: imgColor, uiInfo: uiInfo);
         }
 
@@ -102,11 +99,11 @@ namespace uBUI
         public Toggle AddToggle(UnityAction<bool> onValueChanged, string labelStr, bool isOn = true)
         { return BHelper.CreateToggle(gameObject, onValueChanged, labelStr, isOn: isOn); }
 
-        public Image AddImage(string path, Vector2 size = default(Vector2), UIInfo uiInfo=null)
+        public Image AddImage(string path, UIInfo uiInfo=null)
         {
             if (uiInfo == null) uiInfo = UIInfo.IMAGE_DEFAULT;            
-            if (size != default(Vector2)) uiInfo = uiInfo.lePreferredSize(size.x, size.y);
-            return BHelper.CreateImage(gameObject, path, width: (int)size.x, height: (int)size.y, uiInfo: uiInfo);
+            //if (size != default(Vector2)) uiInfo = uiInfo.lePreferredSize(size.x, size.y);
+            return BHelper.CreateImage(gameObject, path, uiInfo: uiInfo);
         }
 
         public Image addImage(Sprite sprite = null, Vector2 size = default(Vector2), Color color = default(Color))
