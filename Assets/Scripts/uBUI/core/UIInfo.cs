@@ -54,19 +54,32 @@ namespace uBUI
         public int m_padding_bottom = -1;
         public TextAnchor m_layoutAlignment = TextAnchor.MiddleLeft;
 
+        public static readonly Color COLOR_LIGHT = new Color(0.9f, 0.9f, 0.9f, 0.1f);
+        public static readonly Color COLOR_DARK = new Color(0.1f, 0.1f, 0.1f, 0.1f);
+
 
         public static readonly UIInfo TEXT_DEFAULT = new UIInfo().leFlexWeight(1, 0).bgColor(Color.clear/*SWHelper.COLOR_AREA_BG*/)
             .textSize(SWHelper.FONT_SIZE).textAlignment(TextAnchor.MiddleLeft);
+        public static readonly UIInfo TEXT_H1 = TEXT_DEFAULT.textSize(SWHelper.FONT_SIZE + 4);
+        public static readonly UIInfo TEXT_H2 = TEXT_DEFAULT.textSize(SWHelper.FONT_SIZE + 2);
+        public static readonly UIInfo TEXT_H3 = TEXT_DEFAULT.textSize(SWHelper.FONT_SIZE + 1);
+
         public static readonly UIInfo BUTTON_DEFAULT = TEXT_DEFAULT.leFlexWeight(1, 0).bgColor(Color.white)  //ボタンのデフォルト背景色は白。ホバーしたときの色変化を見やすくするため。)
             .textAlignment(TextAnchor.MiddleCenter);
+        public static readonly UIInfo BUTTON_CAPTION = BUTTON_DEFAULT.lePreferredSize(20).leFlexWeight(0, 0);
+
         public static readonly UIInfo INPUTFIELD_DEFAULT = TEXT_DEFAULT.leFlexWeight(1, 0).bgColor(Color.gray);
         public static readonly UIInfo IMAGE_DEFAULT = new UIInfo();
         public static readonly UIInfo TOGGLE_DEFAULT = new UIInfo().leFlexWeight(1, 0);
         public static readonly UIInfo RADIO_BUTTON_DEFAULT = new UIInfo().leFlexWeight(1, 0);
         public static readonly UIInfo SCROLLBAR_DEFAULT = new UIInfo().rtSizeDelta(new Vector2(20, 20)); // .lePreferredSize(20, 20); //  .fit_Fixed().position(Vector2.zero).uiSize(SWHelper.UIELEMENT_SIZE);
-        public static readonly UIInfo SCROLLVIEW_DEFAULT = new UIInfo().bgColor(SWHelper.COLOR_AREA_BG);
-        public static readonly UIInfo CANVAS_DEFAULT = new UIInfo();
-        public static readonly UIInfo PANEL_DEFAULT = new UIInfo().leFlexWeight(1, 1).bgColor(SWHelper.COLOR_AREA_BG).layoutAlignment(TextAnchor.MiddleLeft);
+        public static readonly UIInfo SCROLLVIEW_DEFAULT = new UIInfo().bgColor(SWHelper.COLOR_AREA_BG).leFlexWeight(1);
+        public static readonly UIInfo CANVAS_DEFAULT = new UIInfo().bgColor(COLOR_DARK);
+
+        public static readonly UIInfo PANEL_DEFAULT = new UIInfo()./*leFlexWeight(1, 1).*/bgColor(Color.clear).layoutAlignment(TextAnchor.MiddleLeft);
+        public static readonly UIInfo PANEL_DARK = PANEL_DEFAULT.bgColor(COLOR_DARK);
+        public static readonly UIInfo PANEL_LIGHT = PANEL_DEFAULT.bgColor(COLOR_LIGHT);
+
 
         //public static readonly UIInfo DEFAULT = new UIInfo().fit_Parent().fit_Parent().bgColor(SWHelper.COLOR_AREA_BG).layoutAlignment(TextAnchor.MiddleLeft);
 
@@ -144,7 +157,7 @@ namespace uBUI
         public UIInfo rtOffsetMin(Vector2 offset)
         {
             UIInfo ret = this.Clone();
-            ret.m_rtOffsetMin= Vector2R.make(offset);
+            ret.m_rtOffsetMin = Vector2R.make(offset);
             return ret;
         }
 
@@ -187,7 +200,7 @@ namespace uBUI
             return ret;
         }
 
-        public UIInfo leFlexWeight(float size) { return leFlexWeight(new Vector2(size, size)); }
+        public UIInfo leFlexWeight(float weight) { return leFlexWeight(new Vector2(weight, weight)); }
         public UIInfo leFlexWeight(float wWeight, float hWeight) { return leFlexWeight(new Vector2(wWeight, hWeight)); }
         public UIInfo leFlexWeight(Vector2 weight)
         {

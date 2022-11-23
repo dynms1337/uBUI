@@ -17,7 +17,7 @@ namespace uBUI
 
         public Vector2 Size { get { return goPanel.GetComponent<RectTransform>().rect.size; } }
 
-        protected internal SPanel(LayoutGroup layoutGroup)
+        protected SPanel(LayoutGroup layoutGroup)
         {
             this.goPanel = layoutGroup.gameObject;
             this.layoutGroup = layoutGroup;
@@ -54,7 +54,7 @@ namespace uBUI
         public static SPanel CreateGrid(GameObject parent, int cellWidthPx = -1, float aspectRatio = 1, UIInfo uiInfo = null)
         {
             if (uiInfo == null) uiInfo = new UIInfo();
-            GridLayoutGroup lg = (GridLayoutGroup)SWHelper.CreatePanel(uiInfo.leFlexWeight(1,0), layoutGroup: LayoutType.Grid, parent: parent);
+            GridLayoutGroup lg = (GridLayoutGroup)SWHelper.CreatePanel(uiInfo.leFlexWeight(1, 0), layoutGroup: LayoutType.Grid, parent: parent);
             float width = DEFAULT_GRIDPANEL_CELLWIDTH;
             if (cellWidthPx >= 1) { width = cellWidthPx; }
             lg.cellSize = new Vector2(width, width * aspectRatio);
@@ -84,6 +84,13 @@ namespace uBUI
         /// <param name="uiInfo"></param>
         /// <returns></returns>
         public SPanel addPanel_Horizontal(UIInfo uiInfo = null) { return CreateHorizontal(goPanel, uiInfo); }
+
+        public SPanel addPanel_Scroll(LayoutType layoutType = LayoutType.Vertical, UIInfo uiInfo = null, string goName = "")
+        {
+            return SPanel.CreateFromPanel(
+               SWHelper.CreateScrollView(this.goPanel, contentPanelLayoutGroupType: layoutType, uiInfo: uiInfo, goName: goName));
+        }
+
         /// <summary>
         /// GridLayoutGroupコンポーネントを持ったGameObjectを子要素に追加して、LayoutGroupに対応するSPanelを返す
         /// </summary>
@@ -193,14 +200,12 @@ namespace uBUI
         /// <returns></returns>
         public Image addImage(Sprite sprite = null, Vector2 size = default(Vector2), Color color = default(Color))
         {
-            if (color == default(Color)) color = Color.white;
             UIInfo uiInfo = new UIInfo().bgColor(color);
-            if (size != default(Vector2)) uiInfo = uiInfo.lePreferredSize(size.x,size.y); // fit_Fixed(Vector2.zero, size);
+            if (size != default(Vector2)) uiInfo = uiInfo.lePreferredSize(size.x, size.y); // fit_Fixed(Vector2.zero, size);
             return SWHelper.CreateImage(goPanel, sprite, uiInfo: uiInfo);
         }
         public Image addImage_byTexture2D(Texture2D tex = null, Vector2 size = default(Vector2), Color color = default(Color))
         {
-            if (color == default(Color)) color = Color.white;
             UIInfo uiInfo = new UIInfo().bgColor(color);
             if (size != default(Vector2)) uiInfo = uiInfo.lePreferredSize(size.x, size.y);
             return SWHelper.CreateImage(goPanel, tex, uiInfo: uiInfo);

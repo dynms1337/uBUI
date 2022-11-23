@@ -6,79 +6,85 @@ using UnityEngine.UI;
 
 public class Example01 : MonoBehaviour
 {
-    
+
 
     void Start() { example01(); }
 
     private void example01()
     {
         string Title = "Example01 - Components";
-        //var (window_width, window_height, window_left, window_bottom) = (400, 800, 420, 20);
         var (window_size, window_leftbottom) = (new Vector2(400, 800), new Vector2(420, 20));
 
-        //var container = SPanel.CreateContainer(Title, window_leftbottom, window_size);
+        //isScreenMode
+        var container = BContainer.Create(RenderMode.ScreenSpaceOverlay, Title, window_leftbottom, window_size);
 
-        SWindow window = new SWindow();
-        window.init_onScreen(Title, leftbottom: window_leftbottom, windowSize: window_size, hooterLayout: LayoutType.Vertical);
+        // ************************ header ************************
+        var header = container.addPanel_Horizontal();
+        header.addText(Title, UIInfo.TEXT_H1);
+        header.addSpacer();
 
-        // ************************ Caption buttons ************************
         // △ Basic Position
-        var uiCaption = UIInfo.BUTTON_DEFAULT.lePreferredSize(20,20);
-        window.caption.addButton(() => { window.locate_byPosition(left: window_leftbottom.x, bottom: window_leftbottom.y, width: window_size.x, height: window_size.y); },
+        var uiCaption = UIInfo.BUTTON_CAPTION;
+        header.addButton(() => { container.locate_byPosition(left: window_leftbottom.x, bottom: window_leftbottom.y, width: window_size.x, height: window_size.y); },
             labelStr: "△", uiInfo: uiCaption);
         // □ Maximize
-        window.caption.addButton(() => { window.locate_byMarginPx(left: 10, right: 10, top: 10, bottom: 10); }, labelStr: "□"
+        header.addButton(() => { container.locate_byMarginPx(left: 10, right: 10, top: 10, bottom: 10); }, labelStr: "□"
             , uiInfo: uiCaption);
         // × Hide
-        window.caption.addButton(() => { window.SetActive(false); }, labelStr: "×"
+        header.addButton(() => { container.goPanel.SetActive(false); }, labelStr: "×"
             , uiInfo: uiCaption);
 
 
         // ************************ Content ************************
-        SPanel content = window.content;
+        SPanel content = container.addPanel_Scroll(LayoutType.Vertical, UIInfo.SCROLLVIEW_DEFAULT);
 
-        UIInfo uiTitle = UIInfo.TEXT_DEFAULT.textSize(18);
-        UIInfo uiDesc = UIInfo.TEXT_DEFAULT.textSize(14).lePreferredSize(350,0);
+        UIInfo uiTitle = UIInfo.TEXT_H2;
+        UIInfo uiDesc = UIInfo.TEXT_DEFAULT.textSize(14).lePreferredSize(350, 0);
 
-        content.addText("------ Content ------", uiTitle.layoutAlignment(TextAnchor.MiddleCenter));
+        content.addText("------ Content ------", uiTitle.textAlignment(TextAnchor.MiddleCenter));
         {
-            content.addText("InputField (Single line)", uiTitle);
+            var vp = content.addPanel_Vertical(UIInfo.PANEL_DARK);
+            vp.addText("InputField (Single line)", uiTitle);
             string initialText = "entered string: \r\n";
-            Text log = content.addText(initialText);
-            content.addTextField(onEndEdit: s => log.text += "\r\n---\r\n\r\n", onValueChanged: s => log.text = $"{initialText}{s}\r\n");
-            content.addSpacer();
+            Text log = vp.addText(initialText);
+            vp.addTextField(onEndEdit: s => log.text += "\r\n---\r\n\r\n", onValueChanged: s => log.text = $"{initialText}{s}\r\n");
         }
+        content.addSpacer();
 
         {
-            content.addText("InputField (Multi lines)", uiTitle);
+            var vp = content.addPanel_Vertical(UIInfo.PANEL_DARK);
+            vp.addText("InputField (Multi lines)", uiTitle);
             string initialText = "entered string: \r\n";
-            Text log = content.addText(initialText);
-            content.addTextField(onEndEdit: s => log.text += "\r\n---\r\n\r\n", onValueChanged: s => log.text = $"{initialText}{s}\r\n", lineCount: 2);
-            content.addSpacer();
+            Text log = vp.addText(initialText);
+            vp.addTextField(onEndEdit: s => log.text += "\r\n---\r\n\r\n", onValueChanged: s => log.text = $"{initialText}{s}\r\n", lineCount: 2);
         }
+        content.addSpacer();
         {
-            content.addText("Button", uiTitle);
-            Text log = content.addText("click count : 0");
+            var vp = content.addPanel_Vertical(UIInfo.PANEL_DARK);
+            vp.addText("Button", uiTitle);
+            Text log = vp.addText("click count : 0");
             int clickCount = 0;
-            content.addButton(() =>
+            vp.addButton(() =>
             {
                 clickCount++;
                 log.text = $"click count : {clickCount}";
             }
             , "click here");
-            content.addSpacer();
         }
+        content.addSpacer();
         {
-            content.addText("Toggle", uiTitle);
-            SPanel hp = content.addPanel_Horizontal();
+            var vp = content.addPanel_Vertical(UIInfo.PANEL_DARK);
+            vp.addText("Toggle", uiTitle);
+            SPanel hp = vp.addPanel_Horizontal();
             Text textToggleStatus = hp.addText("Toggle Status...");
             hp.addToggle(b => textToggleStatus.text = "Toggle Status :" + (b ? "ON" : "OFF"), "switch here!", isOn: false);
-            content.addSpacer();
         }
+        content.addSpacer();
 
         {
-            content.addText("Radio Buttons (by ToggleGroup)", uiTitle);
-            SPanel hp = content.addPanel_Horizontal();
+            var vp = content.addPanel_Vertical(UIInfo.PANEL_DARK);
+            vp.addText("Radio Buttons (by ToggleGroup)", uiTitle);
+            SPanel hp = vp.addPanel_Horizontal();
             Text text_radio = hp.addText("click radio button...");
 
             hp.addRadioButton(s => text_radio.text = "selected :" + s,
@@ -89,32 +95,35 @@ public class Example01 : MonoBehaviour
                         {"name2","value2" },
                     },
                 layoutGroup: LayoutType.Horizontal);
-            content.addSpacer();
         }
+        content.addSpacer();
         {
-            content.addText("Slider", uiTitle);
-            SPanel hp = content.addPanel_Horizontal();
+            var vp = content.addPanel_Vertical(UIInfo.PANEL_DARK);
+            vp.addText("Slider", uiTitle);
+            SPanel hp = vp.addPanel_Horizontal();
             Text text_slider = hp.addText("drag slider...");
             hp.addSlider(f => text_slider.text = "value :" + f.ToString());
-            content.addSpacer();
         }
+        content.addSpacer();
 
         {
-            content.addText("Image, Spacer", uiTitle);
-            content.addText("By placing a Spacer in the middle of the HorizontalPanel, objects can be placed on both sides.", uiDesc);
-            SPanel hp = content.addPanel_Horizontal(UIInfo.PANEL_DEFAULT.layoutAlignment(TextAnchor.LowerRight));
+            var vp = content.addPanel_Vertical(UIInfo.PANEL_DARK);
+            vp.addText("Image, Spacer", uiTitle);
+            vp.addText("By placing a Spacer in the middle of the HorizontalPanel, objects can be placed on both sides.", uiDesc);
+            SPanel hp = vp.addPanel_Horizontal(UIInfo.PANEL_DEFAULT.layoutAlignment(TextAnchor.LowerRight));
             hp.addImage(size: new Vector2(100, 100), color: Color.red);
             hp.addSpacer();
             hp.addImage(size: new Vector2(150, 150), color: Color.green);
-            content.addSpacer();
         }
+        content.addSpacer();
 
         // ************************ Hooter ************************
-        window.hooter.addText("------ Hooter ------", uiTitle.layoutAlignment(TextAnchor.MiddleCenter));
+        var hooter = container.addPanel_Vertical();
+        hooter.addText("------ Hooter ------", uiTitle.textAlignment(TextAnchor.MiddleCenter));
         {
-            Text log = window.hooter.addText("click count : 0");
+            Text log = hooter.addText("click count : 0");
             int clickCount = 0;
-            window.hooter.addButton(() =>
+            hooter.addButton(() =>
             {
                 clickCount++;
                 log.text = $"click count : {clickCount}";

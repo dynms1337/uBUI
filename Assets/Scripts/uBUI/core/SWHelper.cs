@@ -187,7 +187,6 @@ namespace uBUI
 
         public static Text addTextComponent(GameObject go, string label, UIInfo uiInfo)
         {
-            if (uiInfo.m_textColor == default(Color)) uiInfo = uiInfo.Clone().textColor(COLOR_TEXT);
             Text lbl = go.AddComponent<Text>();
             lbl.text = label;
             lbl.font = TEXT_FONT;
@@ -225,7 +224,6 @@ namespace uBUI
         public static Image addImageComponent(GameObject go, Sprite sprite = null, UIInfo uiInfo = null)
         {
             if (uiInfo == null) uiInfo = UIInfo.IMAGE_DEFAULT;
-            if (uiInfo.m_bgColor == default(Color)) { uiInfo.m_bgColor = COLOR_IMAGE_DEFAULT; }
             Image image = go.AddComponent<Image>();
             if (sprite != null)
             {
@@ -271,8 +269,8 @@ namespace uBUI
         /// <param name="renderMode">RenderMode.WorldSpace or RenderMode.ScreenSpaceOverlay</param>
         public static LayoutGroup CreateCanvas(RenderMode renderMode, Vector2? leftbottom = null, Vector2? size = null,
             UIInfo uiInfo = null, LayoutType layoutGroup = LayoutType.Vertical, float canvasScale = 1f,
-            Camera camera4world = null, float meterPerPx4world = 0.001f,  // parameters for world space
-            bool draggable4screen = true,   // parameters for screen space
+            Camera camera4world = null, float meterPerPx4world = 0.001f,  // WorldSpace parameters
+            bool draggable4screen = true,   // ScreenSpace parameters
             GameObject parent = null, string goName = "")
         {
             if (leftbottom == null) leftbottom = WINDOW_POSITION;
@@ -324,6 +322,7 @@ namespace uBUI
             }
             else { Debug.LogError($"CreateCanvas : process not implemented for {renderMode}"); }
 
+            uiInfo2 = uiInfo2.bgColor(uiInfo.m_bgColor);
             LayoutGroup container = CreatePanel(uiInfo2, layoutGroup, canvas.gameObject, "container");
             if (renderMode == RenderMode.ScreenSpaceOverlay & draggable4screen) container.gameObject.GetOrAddComponent<DragBehaviour>();
 
@@ -334,9 +333,7 @@ namespace uBUI
         public static LayoutGroup CreatePanel(UIInfo uiInfo = null, LayoutType layoutGroup = LayoutType.Vertical, GameObject parent = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.PANEL_DEFAULT;
-            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Parent();
             GameObject panelGO = CreateUIElement(goName == "" ? goname_Panel.get() + "-" + layoutGroup.ToString() : goName, uiInfo, parent: parent);
-            if (uiInfo.m_bgColor == default(Color)) uiInfo.m_bgColor = SWHelper.COLOR_AREA_BG;
             Image image = addImageComponent(panelGO, uiInfo: uiInfo);
             LayoutGroup lg = null;
             switch (layoutGroup)
@@ -372,7 +369,6 @@ namespace uBUI
 
         public static Image CreateHorizontalBar(GameObject parent, int height = HR_HEIGHT, Color color = default(Color), string goName = "HorizontalBar")
         {
-            if (color == default(Color)) color = Color.black;
             Image ret = CreateImage(parent, uiInfo:
                 UIInfo.IMAGE_DEFAULT.leFlexWeight(1, 0).lePreferredSize(0, height)
                 , goName: goName);
@@ -383,8 +379,6 @@ namespace uBUI
         public static Text CreateText(GameObject parent, string label, UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.TEXT_DEFAULT;
-            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_WParentHSelf();
-            if (uiInfo.m_bgColor == default(Color)) uiInfo.m_bgColor = COLOR_AREA_BG;
             Image image = CreateImage(parent, uiInfo: uiInfo, goName: goName == "" ? "TextContainer" : goName);
             GameObject container = image.gameObject;
             addLyaoutGroup(container, LayoutType.Vertical, uiInfo.padding(1));
@@ -688,8 +682,6 @@ namespace uBUI
             float scrollSensitivity = 20, UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.SCROLLVIEW_DEFAULT;
-            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_Parent();
-            if (uiInfo.m_bgColor == default(Color)) uiInfo = uiInfo.bgColor(COLOR_AREA_BG);
             GameObject goScrollView = CreateUIElement(goName == "" ? goname_ScrollView.get() : goName, uiInfo, parent: parent);
             GameObject goViewport = CreateUIElement("Viewport", new UIInfo().rtAnchorParent(), parent: goScrollView);
 

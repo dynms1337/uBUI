@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\uBUI\core\LayoutType.cs" />
+    <Compile Include="Assets\Scripts\uBUI\BContainer.cs" />
     <Compile Include="Assets\Scripts\uBUI\SWindow.cs" />
     <Compile Include="Assets\Scripts\uBUI\core\UIInfo.cs" />
     <Compile Include="Assets\Scripts\uBUI\SPanel.cs" />
