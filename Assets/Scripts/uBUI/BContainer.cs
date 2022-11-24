@@ -32,9 +32,9 @@ namespace uBUI
             mode = containerMode;
         }
 
-        /// <param name="renderMode">RenderMode.WorldSpace or RenderMode.ScreenSpaceOverlay</param>
+        /// <param name="isScreenMode">true:RenderMode.ScreenSpaceOverlay,  false:RenderMode.WorldSpace </param>
         /// <param name="uiInfo">rtAnchoredPosition:container position, rtSizeDelta: container size</param>
-        public static BContainer Create(RenderMode renderMode, string goCanvasName = "Canvas", ContainerMode containerMode = null,
+        public static BContainer Create(bool isScreenMode, string goCanvasName = "Canvas", ContainerMode containerMode = null,
              UIInfo uiInfo = null, bool draggable4screen = true,  // Canvas parameters
              LayoutType Layout = LayoutType.Vertical, // Panel parameters
              float canvasScale = 1f, GameObject parent = null)
@@ -42,7 +42,7 @@ namespace uBUI
             if (containerMode == null) containerMode = ContainerMode.FIXED;
             if (uiInfo == null) uiInfo = UIInfo.CANVAS_DEFAULT;
 
-            LayoutGroup lg = BHelper.CreateCanvas(renderMode,
+            LayoutGroup lg = BHelper.CreateCanvas(isScreenMode,
                 uiInfo: uiInfo, layoutGroup: LayoutType.Vertical,
                 draggable4screen: draggable4screen, canvasScale: canvasScale, parent: parent, goName: goCanvasName);
             if (containerMode == ContainerMode.VARIABLE)

@@ -14,13 +14,13 @@ public class Example01 : MonoBehaviour
         var (window_size, window_leftbottom) = (new Vector2(400, 800), new Vector2(20, 20));
 
         //isScreenMode
-        var container = BContainer.Create(RenderMode.ScreenSpaceOverlay, Title,
+        var container = BContainer.Create(isScreenMode: false, Title,
             uiInfo: UIInfo.BCONTAINER_DEFAULT.rtAnchoredPosition(window_leftbottom).rtSizeDelta(window_size));
 
         // ************************ header ************************
         var headerRoot = container.AddVerticalPanel();
         var header = headerRoot.AddHorizontalPanel();
-        header.AddText(Title, UIInfo.TEXT_H1.leFlexWeight(1,0));
+        header.AddText(Title, UIInfo.TEXT_H1.leFlexWeight(1, 0));
         //header.AddSpacer();
 
         // △ Basic Position

@@ -291,9 +291,9 @@ namespace uBUI
             return tex;
         }
 
-        /// <param name="renderMode">RenderMode.WorldSpace or RenderMode.ScreenSpaceOverlay</param>
+        /// <param name="isScreenMode">true:RenderMode.ScreenSpaceOverlay,  false:RenderMode.WorldSpace </param>
         /// <param name="uiInfo">rtAnchoredPosition:container position, rtSizeDelta: container size</param>
-        public static LayoutGroup CreateCanvas(RenderMode renderMode,
+        public static LayoutGroup CreateCanvas(bool isScreenMode,
             UIInfo uiInfo = null, LayoutType layoutGroup = LayoutType.Vertical, float canvasScale = 1f,
             Camera camera4world = null, float meterPerPx4world = 0.001f,  // WorldSpace parameters
             bool draggable4screen = true,   // ScreenSpace parameters
@@ -305,6 +305,7 @@ namespace uBUI
             if (uiInfo.m_rtSizeDelta.notNull) size = uiInfo.m_rtSizeDelta.Value;
             if (size == null) size = WINDOW_SIZE;
             if (uiInfo == null) uiInfo = UIInfo.CANVAS_DEFAULT;
+            RenderMode renderMode = isScreenMode ? RenderMode.ScreenSpaceOverlay : RenderMode.WorldSpace;
 
             Canvas canvas = null;
             {

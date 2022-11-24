@@ -14,7 +14,7 @@ public class Example02 : MonoBehaviour
         var (window_size, window_leftbottom) = (new Vector2(400, 800), new Vector2(420, 420));
 
         //isScreenMode
-        var container = BContainer.Create(RenderMode.ScreenSpaceOverlay, Title, ContainerMode.VARIABLE,
+        var container = BContainer.Create(isScreenMode: true, Title, ContainerMode.VARIABLE,
             uiInfo: UIInfo.BCONTAINER_DEFAULT.spacing(5).rtAnchoredPosition(window_leftbottom).rtSizeDelta(window_size));
 
         container.AddText(Title, UIInfo.TEXT_H1.textAlignment(TextAnchor.MiddleCenter));
@@ -33,7 +33,7 @@ public class Example02 : MonoBehaviour
             clickCount++;
             container.AddText($"Click count : {clickCount}");
         }
-        , "Add Text Component (so that UI expands.)");
+        , "Add Text Component (then UI grows)");
         container.AddSpacer();
         Text log = container.AddText("Click log", UIInfo.TEXT_DEFAULT);
     }
