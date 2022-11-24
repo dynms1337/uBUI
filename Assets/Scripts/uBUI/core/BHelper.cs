@@ -191,17 +191,44 @@ namespace uBUI
             Text lbl = go.AddComponent<Text>();
             lbl.text = label;
             lbl.font = TEXT_FONT;
-            lbl.setUIInfo(uiInfo);
+            setUIInfo(lbl, uiInfo);
             return lbl;
         }
-        public static void setUIInfo(this Text lbl, UIInfo uiInfo)
+
+        public static void setUIInfo(object component, UIInfo uiInfo)
         {
-            lbl.color = uiInfo.m_textColor;
-            lbl.alignment = uiInfo.m_textAlignment;
-            lbl.fontSize = uiInfo.m_textSize;
-            Image img = lbl.gameObject.getParent().GetComponent<Image>();
-            if (img != null) img.setUIInfo(uiInfo);
+            if (component is Text)
+            {
+                Text lbl = component as Text;
+                lbl.color = uiInfo.m_textColor;
+                lbl.alignment = uiInfo.m_textAlignment;
+                lbl.fontSize = uiInfo.m_textSize;
+                Image img = lbl.gameObject.getParent().GetComponent<Image>();
+                if (img != null) setUIInfo(img, uiInfo);
+            }
+            else if (component is Button)
+            {
+                (component as Button).gameObject.Foreach(g =>
+                {
+                    Text lbl = g.GetComponent<Text>();
+                    if (lbl != null) setUIInfo(lbl, uiInfo);
+                });
+            }
+            else if (component is InputField)
+            {
+                Foreach((component as InputField).gameObject, g =>
+                {
+                    Text text = g.GetComponent<Text>();
+                    if (text != null) setUIInfo(text, uiInfo);
+                });
+            }
+            else if (component is Image)
+            {
+                (component as Image).color = uiInfo.m_bgColor;
+            }
+            else Debug.Log($"uBUI setUIInfo > warning. Can not apply to {component}");
         }
+
 
         public static void updateColliderSize(this BoxCollider collider)
         {
@@ -231,13 +258,10 @@ namespace uBUI
                 image.sprite = sprite;
             }
             image.type = Image.Type.Simple;
-            image.setUIInfo(uiInfo);
+            setUIInfo(image, uiInfo);
             return image;
         }
-        public static void setUIInfo(this Image img, UIInfo uiInfo)
-        {
-            img.color = uiInfo.m_bgColor;
-        }
+
         public static Texture2D loadTexture(string path)
         {
             if (!File.Exists(path)) { Debug.Log($"loadTexture : {path} not found."); return null; }
@@ -345,11 +369,6 @@ namespace uBUI
             }
             return lg;
         }
-        public static void setUIInfo(this LayoutGroup lg, UIInfo uiInfo)
-        {
-            Image img = lg.gameObject.GetComponent<Image>();
-            if (img != null) img.setUIInfo(uiInfo);
-        }
 
 
         public static Image CreateSpacer(GameObject parent, int height = 0, string goName = "Spacer")
@@ -397,7 +416,7 @@ namespace uBUI
             lg.childAlignment = TextAnchor.MiddleCenter;
 
             Image img = goButton.GetOrAddComponent<Image>();
-            img.setUIInfo(uiInfo);
+            setUIInfo(img, uiInfo);
 
             if (sprite != null)  //Don't add a GameObject when there is no button image. To keep the layout from collapsing.
             {
@@ -417,7 +436,7 @@ namespace uBUI
             Button btn = goButton.AddComponent<Button>();
             configSelectableColors(btn);
             if (TaskOnClick != null) btn.onClick.AddListener(TaskOnClick);
-            btn.setUIInfo(uiInfo);
+            setUIInfo(btn, uiInfo);
             return btn;
         }
 
@@ -439,14 +458,6 @@ namespace uBUI
             return btn;
         }
 
-        public static void setUIInfo(this Button btn, UIInfo uiInfo)
-        {
-            btn.gameObject.Foreach(g =>
-           {
-               Text lbl = g.GetComponent<Text>();
-               if (lbl != null) lbl.setUIInfo(uiInfo);
-           });
-        }
         public static Text getText(this Button self)
         {
             Text ret = null;
@@ -633,7 +644,7 @@ namespace uBUI
            string initialText = "", int lineCount = 1, UIInfo uiInfo = null, string goName = "")
         {
             if (uiInfo == null) uiInfo = UIInfo.INPUTFIELD_DEFAULT;
-            //if (uiInfo.is_fit_UnSpecified()) uiInfo = uiInfo.fit_WParentHSelf();
+
             GameObject goInputField = CreateUIElement(goName == "" ? goname_InputField.get() : goName, uiInfo.leMinSize(INPUTFIELD_MIN_SIZE), parent: parent);
             InputField inputField = goInputField.AddComponent<InputField>();
             LayoutElement leInputField = goInputField.GetOrAddComponent<LayoutElement>();
@@ -667,20 +678,12 @@ namespace uBUI
             inputField.text = initialText;
             if (onValueChanged != null) inputField.onValueChanged.AddListener(onValueChanged);
             if (onEndEdit != null) inputField.onEndEdit.AddListener(onEndEdit);
-            inputField.setUIInfo(uiInfo);
+            setUIInfo(inputField, uiInfo);
             configSelectableColors(inputField);
 
             return inputField;
         }
 
-        public static void setUIInfo(this InputField inputfield, UIInfo uiInfo)
-        {
-            Foreach(inputfield.gameObject, g =>
-            {
-                Text text = g.GetComponent<Text>();
-                if (text != null) text.setUIInfo(uiInfo);
-            });
-        }
 
 
         public static LayoutGroup CreateScrollView(GameObject parent, LayoutType contentPanelLayoutGroupType = LayoutType.Vertical,
