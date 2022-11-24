@@ -69,14 +69,18 @@ namespace uBUI
         public static readonly UIInfo BUTTON_CAPTION = BUTTON_DEFAULT.lePreferredSize(20).leFlexWeight(0, 0);
 
         public static readonly UIInfo INPUTFIELD_DEFAULT = TEXT_DEFAULT.leFlexWeight(1, 0).bgColor(Color.gray);
+
         public static readonly UIInfo IMAGE_DEFAULT = new UIInfo();
+
         public static readonly UIInfo TOGGLE_DEFAULT = new UIInfo().leFlexWeight(1, 0);
         public static readonly UIInfo RADIO_BUTTON_DEFAULT = new UIInfo().leFlexWeight(1, 0);
+
         public static readonly UIInfo SCROLLBAR_DEFAULT = new UIInfo().rtSizeDelta(new Vector2(20, 20)); // .lePreferredSize(20, 20); //  .fit_Fixed().position(Vector2.zero).uiSize(SWHelper.UIELEMENT_SIZE);
         public static readonly UIInfo SCROLLVIEW_DEFAULT = new UIInfo().bgColor(BHelper.COLOR_AREA_BG).leFlexWeight(1);
+
         public static readonly UIInfo CANVAS_DEFAULT = new UIInfo().bgColor(COLOR_DARK);
 
-        public static readonly UIInfo PANEL_DEFAULT = new UIInfo()./*leFlexWeight(1, 1).*/bgColor(Color.clear).layoutAlignment(TextAnchor.MiddleLeft);
+        public static readonly UIInfo PANEL_DEFAULT = new UIInfo().bgColor(Color.clear).layoutAlignment(TextAnchor.MiddleLeft);
         public static readonly UIInfo PANEL_DARK = PANEL_DEFAULT.bgColor(COLOR_DARK);
         public static readonly UIInfo PANEL_LIGHT = PANEL_DEFAULT.bgColor(COLOR_LIGHT);
 

@@ -322,7 +322,7 @@ namespace uBUI
             canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
             canvasScaler.scaleFactor = canvasScale;
 
-            UIInfo uiInfo2 = null;
+            UIInfo uiInfoPanel = uiInfo.layoutAlignment(TextAnchor.MiddleLeft); 
             if (renderMode == RenderMode.WorldSpace)
             {
                 if (camera4world == null) camera4world = Camera.main;
@@ -332,17 +332,16 @@ namespace uBUI
                 canvas.gameObject.GetComponent<CanvasScaler>().dynamicPixelsPerUnit = 2;
 
                 canvas.gameObject.GetComponent<RectTransform>().localScale = new Vector3(meterPerPx4world, meterPerPx4world, meterPerPx4world);
-                uiInfo2 = UIInfo.PANEL_DEFAULT.lePreferredSize(size.Value);
+                uiInfoPanel = uiInfoPanel.lePreferredSize(size.Value);
             }
             else if (renderMode == RenderMode.ScreenSpaceOverlay)
             {
-                uiInfo2 = UIInfo.PANEL_DEFAULT.rtSizeDelta(size.Value).rtAnchoredPosition(leftbottom.Value)
+                uiInfoPanel = uiInfoPanel.rtSizeDelta(size.Value).rtAnchoredPosition(leftbottom.Value)
                     .rtAnchorMin(Vector2.zero).rtAnchorMax(Vector2.zero).rtPivot(Vector2.zero);
             }
             else { Debug.LogError($"CreateCanvas : process not implemented for {renderMode}"); }
 
-            uiInfo2 = uiInfo2.bgColor(uiInfo.m_bgColor);
-            LayoutGroup container = CreatePanel(uiInfo2, layoutGroup, canvas.gameObject, "container");
+            LayoutGroup container = CreatePanel(uiInfoPanel, layoutGroup, canvas.gameObject, "container");
             if (renderMode == RenderMode.ScreenSpaceOverlay & draggable4screen) container.gameObject.GetOrAddComponent<DragBehaviour>();
 
             return container;

@@ -8,21 +8,20 @@ public class Example01 : MonoBehaviour
 {
 
 
-    void Start() { example01(); }
-
-    private void example01()
+    void Start()
     {
-        string Title = "Example01 - Components";
-        var (window_size, window_leftbottom) = (new Vector2(400, 800), new Vector2(420, 20));
+        string Title = "Example01 - Window Style & Components";
+        var (window_size, window_leftbottom) = (new Vector2(400, 800), new Vector2(20, 20));
 
         //isScreenMode
         var container = BContainer.Create(RenderMode.ScreenSpaceOverlay, Title,
             uiInfo: UIInfo.BCONTAINER_DEFAULT.rtAnchoredPosition(window_leftbottom).rtSizeDelta(window_size));
 
         // ************************ header ************************
-        var header = container.AddHorizontalPanel();
-        header.AddText(Title, UIInfo.TEXT_H1);
-        header.AddSpacer();
+        var headerRoot = container.AddVerticalPanel();
+        var header = headerRoot.AddHorizontalPanel();
+        header.AddText(Title, UIInfo.TEXT_H1.leFlexWeight(1,0));
+        //header.AddSpacer();
 
         // △ Basic Position
         var uiCaption = UIInfo.BUTTON_CAPTION;
@@ -35,6 +34,13 @@ public class Example01 : MonoBehaviour
         header.AddButton(() => { container.gameObject.SetActive(false); }, labelStr: "×"
             , uiInfo: uiCaption);
 
+        headerRoot.AddText(string.Join("\r\n", new string[]
+            {
+                "Window style container built by Fixed Container Mode.",
+                "Fixed Container Mode is `Top Down` UI design.",
+                "Container size is fixed, so Components are adjusted to fit.",
+                "Suitable for ScrollPanel."
+            }), UIInfo.TEXT_DEFAULT.lePreferredSize(window_size.x, 0));
 
         // ************************ Content ************************
         BPanel content = container.AddScrollPanel(LayoutType.Vertical, UIInfo.SCROLLVIEW_DEFAULT);
