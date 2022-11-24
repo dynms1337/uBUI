@@ -268,17 +268,20 @@ namespace uBUI
         }
 
         /// <param name="renderMode">RenderMode.WorldSpace or RenderMode.ScreenSpaceOverlay</param>
-        public static LayoutGroup CreateCanvas(RenderMode renderMode, Vector2? leftbottom = null, Vector2? size = null,
+        /// <param name="uiInfo">rtAnchoredPosition:container position, rtSizeDelta: container size</param>
+        public static LayoutGroup CreateCanvas(RenderMode renderMode,
             UIInfo uiInfo = null, LayoutType layoutGroup = LayoutType.Vertical, float canvasScale = 1f,
             Camera camera4world = null, float meterPerPx4world = 0.001f,  // WorldSpace parameters
             bool draggable4screen = true,   // ScreenSpace parameters
             GameObject parent = null, string goName = "")
         {
+            Vector2? leftbottom = null; Vector2? size = null;
+            if (uiInfo.m_rtAnchoredPosition.notNull) leftbottom = uiInfo.m_rtAnchoredPosition.Value;
             if (leftbottom == null) leftbottom = WINDOW_POSITION;
+            if (uiInfo.m_rtSizeDelta.notNull) size = uiInfo.m_rtSizeDelta.Value;
             if (size == null) size = WINDOW_SIZE;
             if (uiInfo == null) uiInfo = UIInfo.CANVAS_DEFAULT;
 
-            //Canvas canvas = CreateCanvas(parent, renderMode, UIInfo.CANVAS_DEFAULT, leftbottom.Value, size.Value, goName);
             Canvas canvas = null;
             {
                 var goCanvas = CreateUIElement(goName == "" ? goname_Canvas.get() : goName, uiInfo.rtSizeDelta(size.Value), parent: parent);
@@ -288,15 +291,6 @@ namespace uBUI
                 goCanvas.AddComponent<GraphicRaycaster>();
 
                 CreateEventSystem();
-
-                //if (goCanvas.transform.parent as RectTransform)
-                //{
-                //    RectTransform rect = goCanvas.transform as RectTransform;
-                //    rect.anchorMin = Vector2.zero;
-                //    rect.anchorMax = Vector2.one;
-                //    rect.anchoredPosition = Vector2.zero;
-                //    rect.sizeDelta = Vector2.zero;
-                //}
                 var collider = addBoxCollider(goCanvas);
             }
 

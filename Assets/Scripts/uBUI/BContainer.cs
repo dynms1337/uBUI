@@ -21,14 +21,14 @@ namespace uBUI
         }
 
         /// <param name="renderMode">RenderMode.WorldSpace or RenderMode.ScreenSpaceOverlay</param>
-        public static BContainer Create(RenderMode renderMode, string goCanvasName = "Canvas", Vector2? leftbottom = null, Vector2? windowSize = null,
+        /// <param name="uiInfo">rtAnchoredPosition:container position, rtSizeDelta: container size</param>
+        public static BContainer Create(RenderMode renderMode, string goCanvasName = "Canvas", 
              UIInfo uiInfo = null, bool draggable4screen = true,  // Canvas parameters
              LayoutType Layout = LayoutType.Vertical, // Panel parameters
              float canvasScale = 1f, GameObject parent = null)
         {
-            //if (bgColor == null) bgColor = new Color(1f, 1f, 1f, 0.1f);
             if (uiInfo == null) uiInfo = UIInfo.CANVAS_DEFAULT;
-            LayoutGroup lg = BHelper.CreateCanvas(renderMode, leftbottom, windowSize,
+            LayoutGroup lg = BHelper.CreateCanvas(renderMode, 
                 uiInfo: uiInfo, layoutGroup: LayoutType.Vertical,
                 draggable4screen: draggable4screen, canvasScale: canvasScale, parent: parent, goName: goCanvasName);
             var ret = new BContainer(lg);

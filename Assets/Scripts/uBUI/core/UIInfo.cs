@@ -80,7 +80,9 @@ namespace uBUI
         public static readonly UIInfo PANEL_DARK = PANEL_DEFAULT.bgColor(COLOR_DARK);
         public static readonly UIInfo PANEL_LIGHT = PANEL_DEFAULT.bgColor(COLOR_LIGHT);
 
+        public static readonly UIInfo BCONTAINER_DEFAULT = CANVAS_DEFAULT.rtAnchoredPosition(10,10).rtSizeDelta(200,600);
 
+        
         //public static readonly UIInfo DEFAULT = new UIInfo().fit_Parent().fit_Parent().bgColor(SWHelper.COLOR_AREA_BG).layoutAlignment(TextAnchor.MiddleLeft);
 
         public UIInfo() { }

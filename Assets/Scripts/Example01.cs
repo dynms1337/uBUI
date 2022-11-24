@@ -16,7 +16,8 @@ public class Example01 : MonoBehaviour
         var (window_size, window_leftbottom) = (new Vector2(400, 800), new Vector2(420, 20));
 
         //isScreenMode
-        var container = BContainer.Create(RenderMode.ScreenSpaceOverlay, Title, window_leftbottom, window_size);
+        var container = BContainer.Create(RenderMode.ScreenSpaceOverlay, Title,
+            uiInfo: UIInfo.BCONTAINER_DEFAULT.rtAnchoredPosition(window_leftbottom).rtSizeDelta(window_size));
 
         // ************************ header ************************
         var header = container.AddHorizontalPanel();

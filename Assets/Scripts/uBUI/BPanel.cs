@@ -24,7 +24,7 @@ namespace uBUI
             this.layoutGroup = layoutGroup;
         }
 
-        // **************************************** Create Panel Methods ****************************************
+        // **************************************** BPanel Create Methods ****************************************
         public static BPanel CreateFromPanel(LayoutGroup layoutGroup) { return new BPanel(layoutGroup); }
 
         public static BPanel CreateVertical(GameObject parent, UIInfo uiInfo = null, string goName = "")
