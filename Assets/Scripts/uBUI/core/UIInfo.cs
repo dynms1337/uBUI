@@ -28,7 +28,10 @@ namespace uBUI
             }
         }
 
+        public static readonly Color COLOR_LIGHT = new Color(0.9f, 0.9f, 0.9f, 0.1f);
+        public static readonly Color COLOR_DARK = new Color(0.1f, 0.1f, 0.1f, 0.1f);
 
+        // ********************************* fields *********************************
         // LayoutElement
         public Vector2R m_lePreferredSize = new Vector2R();
         public Vector2R m_leMinSize = new Vector2R();
@@ -47,17 +50,19 @@ namespace uBUI
         public Color m_textColor = BHelper.COLOR_TEXT;
         public Color m_bgColor = default(Color);      //デフォルト値なら、各UI要素作成時に適切な色を選択
         public TextAnchor m_textAlignment = TextAnchor.MiddleLeft;
-        public int m_spacing = BHelper.LAYOUTGROUP_SPACING;
+
+        // LayoutGroup
+        public Vector2R m_spacing = Vector2R.make(new Vector2(BHelper.LAYOUTGROUP_SPACING, BHelper.LAYOUTGROUP_SPACING));
         public int m_padding_left = -1;
         public int m_padding_right = -1;
         public int m_padding_top = -1;
         public int m_padding_bottom = -1;
         public TextAnchor m_layoutAlignment = TextAnchor.MiddleLeft;
 
-        public static readonly Color COLOR_LIGHT = new Color(0.9f, 0.9f, 0.9f, 0.1f);
-        public static readonly Color COLOR_DARK = new Color(0.1f, 0.1f, 0.1f, 0.1f);
 
 
+
+        // ********************************* UIInfo default settings *********************************
         public static readonly UIInfo TEXT_DEFAULT = new UIInfo().leFlexWeight(1, 0).bgColor(Color.clear/*SWHelper.COLOR_AREA_BG*/)
             .textSize(BHelper.FONT_SIZE).textAlignment(TextAnchor.MiddleLeft);
         public static readonly UIInfo TEXT_H1 = TEXT_DEFAULT.textSize(BHelper.FONT_SIZE + 4);
@@ -87,12 +92,11 @@ namespace uBUI
         public static readonly UIInfo BCONTAINER_DEFAULT = CANVAS_DEFAULT.rtAnchoredPosition(10,10).rtSizeDelta(200,600);
 
         
-        //public static readonly UIInfo DEFAULT = new UIInfo().fit_Parent().fit_Parent().bgColor(SWHelper.COLOR_AREA_BG).layoutAlignment(TextAnchor.MiddleLeft);
 
         public UIInfo() { }
 
-        /* Field editing method (Immutable like)
-         * Usage:
+        // ********************************* Field editing method (Immutable like) *********************************
+        /* Usage:
          *  UIInfo uiInfo1 = new UIInfo().fit_Parent().bgColor(Color.red);
          *  UIInfo uiInfo2 = uiInfo1.textSize(14);
         */
@@ -102,7 +106,6 @@ namespace uBUI
         public UIInfo bgColor(string colorCode) { UIInfo ret = this.Clone(); ret.m_bgColor = BHelper.parseColor(colorCode); return ret; }
         public UIInfo textAlignment(TextAnchor textAlignment) { UIInfo ret = this.Clone(); ret.m_textAlignment = textAlignment; return ret; }
         public UIInfo layoutAlignment(TextAnchor layoutAlignment) { UIInfo ret = this.Clone(); ret.m_layoutAlignment = layoutAlignment; return ret; }
-        public UIInfo spacing(int space) { UIInfo ret = this.Clone(); ret.m_spacing = space; return ret; }
         public UIInfo padding(int pad) { return this.padding(pad, pad, pad, pad); }
         public UIInfo padding(int left, int right, int top, int bottom)
         {
@@ -113,6 +116,16 @@ namespace uBUI
             ret.m_padding_bottom = bottom;
             return ret;
         }
+
+        public UIInfo spacing(float spacing) { return this.spacing(new Vector2(spacing, spacing)); }
+        public UIInfo spacing(float x, float y) { return spacing(new Vector2(x, y)); }
+        public UIInfo spacing(Vector2 xy)
+        {
+            UIInfo ret = this.Clone();
+            ret.m_spacing= Vector2R.make(xy);
+            return ret;
+        }
+
 
         // ----- RectTransform -----
         public UIInfo rtSizeDelta(float size) { return rtSizeDelta(new Vector2(size, size)); }

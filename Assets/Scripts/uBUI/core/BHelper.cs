@@ -144,7 +144,7 @@ namespace uBUI
                     GridLayoutGroup glg = go.AddComponent<GridLayoutGroup>();
                     setPadding(5, 5, 5, 5);
                     glg.padding = new RectOffset(uiInfo.m_padding_left, uiInfo.m_padding_right, uiInfo.m_padding_top, uiInfo.m_padding_bottom);
-                    glg.spacing = new Vector2(uiInfo.m_spacing, uiInfo.m_spacing);
+                    glg.spacing = uiInfo.m_spacing.Value;
                     return glg;
                 case LayoutType.Horizontal:
                     HorizontalLayoutGroup hlg = go.AddComponent<HorizontalLayoutGroup>();
@@ -152,7 +152,7 @@ namespace uBUI
                     hlg.childControlHeight = true;
                     hlg.childForceExpandWidth = false;
                     hlg.childForceExpandHeight = false;
-                    hlg.spacing = uiInfo.m_spacing;
+                    hlg.spacing = uiInfo.m_spacing.Value.x;
                     setPadding(5, 5, 2, 2);
                     hlg.padding = new RectOffset(uiInfo.m_padding_left, uiInfo.m_padding_right, uiInfo.m_padding_top, uiInfo.m_padding_bottom);
                     return hlg;
@@ -162,7 +162,7 @@ namespace uBUI
                     vlg.childControlHeight = true;
                     vlg.childForceExpandWidth = false;
                     vlg.childForceExpandHeight = false;
-                    vlg.spacing = uiInfo.m_spacing;
+                    vlg.spacing = uiInfo.m_spacing.Value.y;
                     setPadding(2, 2, 5, 5);
                     vlg.padding = new RectOffset(uiInfo.m_padding_left, uiInfo.m_padding_right, uiInfo.m_padding_top, uiInfo.m_padding_bottom);
                     return vlg;
