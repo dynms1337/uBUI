@@ -62,13 +62,6 @@ namespace uBUI
         public BPanel AddGridPanel(int cellWidthPx = -1, float aspectRatio = 1, UIInfo uiInfo = null)
         { return CreateGrid(gameObject, cellWidthPx, aspectRatio, uiInfo); }
 
-        public InfiniteScroll AddInfiniteScrollPanel(Func<GameObject, int, InfiniteScroll.Item> itemBuildFunc, float itemHeight, int initialItemCount)
-        {
-            GameObject.Destroy(this.gameObject.GetComponent<VerticalLayoutGroup>());
-            var ret = this.gameObject.AddComponent<InfiniteScroll>();
-            ret.initFields(this, itemBuildFunc, itemHeight, initialItemCount);
-            return ret;
-        }
 
         // **************************************** Add Component Methods ****************************************
         public Text AddText(string label, UIInfo uiInfo = null)

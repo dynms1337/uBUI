@@ -64,7 +64,6 @@
     <Compile Include="Assets\Scripts\uBUI\core\UIInfo.cs" />
     <Compile Include="Assets\Scripts\uBUI\BPanel.cs" />
     <Compile Include="Assets\Scripts\uBUI\core\DragBehaviour.cs" />
-    <Compile Include="Assets\Scripts\uBUI\core\InfiniteScroll.cs" />
     <Compile Include="Assets\Scripts\uBUI\core\BHelper.cs" />
     <Compile Include="Assets\Scripts\Example01.cs" />
   </ItemGroup>
