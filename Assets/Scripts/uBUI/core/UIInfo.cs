@@ -58,12 +58,14 @@ namespace uBUI
         public int m_padding_top = -1;
         public int m_padding_bottom = -1;
         public TextAnchor m_layoutAlignment = TextAnchor.MiddleLeft;
+        public bool m_childForceExpandWidth = false;
+        public bool m_childForceExpandHeight = false;
 
 
 
 
         // ********************************* UIInfo default settings *********************************
-        public static readonly UIInfo TEXT_DEFAULT = new UIInfo().leFlexWeight(1, 0).bgColor(Color.clear/*SWHelper.COLOR_AREA_BG*/)
+        public static readonly UIInfo TEXT_DEFAULT = new UIInfo().leFlexWeight(1, 0).bgColor(Color.clear).childForceExpand(true, true)
             .textSize(BHelper.FONT_SIZE).textAlignment(TextAnchor.MiddleLeft);
         public static readonly UIInfo TEXT_H1 = TEXT_DEFAULT.textSize(BHelper.FONT_SIZE + 4);
         public static readonly UIInfo TEXT_H2 = TEXT_DEFAULT.textSize(BHelper.FONT_SIZE + 2);
@@ -89,9 +91,9 @@ namespace uBUI
         public static readonly UIInfo PANEL_DARK = PANEL_DEFAULT.bgColor(COLOR_DARK);
         public static readonly UIInfo PANEL_LIGHT = PANEL_DEFAULT.bgColor(COLOR_LIGHT);
 
-        public static readonly UIInfo BCONTAINER_DEFAULT = CANVAS_DEFAULT.rtAnchoredPosition(10,10).rtSizeDelta(200,600);
+        public static readonly UIInfo BCONTAINER_DEFAULT = CANVAS_DEFAULT.rtAnchoredPosition(10, 10).rtSizeDelta(200, 600);
 
-        
+
 
         public UIInfo() { }
 
@@ -105,6 +107,8 @@ namespace uBUI
         public UIInfo bgColor(Color bgColor) { UIInfo ret = this.Clone(); ret.m_bgColor = bgColor; return ret; }
         public UIInfo bgColor(string colorCode) { UIInfo ret = this.Clone(); ret.m_bgColor = BHelper.parseColor(colorCode); return ret; }
         public UIInfo textAlignment(TextAnchor textAlignment) { UIInfo ret = this.Clone(); ret.m_textAlignment = textAlignment; return ret; }
+
+        // LayoutGroup
         public UIInfo layoutAlignment(TextAnchor layoutAlignment) { UIInfo ret = this.Clone(); ret.m_layoutAlignment = layoutAlignment; return ret; }
         public UIInfo padding(int pad) { return this.padding(pad, pad, pad, pad); }
         public UIInfo padding(int left, int right, int top, int bottom)
@@ -122,10 +126,16 @@ namespace uBUI
         public UIInfo spacing(Vector2 xy)
         {
             UIInfo ret = this.Clone();
-            ret.m_spacing= Vector2R.make(xy);
+            ret.m_spacing = Vector2R.make(xy);
             return ret;
         }
-
+        public UIInfo childForceExpand(bool? width, bool? height)
+        {
+            UIInfo ret = this.Clone();
+            if (width != null) ret.m_childForceExpandWidth = width.Value;
+            if (height != null) ret.m_childForceExpandHeight = height.Value;
+            return ret;
+        }
 
         // ----- RectTransform -----
         public UIInfo rtSizeDelta(float size) { return rtSizeDelta(new Vector2(size, size)); }

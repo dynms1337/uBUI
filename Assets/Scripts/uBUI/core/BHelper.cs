@@ -150,8 +150,8 @@ namespace uBUI
                     HorizontalLayoutGroup hlg = go.AddComponent<HorizontalLayoutGroup>();
                     hlg.childControlWidth = true;
                     hlg.childControlHeight = true;
-                    hlg.childForceExpandWidth = false;
-                    hlg.childForceExpandHeight = false;
+                    hlg.childForceExpandWidth = uiInfo.m_childForceExpandWidth;
+                    hlg.childForceExpandHeight = uiInfo.m_childForceExpandHeight;
                     hlg.spacing = uiInfo.m_spacing.Value.x;
                     setPadding(5, 5, 2, 2);
                     hlg.padding = new RectOffset(uiInfo.m_padding_left, uiInfo.m_padding_right, uiInfo.m_padding_top, uiInfo.m_padding_bottom);
@@ -160,8 +160,8 @@ namespace uBUI
                     VerticalLayoutGroup vlg = go.AddComponent<VerticalLayoutGroup>();
                     vlg.childControlWidth = true;   // false;
                     vlg.childControlHeight = true;
-                    vlg.childForceExpandWidth = false;
-                    vlg.childForceExpandHeight = false;
+                    vlg.childForceExpandWidth = uiInfo.m_childForceExpandWidth;
+                    vlg.childForceExpandHeight = uiInfo.m_childForceExpandHeight;
                     vlg.spacing = uiInfo.m_spacing.Value.y;
                     setPadding(2, 2, 5, 5);
                     vlg.padding = new RectOffset(uiInfo.m_padding_left, uiInfo.m_padding_right, uiInfo.m_padding_top, uiInfo.m_padding_bottom);
@@ -396,8 +396,6 @@ namespace uBUI
             Image image = CreateImage(parent, uiInfo: uiInfo, goName: goName == "" ? "TextContainer" : goName);
             GameObject container = image.gameObject;
             var vp = addLyaoutGroup(container, LayoutType.Vertical, uiInfo.padding(1)) as VerticalLayoutGroup;
-            vp.childForceExpandWidth = true;
-            vp.childForceExpandHeight = true;
 
             GameObject go = CreateUIElement(goname_Text.get(), uiInfo, parent: container);
             (go.transform as RectTransform).pivot = new Vector2(0f, 0.5f);  // Base point for scaling and rotation. Expands to the right when the number of characters increases.
