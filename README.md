@@ -4,9 +4,17 @@ A library to help with simple uGUI setups.
 
 
 
-# Install
+# Install to your project
 
 Copy `Assets/Scripts/uBUI` folder to your project code.
+
+
+
+# Run Example
+
+Open Root folder as Unity Project & Run.
+
+(The sample program is started with the "Example01/02" Component of the "GO_Example" game object.)
 
 
 
@@ -24,6 +32,12 @@ Copy `Assets/Scripts/uBUI` folder to your project code.
   - Variable Container Mode
     - Bottom UP UI design.
     - Container grows to fit component, so that all components are large enough (i.e. Problems such as cut off text do not occur).
+
+- Place UI in world space
+
+  - if `isScreenMode`  is false, UI is set in world space.
+  - ex. `BContainer.Create(isScreenMode: false,...`
+
 
 
 
