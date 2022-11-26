@@ -14,7 +14,7 @@ public class Example01 : MonoBehaviour
         var (window_size, window_leftbottom) = (new Vector2(400, 800), new Vector2(20, 20));
 
         //isScreenMode
-        var container = BContainer.Create(isScreenMode: false, Title,
+        var container = BContainer.Create(isScreenMode: true, Title,
             uiInfo: UIInfo.BCONTAINER_DEFAULT.rtAnchoredPosition(window_leftbottom).rtSizeDelta(window_size));
 
         // ************************ header ************************

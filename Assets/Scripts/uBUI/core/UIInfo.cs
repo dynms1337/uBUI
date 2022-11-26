@@ -78,7 +78,7 @@ namespace uBUI
         public static readonly UIInfo SCROLLBAR_DEFAULT = new UIInfo().rtSizeDelta(new Vector2(20, 20)); // .lePreferredSize(20, 20); //  .fit_Fixed().position(Vector2.zero).uiSize(SWHelper.UIELEMENT_SIZE);
         public static readonly UIInfo SCROLLVIEW_DEFAULT = new UIInfo().bgColor(BHelper.COLOR_AREA_BG).leFlexWeight(1);
 
-        public static readonly UIInfo CANVAS_DEFAULT = new UIInfo().bgColor(COLOR_DARK);
+        public static readonly UIInfo CANVAS_DEFAULT = new UIInfo().bgColor(COLOR_DARK).layoutAlignment(TextAnchor.MiddleLeft);
 
         public static readonly UIInfo PANEL_DEFAULT = new UIInfo().bgColor(Color.clear).layoutAlignment(TextAnchor.MiddleLeft);
         public static readonly UIInfo PANEL_DARK = PANEL_DEFAULT.bgColor(COLOR_DARK);

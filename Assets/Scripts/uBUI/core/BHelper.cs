@@ -323,7 +323,7 @@ namespace uBUI
             canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
             canvasScaler.scaleFactor = canvasScale;
 
-            UIInfo uiInfoPanel = uiInfo.layoutAlignment(TextAnchor.MiddleLeft); 
+            UIInfo uiInfoPanel = uiInfo;
             if (renderMode == RenderMode.WorldSpace)
             {
                 if (camera4world == null) camera4world = Camera.main;
@@ -365,7 +365,7 @@ namespace uBUI
                     lg = addLyaoutGroup(panelGO, layoutGroup, uiInfo);
                     lg.childAlignment = uiInfo.m_layoutAlignment;
                     break;
-                default: lg = addLyaoutGroup(panelGO, layoutGroup); break;
+                default: lg = addLyaoutGroup(panelGO, layoutGroup, uiInfo); break;
             }
             return lg;
         }
@@ -395,7 +395,10 @@ namespace uBUI
             if (uiInfo == null) uiInfo = UIInfo.TEXT_DEFAULT;
             Image image = CreateImage(parent, uiInfo: uiInfo, goName: goName == "" ? "TextContainer" : goName);
             GameObject container = image.gameObject;
-            addLyaoutGroup(container, LayoutType.Vertical, uiInfo.padding(1));
+            var vp = addLyaoutGroup(container, LayoutType.Vertical, uiInfo.padding(1)) as VerticalLayoutGroup;
+            vp.childForceExpandWidth = true;
+            vp.childForceExpandHeight = true;
+
             GameObject go = CreateUIElement(goname_Text.get(), uiInfo, parent: container);
             (go.transform as RectTransform).pivot = new Vector2(0f, 0.5f);  // Base point for scaling and rotation. Expands to the right when the number of characters increases.
 
