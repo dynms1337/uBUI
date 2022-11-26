@@ -3,13 +3,13 @@ Overview of class dependencies
 @startuml
 
 package "core" #eee{
-    class SWHelper
+    class BHelper
     class UIInfo
 }
 
-SPanel ..> SWHelper : <<use>>
-SPanel ..> UIInfo : <<use>>
-BContainer --|> SPanel
+BPanel ..> BHelper : <<use>>
+BPanel ..> UIInfo : <<use>>
+BContainer --|> BPanel
 
 
 

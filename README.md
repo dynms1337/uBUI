@@ -20,6 +20,10 @@ Open Root folder as Unity Project & Run.
 
 # Concept of window assembly
 
+**Overview of class dependencies**
+
+![image-20221126232334298](README.assets/image-20221126232334298.png)
+
 ## BContainer
 
 - A wrapper class that holds the canvas and the top-level LayoutGroup.
@@ -44,7 +48,9 @@ Open Root folder as Unity Project & Run.
 ## BPanel
 
 - A wrapper class that holds a LayoutGroup.
-- Use the methods of this class to add basic components.
+- To add components, use `AddXXX` methods.
+  - ex. `bpanel.AddText("text to show.");`
+
 - Almost immutable
   - Editing chain methods return an edited copy of the original object, leaving the original unchanged.
   - Fields are publicly accessible (for convenience), so they are not fully immutable.
