@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class Example01 : MonoBehaviour
 {
-
-
     void Start()
     {
-        string Title = "Example01";
+        string Title = "Example01 - Fixed Container";
         var (window_size, window_leftbottom) = (new Vector2(400, 800), new Vector2(20, 20));
 
         var container = BContainer.Create(isScreenMode: true, Title,
@@ -31,15 +28,6 @@ public class Example01 : MonoBehaviour
         // × Hide
         header.AddButton(() => { container.gameObject.SetActive(false); }, labelStr: "×"
             , uiInfo: uiCaption);
-
-        container.AddText("Fixed Container, WindowStyle, Components", UIInfo.TEXT_H2);
-        container.AddText(string.Join("\r\n", new string[]
-            {
-                "Window style container built by Fixed Container Mode.",
-                "Fixed Container Mode is `Top Down` UI design.",
-                "Container size is fixed, so Components are adjusted to fit.",
-                "Suitable for ScrollPanel."
-            }), UIInfo.TEXT_DEFAULT.lePreferredSize(window_size.x, 0));
 
         // ************************ Content ************************
         BPanel content = container.AddScrollPanel(LayoutType.Vertical, UIInfo.SCROLLVIEW_DEFAULT);
@@ -137,7 +125,5 @@ public class Example01 : MonoBehaviour
             , "click here");
         }
     }
-
-
 }
 
