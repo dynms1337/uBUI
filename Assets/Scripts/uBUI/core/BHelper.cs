@@ -145,6 +145,11 @@ namespace uBUI
                     setPadding(5, 5, 5, 5);
                     glg.padding = new RectOffset(uiInfo.m_padding_left, uiInfo.m_padding_right, uiInfo.m_padding_top, uiInfo.m_padding_bottom);
                     glg.spacing = uiInfo.m_spacing.Value;
+                    if (uiInfo.m_constraintCount != -1)
+                    {
+                        glg.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                        glg.constraintCount = uiInfo.m_constraintCount;
+                    }
                     return glg;
                 case LayoutType.Horizontal:
                     HorizontalLayoutGroup hlg = go.AddComponent<HorizontalLayoutGroup>();

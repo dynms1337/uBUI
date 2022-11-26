@@ -60,7 +60,7 @@ namespace uBUI
         public TextAnchor m_layoutAlignment = TextAnchor.MiddleLeft;
         public bool m_childForceExpandWidth = false;
         public bool m_childForceExpandHeight = false;
-
+        public int m_constraintCount = -1;
 
 
 
@@ -120,7 +120,6 @@ namespace uBUI
             ret.m_padding_bottom = bottom;
             return ret;
         }
-
         public UIInfo spacing(float spacing) { return this.spacing(new Vector2(spacing, spacing)); }
         public UIInfo spacing(float x, float y) { return spacing(new Vector2(x, y)); }
         public UIInfo spacing(Vector2 xy)
@@ -134,6 +133,12 @@ namespace uBUI
             UIInfo ret = this.Clone();
             if (width != null) ret.m_childForceExpandWidth = width.Value;
             if (height != null) ret.m_childForceExpandHeight = height.Value;
+            return ret;
+        }
+        public UIInfo constraintCount(int count)
+        {
+            UIInfo ret = this.Clone();
+            ret.m_constraintCount = count;
             return ret;
         }
 

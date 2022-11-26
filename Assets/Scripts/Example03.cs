@@ -32,10 +32,7 @@ public class Example03 : MonoBehaviour
         }
         , "Add Text Component (then UI grows)");
 
-        gp = container.AddGridPanel(uiInfo: UIInfo.PANEL_DARK.rtSizeDelta(200).spacing(5));
-        var glg = gp.layoutGroup as GridLayoutGroup;
-        glg.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-        glg.constraintCount = 2;
+        gp = container.AddGridPanel(uiInfo: UIInfo.PANEL_DARK.spacing(5).constraintCount(2));
 
         container.AddSpacer();
     }
