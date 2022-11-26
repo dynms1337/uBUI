@@ -10,18 +10,16 @@ public class Example01 : MonoBehaviour
 
     void Start()
     {
-        string Title = "Example01 - Window Style & Components";
+        string Title = "Example01";
         var (window_size, window_leftbottom) = (new Vector2(400, 800), new Vector2(20, 20));
 
-        //isScreenMode
         var container = BContainer.Create(isScreenMode: true, Title,
-            uiInfo: UIInfo.BCONTAINER_DEFAULT.rtAnchoredPosition(window_leftbottom).rtSizeDelta(window_size));
+            uiInfo: UIInfo.BCONTAINER_DEFAULT.rtAnchoredPosition(window_leftbottom).rtSizeDelta(window_size).spacing(5));
 
         // ************************ header ************************
         var headerRoot = container.AddVerticalPanel();
         var header = headerRoot.AddHorizontalPanel();
         header.AddText(Title, UIInfo.TEXT_H1.leFlexWeight(1, 0));
-        //header.AddSpacer();
 
         // △ Basic Position
         var uiCaption = UIInfo.BUTTON_CAPTION;
@@ -34,7 +32,8 @@ public class Example01 : MonoBehaviour
         header.AddButton(() => { container.gameObject.SetActive(false); }, labelStr: "×"
             , uiInfo: uiCaption);
 
-        headerRoot.AddText(string.Join("\r\n", new string[]
+        container.AddText("Fixed Container, WindowStyle, Components", UIInfo.TEXT_H2);
+        container.AddText(string.Join("\r\n", new string[]
             {
                 "Window style container built by Fixed Container Mode.",
                 "Fixed Container Mode is `Top Down` UI design.",
