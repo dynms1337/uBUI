@@ -8,7 +8,7 @@ public class Example01 : MonoBehaviour
     void Start()
     {
         string Title = "Example01 - Fixed Container";
-        var (window_size, window_leftbottom) = (new Vector2(400, 800), new Vector2(20, 20));
+        var window_size = new Vector2(400, 800); var window_leftbottom = new Vector2(20, 20);
 
         var container = BContainer.Create(isScreenMode: true, Title,
             uiInfo: UIInfo.BCONTAINER_DEFAULT.rtAnchoredPosition(window_leftbottom).rtSizeDelta(window_size).spacing(5));

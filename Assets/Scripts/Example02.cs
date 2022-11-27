@@ -8,7 +8,7 @@ public class Example02 : MonoBehaviour
     void Start()
     {
         string Title = "Example02 - Variable Container";
-        var (window_size, window_leftbottom) = (new Vector2(400, 0), new Vector2(420, 420));
+        var window_size = new Vector2(400, 0); var window_leftbottom = new Vector2(420, 420);
 
         var container = BContainer.Create(isScreenMode: true, Title, ContainerMode.VARIABLE,
             uiInfo: UIInfo.BCONTAINER_DEFAULT.spacing(5).layoutAlignment(TextAnchor.UpperLeft)
@@ -19,7 +19,7 @@ public class Example02 : MonoBehaviour
         { // Scroll Panel
             container.AddText("ScrollPanel(in VariableContainer)", UIInfo.TEXT_H2);
             BPanel content = container.AddScrollPanel(LayoutType.Vertical, UIInfo.SCROLLVIEW_DEFAULT.lePreferredSize(new Vector2(0, 100)));
-            
+
             int clickCount = 0;
             content.AddButton(() =>
             {
