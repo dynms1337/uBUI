@@ -8,12 +8,12 @@ using System.Reflection;
 
 namespace uBUI
 {
-    public enum LayoutType
+    public class LayoutType
     {
-        Grid,
-        Horizontal,
-        Vertical,
-        None,
+        public static readonly LayoutType Grid = new LayoutType();
+        public static readonly LayoutType Horizontal = new LayoutType();
+        public static readonly LayoutType Vertical = new LayoutType();
+        public static readonly LayoutType None = new LayoutType();
     }
 
 

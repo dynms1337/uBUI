@@ -51,8 +51,9 @@ namespace uBUI
 
         public BPanel AddHorizontalPanel(UIInfo uiInfo = null) { return CreateHorizontal(gameObject, uiInfo); }
 
-        public BPanel AddScrollPanel(LayoutType layoutType = LayoutType.Vertical, UIInfo uiInfo = null, string goName = "")
+        public BPanel AddScrollPanel(LayoutType layoutType = null, UIInfo uiInfo = null, string goName = "")
         {
+            if (layoutType == null) layoutType = LayoutType.Vertical;
             return BPanel.CreateFromPanel(
                BHelper.CreateScrollView(this.gameObject, contentPanelLayoutGroupType: layoutType, uiInfo: uiInfo, goName: goName));
         }
@@ -83,7 +84,7 @@ namespace uBUI
         /// <param name="showValueDict">key : Display string of radio button. value : input for `onValueChanged`</param>
         /// <param name="layoutGroup">Layout of RadioButtons</param>
         public ToggleGroup AddRadioButton<T>(UnityAction<T> onValueChanged, Dictionary<string, T> showValueDict, int initialSelected = 0,
-            LayoutType layoutGroup = LayoutType.Horizontal)
+            LayoutType layoutGroup = null)
         { return BHelper.CreateRadioButton(gameObject, onValueChanged, showValueDict, initialSelected, layoutGroup); }
 
         public Slider AddSlider(UnityAction<float> onValueChanged, float initialValue = 0.5f, float max = 1f, float min = 0f, bool wholeNumbers = false)

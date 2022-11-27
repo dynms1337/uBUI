@@ -138,52 +138,56 @@ namespace uBUI
         private static LayoutGroup addLyaoutGroup(GameObject go, LayoutType layoutGroupType, UIInfo uiInfo = null)
         {
             if (uiInfo == null) uiInfo = UIInfo.PANEL_DEFAULT;
-            switch (layoutGroupType)
+            if (layoutGroupType == LayoutType.Grid)
             {
-                case LayoutType.Grid:
-                    GridLayoutGroup glg = go.AddComponent<GridLayoutGroup>();
-                    setPadding(5, 5, 5, 5);
-                    glg.padding = new RectOffset(uiInfo.m_padding_left, uiInfo.m_padding_right, uiInfo.m_padding_top, uiInfo.m_padding_bottom);
-                    glg.spacing = uiInfo.m_spacing.Value;
-                    if (uiInfo.m_constraintCount != -1)
-                    {
-                        glg.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-                        glg.constraintCount = uiInfo.m_constraintCount;
-                    }
-                    return glg;
-                case LayoutType.Horizontal:
-                    HorizontalLayoutGroup hlg = go.AddComponent<HorizontalLayoutGroup>();
-                    hlg.childControlWidth = true;
-                    hlg.childControlHeight = true;
-                    hlg.childForceExpandWidth = uiInfo.m_childForceExpandWidth;
-                    hlg.childForceExpandHeight = uiInfo.m_childForceExpandHeight;
-                    hlg.spacing = uiInfo.m_spacing.Value.x;
-                    setPadding(5, 5, 2, 2);
-                    hlg.padding = new RectOffset(uiInfo.m_padding_left, uiInfo.m_padding_right, uiInfo.m_padding_top, uiInfo.m_padding_bottom);
-                    return hlg;
-                case LayoutType.Vertical:
-                    VerticalLayoutGroup vlg = go.AddComponent<VerticalLayoutGroup>();
-                    vlg.childControlWidth = true;   // false;
-                    vlg.childControlHeight = true;
-                    vlg.childForceExpandWidth = uiInfo.m_childForceExpandWidth;
-                    vlg.childForceExpandHeight = uiInfo.m_childForceExpandHeight;
-                    vlg.spacing = uiInfo.m_spacing.Value.y;
-                    setPadding(2, 2, 5, 5);
-                    vlg.padding = new RectOffset(uiInfo.m_padding_left, uiInfo.m_padding_right, uiInfo.m_padding_top, uiInfo.m_padding_bottom);
-                    return vlg;
-                case LayoutType.None: break;
+                GridLayoutGroup glg = go.AddComponent<GridLayoutGroup>();
+                setPadding(uiInfo, 5, 5, 5, 5);
+                glg.padding = new RectOffset(uiInfo.m_padding_left, uiInfo.m_padding_right, uiInfo.m_padding_top, uiInfo.m_padding_bottom);
+                glg.spacing = uiInfo.m_spacing.Value;
+                if (uiInfo.m_constraintCount != -1)
+                {
+                    glg.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                    glg.constraintCount = uiInfo.m_constraintCount;
+                }
+                return glg;
             }
+            else if (layoutGroupType == LayoutType.Horizontal)
+            {
+                HorizontalLayoutGroup hlg = go.AddComponent<HorizontalLayoutGroup>();
+                hlg.childControlWidth = true;
+                hlg.childControlHeight = true;
+                hlg.childForceExpandWidth = uiInfo.m_childForceExpandWidth;
+                hlg.childForceExpandHeight = uiInfo.m_childForceExpandHeight;
+                hlg.spacing = uiInfo.m_spacing.Value.x;
+                setPadding(uiInfo, 5, 5, 2, 2);
+                hlg.padding = new RectOffset(uiInfo.m_padding_left, uiInfo.m_padding_right, uiInfo.m_padding_top, uiInfo.m_padding_bottom);
+                return hlg;
+            }
+            else if (layoutGroupType == LayoutType.Vertical)
+            {
+                VerticalLayoutGroup vlg = go.AddComponent<VerticalLayoutGroup>();
+                vlg.childControlWidth = true;   // false;
+                vlg.childControlHeight = true;
+                vlg.childForceExpandWidth = uiInfo.m_childForceExpandWidth;
+                vlg.childForceExpandHeight = uiInfo.m_childForceExpandHeight;
+                vlg.spacing = uiInfo.m_spacing.Value.y;
+                setPadding(uiInfo, 2, 2, 5, 5);
+                vlg.padding = new RectOffset(uiInfo.m_padding_left, uiInfo.m_padding_right, uiInfo.m_padding_top, uiInfo.m_padding_bottom);
+                return vlg;
+            }
+            else { }  // pass
             return null;
 
-            void setPadding(int left, int right, int top, int bottom)
-            {
-                if (uiInfo.m_padding_left == -1) uiInfo.m_padding_left = left;
-                if (uiInfo.m_padding_right == -1) uiInfo.m_padding_right = right;
-                if (uiInfo.m_padding_top == -1) uiInfo.m_padding_top = top;
-                if (uiInfo.m_padding_bottom == -1) uiInfo.m_padding_bottom = bottom;
-            }
 
         }
+        static void setPadding(UIInfo uiInfo, int left, int right, int top, int bottom)
+        {
+            if (uiInfo.m_padding_left == -1) uiInfo.m_padding_left = left;
+            if (uiInfo.m_padding_right == -1) uiInfo.m_padding_right = right;
+            if (uiInfo.m_padding_top == -1) uiInfo.m_padding_top = top;
+            if (uiInfo.m_padding_bottom == -1) uiInfo.m_padding_bottom = bottom;
+        }
+
 
         public static T GetOrAddComponent<T>(this GameObject go) where T : Component
         {
@@ -299,12 +303,13 @@ namespace uBUI
         /// <param name="isScreenMode">true:RenderMode.ScreenSpaceOverlay,  false:RenderMode.WorldSpace </param>
         /// <param name="uiInfo">rtAnchoredPosition:container position, rtSizeDelta: container size</param>
         public static LayoutGroup CreateCanvas(bool isScreenMode,
-            UIInfo uiInfo = null, LayoutType layoutGroup = LayoutType.Vertical, float canvasScale = 1f,
+            UIInfo uiInfo = null, LayoutType layoutGroup = null, float canvasScale = 1f,
             Camera camera4world = null, float meterPerPx4world = 0.001f,  // WorldSpace parameters
             bool draggable4screen = true,   // ScreenSpace parameters
             GameObject parent = null, string goName = "")
         {
             Vector2? leftbottom = null; Vector2? size = null;
+            if (layoutGroup == null) layoutGroup = LayoutType.Vertical;
             if (uiInfo.m_rtAnchoredPosition.notNull) leftbottom = uiInfo.m_rtAnchoredPosition.Value;
             if (leftbottom == null) leftbottom = WINDOW_POSITION;
             if (uiInfo.m_rtSizeDelta.notNull) size = uiInfo.m_rtSizeDelta.Value;
@@ -354,24 +359,25 @@ namespace uBUI
         }
 
 
-        public static LayoutGroup CreatePanel(UIInfo uiInfo = null, LayoutType layoutGroup = LayoutType.Vertical, GameObject parent = null, string goName = "")
+        public static LayoutGroup CreatePanel(UIInfo uiInfo = null, LayoutType layoutGroup = null, GameObject parent = null, string goName = "")
         {
+            if (layoutGroup == null) layoutGroup = LayoutType.Vertical;
             if (uiInfo == null) uiInfo = UIInfo.PANEL_DEFAULT;
             GameObject panelGO = CreateUIElement(goName == "" ? goname_Panel.get() + "-" + layoutGroup.ToString() : goName, uiInfo, parent: parent);
             Image image = addImageComponent(panelGO, uiInfo: uiInfo);
             LayoutGroup lg = null;
-            switch (layoutGroup)
+
+            if (layoutGroup == LayoutType.Horizontal)
             {
-                case LayoutType.Horizontal:
-                    lg = addLyaoutGroup(panelGO, layoutGroup, uiInfo);
-                    lg.childAlignment = uiInfo.m_layoutAlignment;
-                    break;
-                case LayoutType.Vertical:
-                    lg = addLyaoutGroup(panelGO, layoutGroup, uiInfo);
-                    lg.childAlignment = uiInfo.m_layoutAlignment;
-                    break;
-                default: lg = addLyaoutGroup(panelGO, layoutGroup, uiInfo); break;
+                lg = addLyaoutGroup(panelGO, layoutGroup, uiInfo);
+                lg.childAlignment = uiInfo.m_layoutAlignment;
             }
+            else if (layoutGroup == LayoutType.Vertical)
+            {
+                lg = addLyaoutGroup(panelGO, layoutGroup, uiInfo);
+                lg.childAlignment = uiInfo.m_layoutAlignment;
+            }
+            else { lg = addLyaoutGroup(panelGO, layoutGroup, uiInfo); }
             return lg;
         }
 
@@ -500,7 +506,7 @@ namespace uBUI
                 height = (int)uiInfo.m_lePreferredSize.Value.y;
                 tex = ResizeTexture(tex, width, height);
             }
-            return CreateButton(parent, TaskOnClick, labelStr, Sprite.Create(tex, new Rect(0, 0, width, height), Vector2.zero), imgSize: imgSize, imgColor: imgColor, uiInfo, goName);
+            return CreateButton(parent, TaskOnClick, labelStr, Sprite.Create(tex, new Rect(0, 0, width, height), Vector2.zero), imgSize: imgSize, imgColor: imgColor, uiInfo: uiInfo, goName: goName);
         }
         public static Button CreateButton(GameObject parent, string texPath, UnityAction TaskOnClick = null,
             string labelStr = "", int imgSize = -1, Color? imgColor = null, UIInfo uiInfo = null, string goName = "")
@@ -636,8 +642,9 @@ namespace uBUI
         }
 
         public static ToggleGroup CreateRadioButton<T>(GameObject parent, UnityAction<T> onValueChanged, Dictionary<string, T> showValueDict, int selected = 0,
-            LayoutType layoutGroup = LayoutType.Horizontal, UIInfo uiInfo = null, string goName = "")
+            LayoutType layoutGroup = null, UIInfo uiInfo = null, string goName = "")
         {
+            if (layoutGroup == null) layoutGroup = LayoutType.Horizontal;
             if (uiInfo == null) uiInfo = UIInfo.RADIO_BUTTON_DEFAULT;
 
             GameObject goRadioPanel = CreatePanel(parent: parent, layoutGroup: layoutGroup, uiInfo: uiInfo, goName: goname_RadioButton.get()).gameObject;
@@ -647,7 +654,7 @@ namespace uBUI
             {
                 string showStr = kvp.Key;
                 T selectedValue = kvp.Value;
-                Toggle t = CreateToggle(parent: goRadioPanel, (b) => { if (b) onValueChanged(selectedValue); }, labelStr: showStr, isOn: i == selected);
+                Toggle t = CreateToggle(parent: goRadioPanel, onValueChanged: (b) => { if (b) onValueChanged(selectedValue); }, labelStr: showStr, isOn: i == selected);
                 t.group = toggleGroup;
                 i++;
             }
@@ -700,9 +707,10 @@ namespace uBUI
 
 
 
-        public static LayoutGroup CreateScrollView(GameObject parent, LayoutType contentPanelLayoutGroupType = LayoutType.Vertical,
+        public static LayoutGroup CreateScrollView(GameObject parent, LayoutType contentPanelLayoutGroupType = null,
             float scrollSensitivity = 20, UIInfo uiInfo = null, string goName = "")
         {
+            if (contentPanelLayoutGroupType == null) contentPanelLayoutGroupType = LayoutType.Vertical;
             if (uiInfo == null) uiInfo = UIInfo.SCROLLVIEW_DEFAULT;
             GameObject goScrollView = CreateUIElement(goName == "" ? goname_ScrollView.get() : goName, uiInfo, parent: parent);
             GameObject goViewport = CreateUIElement("Viewport", new UIInfo().rtAnchorParent(), parent: goScrollView);
@@ -774,7 +782,8 @@ namespace uBUI
         public static Color parseColor(string html_color_code, Color? defaultColor = null)
         {
             if (defaultColor == null) defaultColor = Color.white;
-            if (ColorUtility.TryParseHtmlString(html_color_code, out var color))
+            Color color;
+            if (ColorUtility.TryParseHtmlString(html_color_code, out color))
                 return color;
             else
             {

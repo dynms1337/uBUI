@@ -36,9 +36,10 @@ namespace uBUI
         /// <param name="uiInfo">rtAnchoredPosition:container position, rtSizeDelta: container size</param>
         public static BContainer Create(bool isScreenMode, string goCanvasName = "Canvas", ContainerMode containerMode = null,
              UIInfo uiInfo = null, bool draggable4screen = true,  // Canvas parameters
-             LayoutType Layout = LayoutType.Vertical, // Panel parameters
+             LayoutType layoutType = null, // Panel parameters
              float canvasScale = 1f, GameObject parent = null)
         {
+            if (layoutType == null) layoutType = LayoutType.Vertical;
             if (containerMode == null) containerMode = ContainerMode.FIXED;
             if (uiInfo == null) uiInfo = UIInfo.CANVAS_DEFAULT;
 
@@ -51,7 +52,7 @@ namespace uBUI
                 csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
                 csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-               var rt = lg.gameObject.GetOrAddComponent<RectTransform>();
+                var rt = lg.gameObject.GetOrAddComponent<RectTransform>();
                 rt.pivot = new Vector2(0, 1);  // Expand to the bottom/right.
             }
             else { } // FIXED : pass
