@@ -524,9 +524,17 @@ namespace uBUI
             else if (tex_sprite_path is string)
             {
                 Texture2D tex = loadTexture(tex_sprite_path as string);
-                (int width, int height) = (0, 0);
-                if (uiInfo.m_lePreferredSize.notNull) (width, height) = ((int)uiInfo.m_lePreferredSize.Value.x, (int)uiInfo.m_lePreferredSize.Value.y);
-                else if (uiInfo.m_rtSizeDelta.notNull) (width, height) = ((int)uiInfo.m_rtSizeDelta.Value.x, (int)uiInfo.m_rtSizeDelta.Value.y);
+                int width = 0; int height = 0;
+                if (uiInfo.m_lePreferredSize.notNull)
+                {
+                    width = (int)uiInfo.m_lePreferredSize.Value.x;
+                    height = (int)uiInfo.m_lePreferredSize.Value.y;
+                }
+                else if (uiInfo.m_rtSizeDelta.notNull)
+                {
+                    width = (int)uiInfo.m_rtSizeDelta.Value.x;
+                    height = (int)uiInfo.m_rtSizeDelta.Value.y;
+                }
                 if (width != 0 & height != 0) tex = ResizeTexture(tex, width, height);
                 return CreateImage(parent, tex, uiInfo, goName);
             }
